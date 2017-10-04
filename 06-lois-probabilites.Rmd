@@ -95,7 +95,7 @@ Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici 
 |Probabilités|Commande `R`|
 |-----------:|:-----------|
 |$P(X=k)$    |`dgeom(k, p)`|
-|$P(i\leq X \leq j)$ | `sum(dpgeom(i:j, p))`|
+|$P(i\leq X \leq j)$ | `sum(dgeom(i:j, p))`|
 |$P(X\leq k)$ | `pgeom(k, p)` |
 |$P(X>k)$ | `1-pgeom(k, p)` |
 
@@ -120,8 +120,30 @@ ggplot(fgeom, aes(x = x, y = y)) +
   )
 ```
 
-> Remarque : 
+> Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
 
 ### La loi hypergéométrique
+
+Le _nom racine_ pour la loi hypergéométrique est `hyper`.
+
+On tire sans remise $n$ objets d'un ensemble de $N$ objets dont $A$
+possèdent une caractéristique particulière (et les autres $B=N-A$ ne la possèdent pas). Soit $X$ le nombre d'objets de l'échantillon qui possèdent la caractéristique. Nous avons que $X\sim H(N,A,n)$.
+
+Voici la façon de calculer des probabilités pour la loi hypergéométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dhyper(k, A, B, n)`|
+|$P(i\leq X \leq j)$ | `sum(dhyper(i:j, A, B, n))`|
+|$P(X\leq k)$ | `phyper(k, A, B, n)` |
+|$P(X>k)$ | `1-phyper(k, A, B, n)` |
+
+Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dhyper(2, 5, 8, 4)
+```
+
+Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
 
 ## Les lois de probabilités continues
