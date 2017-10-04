@@ -175,6 +175,9 @@ Voici la façon de calculer des probabilités pour la loi normale à l'aide de `
 |$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
 |$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
 
+
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1). Nous aurons:
+
 ```{r}
 ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
