@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Une introduction à R</title>
+  <meta name="description" content="Une introduction au langage R pour les étudiants du collégial.">
+  <meta name="generator" content="bookdown 0.5.2 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Une introduction à R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Une introduction au langage R pour les étudiants du collégial." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Une introduction à R" />
+  
+  <meta name="twitter:description" content="Une introduction au langage R pour les étudiants du collégial." />
+  
+
+<meta name="author" content="Marc-André Désautels">
+
+
+<meta name="date" content="2017-10-04">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="presentation-des-donnees.html">
+<link rel="next" href="les-series-chronologiques.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Une introduction à R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Avant-propos</a></li>
+<li class="part"><span><b>I La présentation des données</b></span></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#tibbles"><i class="fa fa-check"></i><b>1.1</b> Tibbles</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="intro.html"><a href="intro.html#prerequis"><i class="fa fa-check"></i><b>1.1.1</b> Prérequis</a></li>
+<li class="chapter" data-level="1.1.2" data-path="intro.html"><a href="intro.html#un-exemple-de-tibble"><i class="fa fa-check"></i><b>1.1.2</b> Un exemple de “tibble”</a></li>
+<li class="chapter" data-level="1.1.3" data-path="intro.html"><a href="intro.html#la-base-de-donnees-flights"><i class="fa fa-check"></i><b>1.1.3</b> La base de données flights</a></li>
+<li class="chapter" data-level="1.1.4" data-path="intro.html"><a href="intro.html#donneesdiamonds"><i class="fa fa-check"></i><b>1.1.4</b> La base de données <code>diamonds</code></a></li>
+<li class="chapter" data-level="1.1.5" data-path="intro.html"><a href="intro.html#explorertibbles"><i class="fa fa-check"></i><b>1.1.5</b> Comment explorer des “tibbles”</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#types-de-variables"><i class="fa fa-check"></i><b>1.2</b> Types de variables</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#variables-qualitatives"><i class="fa fa-check"></i><b>1.2.1</b> Variables qualitatives</a></li>
+<li class="chapter" data-level="1.2.2" data-path="intro.html"><a href="intro.html#variables-quantitatives"><i class="fa fa-check"></i><b>1.2.2</b> Variables quantitatives</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html"><i class="fa fa-check"></i><b>2</b> Présentation des données</a><ul>
+<li class="chapter" data-level="2.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#variables-qualitatives-1"><i class="fa fa-check"></i><b>2.1</b> Variables qualitatives</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#tableaux-de-frequences"><i class="fa fa-check"></i><b>2.1.1</b> Tableaux de fréquences</a></li>
+<li class="chapter" data-level="2.1.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-a-bandes"><i class="fa fa-check"></i><b>2.1.2</b> Diagramme à bandes</a></li>
+<li class="chapter" data-level="2.1.3" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-circulaire"><i class="fa fa-check"></i><b>2.1.3</b> Diagramme circulaire</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#variables-quantitatives-1"><i class="fa fa-check"></i><b>2.2</b> Variables quantitatives</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#freqquantitatives"><i class="fa fa-check"></i><b>2.2.1</b> Tableaux de fréquences</a></li>
+<li class="chapter" data-level="2.2.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-a-batons"><i class="fa fa-check"></i><b>2.2.2</b> Diagramme à bâtons</a></li>
+<li class="chapter" data-level="2.2.3" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#histogramme"><i class="fa fa-check"></i><b>2.2.3</b> Histogramme</a></li>
+<li class="chapter" data-level="2.2.4" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#polygone-de-frequences"><i class="fa fa-check"></i><b>2.2.4</b> Polygone de fréquences</a></li>
+<li class="chapter" data-level="2.2.5" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#ogive-des-pourcentages-cumules"><i class="fa fa-check"></i><b>2.2.5</b> Ogive des pourcentages cumulés</a></li>
+<li class="chapter" data-level="2.2.6" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#histogramme-et-polygone-de-frequences"><i class="fa fa-check"></i><b>2.2.6</b> Histogramme et polygone de fréquences</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Les mesures associées aux données</b></span></li>
+<li class="chapter" data-level="3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html"><i class="fa fa-check"></i><b>3</b> Les différentes mesures</a><ul>
+<li class="chapter" data-level="3.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-tendance-centrale"><i class="fa fa-check"></i><b>3.1</b> Les mesures de tendance centrale</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-mode"><i class="fa fa-check"></i><b>3.1.1</b> Le mode</a></li>
+<li class="chapter" data-level="3.1.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-mediane"><i class="fa fa-check"></i><b>3.1.2</b> La médiane</a></li>
+<li class="chapter" data-level="3.1.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-moyenne"><i class="fa fa-check"></i><b>3.1.3</b> La moyenne</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-dispersion"><i class="fa fa-check"></i><b>3.2</b> Les mesures de dispersion</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#letendue"><i class="fa fa-check"></i><b>3.2.1</b> L’étendue</a></li>
+<li class="chapter" data-level="3.2.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-variance"><i class="fa fa-check"></i><b>3.2.2</b> La variance</a></li>
+<li class="chapter" data-level="3.2.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#lecart-type"><i class="fa fa-check"></i><b>3.2.3</b> L’écart-type</a></li>
+<li class="chapter" data-level="3.2.4" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-coefficient-de-variation"><i class="fa fa-check"></i><b>3.2.4</b> Le coefficient de variation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-position"><i class="fa fa-check"></i><b>3.3</b> Les mesures de position</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-cote-z"><i class="fa fa-check"></i><b>3.3.1</b> La cote z</a></li>
+<li class="chapter" data-level="3.3.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-quantiles"><i class="fa fa-check"></i><b>3.3.2</b> Les quantiles</a></li>
+<li class="chapter" data-level="3.3.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-commande-summary"><i class="fa fa-check"></i><b>3.3.3</b> La commande <code>summary</code></a></li>
+<li class="chapter" data-level="3.3.4" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-rang-centile"><i class="fa fa-check"></i><b>3.3.4</b> Le rang centile</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html"><i class="fa fa-check"></i><b>4</b> Les séries chronologiques</a><ul>
+<li class="chapter" data-level="4.1" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-graphiques"><i class="fa fa-check"></i><b>4.1</b> Les graphiques</a></li>
+<li class="chapter" data-level="4.2" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-mesures"><i class="fa fa-check"></i><b>4.2</b> Les mesures</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-absolue"><i class="fa fa-check"></i><b>4.2.1</b> La variation absolue</a></li>
+<li class="chapter" data-level="4.2.2" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-moyenne"><i class="fa fa-check"></i><b>4.2.2</b> La variation moyenne</a></li>
+<li class="chapter" data-level="4.2.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-relative-pourcentage-de-variation"><i class="fa fa-check"></i><b>4.2.3</b> La variation relative (pourcentage de variation)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-donnees-construites"><i class="fa fa-check"></i><b>4.3</b> Les données construites</a></li>
+</ul></li>
+<li class="part"><span><b>III La combinatoire et les probabilités</b></span></li>
+<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a></li>
+<li class="chapter" data-level="6" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html"><i class="fa fa-check"></i><b>6</b> Les lois de probabilités</a><ul>
+<li class="chapter" data-level="6.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-discretes"><i class="fa fa-check"></i><b>6.1</b> Les lois de probabilités discrètes</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-binomiale"><i class="fa fa-check"></i><b>6.1.1</b> La loi binomiale</a></li>
+<li class="chapter" data-level="6.1.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-de-poisson"><i class="fa fa-check"></i><b>6.1.2</b> La loi de Poisson</a></li>
+<li class="chapter" data-level="6.1.3" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-geometrique"><i class="fa fa-check"></i><b>6.1.3</b> La loi géométrique</a></li>
+<li class="chapter" data-level="6.1.4" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-hypergeometrique"><i class="fa fa-check"></i><b>6.1.4</b> La loi hypergéométrique</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-continues"><i class="fa fa-check"></i><b>6.2</b> Les lois de probabilités continues</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-normale"><i class="fa fa-check"></i><b>6.2.1</b> La loi normale</a></li>
+<li class="chapter" data-level="6.2.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-de-student"><i class="fa fa-check"></i><b>6.2.2</b> La loi de Student</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Une introduction à R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="les-differentes-mesures" class="section level1">
+<h1><span class="header-section-number">Chapitre 3</span> Les différentes mesures</h1>
+<p>Dans ce chapitre, nous verrons comment utiliser <code>R</code> pour calculer les mesures importantes permettant de résumer des données.</p>
+<p>Nous allons charger les paquetages que nous allons utiliser:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(nycflights13)</code></pre></div>
+<div id="les-mesures-de-tendance-centrale" class="section level2">
+<h2><span class="header-section-number">3.1</span> Les mesures de tendance centrale</h2>
+<p>Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.</p>
+<div id="le-mode" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Le mode</h3>
+<p>Le mode est la <strong>modalité</strong>, <strong>valeur</strong> ou <strong>classe</strong> possédant la plus grande fréquence. En d’autres mots, c’est la donnée la plus fréquente.</p>
+<p>Puisque le mode se préoccupe seulement de la donnée la plus fréquente, il n’est pas influencé par les valeurs extrêmes.</p>
+<p>Lorsque le mode est une classe, il est appelé <strong>classe modale</strong>.</p>
+<p>Le mode est noté <strong>Mo</strong>.</p>
+<p>Le langage <code>R</code> ne possède pas de fonction permettant de calculer le mode. La façon la plus simple de le calculer est d’utiliser la fonction <code>table</code> de <code>R</code>.</p>
+<p>Par exemple, si nous voulons connaître le mode de la variable <code>cut</code> de la base de données <code>diamonds</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(diamonds<span class="op">$</span>cut)</code></pre></div>
+<pre><code>## 
+##      Fair      Good Very Good   Premium     Ideal 
+##      1610      4906     12082     13791     21551</code></pre>
+<p>Nous remarquons que le maximum est à la modalité <em>Ideal</em> avec une fréquence de 21551.</p>
+<p>Si nous nous intéressons au mode d’une variable quantitative discrète comme <code>cyl</code> de la base de données <code>mtcars</code> nous obtenons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(mtcars<span class="op">$</span>cyl)</code></pre></div>
+<pre><code>## 
+##  4  6  8 
+## 11  7 14</code></pre>
+<p>Nous remarquons que le maximum est à la valeur <em>8</em> avec une fréquence de 14.</p>
+<p>Dans le cas d’une variable quantitative continue, pour calculer le mode, il faut commencer par séparer les données en classes. Nous utiliserons les mêmes classes utilisées à la section <a href="presentation-des-donnees.html#freqquantitatives">2.2.1</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">carat_class =<span class="st"> </span><span class="kw">cut</span>(diamonds<span class="op">$</span>carat,
+                  <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">6</span>, <span class="dt">by =</span> <span class="dv">1</span>),
+                  <span class="dt">right =</span> <span class="ot">FALSE</span>)
+<span class="kw">table</span>(carat_class)</code></pre></div>
+<pre><code>## carat_class
+## [0,1) [1,2) [2,3) [3,4) [4,5) [5,6) 
+## 34880 16906  2114    34     5     1</code></pre>
+<p>La classe modale est donc la classe <em>[0,1)</em> avec une fréquence de 34880.</p>
+</div>
+<div id="la-mediane" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> La médiane</h3>
+<p>La médiane, notée <strong>Md</strong>, est la valeur qui sépare une série de données classée en ordre croissant en deux parties égales.</p>
+<p>La médiane étant la valeur du milieu, elle est la valeur où le pourcentage cumulé atteint 50%.</p>
+<p>Puisque la médiane se préoccupe seulement de déterminer où se situe le centre des données, elle n’est pas influencée par les valeurs extrêmes. Elle est donc une mesure de tendance centrale plus fiable que la moyenne.</p>
+<blockquote>
+<p>Important : La médiane n’est définie que pour les variables quantitatives. En effet, si vous tentez d’utiliser la médiane pour des données autres que numériques, <code>R</code> vous donnera un message d’erreur.</p>
+</blockquote>
+<p>La fonction <code>median</code> permet de calculer la médiane en langage <code>R</code>.</p>
+<p>Par exemple, pour calculer la médiane de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 0.7</code></pre>
+<p>Ceci signifie que 50% des diamants ont une valeur en carat inférieure ou égale à 0.7 et que 50% des diamants ont une valeur en carat supérieure ou égale à 0.7.</p>
+<p>Nous pouvons aussi obtenir que la médiane de la variable <code>price</code> de la base de données <code>diamonds</code> est donnée par:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(diamonds<span class="op">$</span>price)</code></pre></div>
+<pre><code>## [1] 2401</code></pre>
+</div>
+<div id="la-moyenne" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> La moyenne</h3>
+<p>La moyenne est la valeur qui pourrait remplacer chacune des données d’une série pour que leur somme demeure identique. Intuitivement, elle représente le centre d’équilibre d’une série de données. La somme des distances qui sépare les données plus petites que la moyenne devrait être la même que la somme des distances qui sépare les données plus grandes.</p>
+<blockquote>
+<p>Important : La moyenne n’est définie que pour les variables quantitatives. En effet, si vous tentez d’utiliser la moyenne pour des données autres que numériques, <code>R</code> vous donnera un message d’erreur.</p>
+</blockquote>
+<p>La fonction <code>mean</code> permet de calculer la moyenne en langage <code>R</code>.</p>
+<p>Par exemple, pour calculer la moyenne de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 0.7979397</code></pre>
+<p>Nous pouvons aussi obtenir que la moyenne de la variable <code>price</code> de la base de données <code>diamonds</code> est donnée par:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(diamonds<span class="op">$</span>price)</code></pre></div>
+<pre><code>## [1] 3932.8</code></pre>
+</div>
+</div>
+<div id="les-mesures-de-dispersion" class="section level2">
+<h2><span class="header-section-number">3.2</span> Les mesures de dispersion</h2>
+<p>Les mesures de tendance centrale (mode, moyenne et médiane) ne permettent pas de déterminer si une série de données est principalement située autour de son centre, ou si au contraire elle est très dispersée.</p>
+<p>Les mesures de dispersion, elles, permettent de déterminer si une série de données est centralisée autour de sa moyenne, ou si elle est au contraire très dispersée.</p>
+<p>Les mesures de dispersion sont l’étendue, la variance, l’écart-type et le coefficient de variation.</p>
+<div id="letendue" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> L’étendue</h3>
+<p>La première mesure de dispersion, l’étendue, est la différence entre la valeur maximale et la valeur minimale.</p>
+<p>L’étendue ne tenant compte que du maximum et du minimum, elle est grandement influencée par les valeurs extrêmes. Elle est donc une mesure de dispersion peu fiable.</p>
+<p>La fonction <code>range</code> permet de calculer l’étendue d’une variable en langage <code>R</code>.</p>
+<p>Par exemple, pour calculer l’étendue de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 0.20 5.01</code></pre>
+<p>Nous pouvons donc calculer l’étendue de la variable <code>carat</code> en soustrayant les deux valeurs obtenues par la fonction <code>range</code>, c’est-à-dire que l’étendue est 5.01-0.2 = 4.81.</p>
+</div>
+<div id="la-variance" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> La variance</h3>
+<p>La variance sert principalement à calculer l’écart-type, la mesure de dispersion la plus connue.</p>
+<blockquote>
+<p>Attention : Les unités de la variance sont des unités<sup>2</sup>.</p>
+</blockquote>
+<p>La fonction <code>var</code> permet de calculer la variance d’une variable en langage <code>R</code>.</p>
+<p>Par exemple, pour calculer la variance de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 0.2246867</code></pre>
+<p>Ceci signifie que la variance de la variable <code>carat</code> est 0.2246867 carat<sup>2</sup>.</p>
+</div>
+<div id="lecart-type" class="section level3">
+<h3><span class="header-section-number">3.2.3</span> L’écart-type</h3>
+<p>L’écart-type est la mesure de dispersion la plus couramment utilisée. Il peut être vu comme la « moyenne » des écarts entre les données et la moyenne.</p>
+<p>Puisque l’écart-type tient compte de chacune des données, il est une mesure de dispersion beaucoup plus fiable que l’étendue.</p>
+<p>Il est défini comme la racine carrée de la variance.</p>
+<p>La fonction <code>sd</code> permet de calculer l’’écart-type d’une variable en langage <code>R</code>.</p>
+<p>Par exemple, pour calculer l’écart-type de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 0.4740112</code></pre>
+<p>Ceci signifie que l’écart-type de la variable <code>carat</code> est 0.4740112 carat.</p>
+</div>
+<div id="le-coefficient-de-variation" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> Le coefficient de variation</h3>
+<p>Le coefficient de variation, noté C. V., est calculé comme suit :</p>
+<span class="math display">\[\begin{equation}
+C.V. = \dfrac{\text{ecart-type}}{\text{moyenne}}\times 100\%
+\end{equation}\]</span>
+<p>Si le coefficient est inférieur à 15%, les données sont dites <strong>homogènes</strong>. Cela veut dire que les données sont situées près les unes des autres.</p>
+<p>Dans le cas contraire, les données sont dites <strong>hétérogènes</strong>. Cela veut dire que les données sont très dispersées.</p>
+<blockquote>
+<p>Important : Le coefficient de variation ne possède pas d’unité, outre le symbole de pourcentage.</p>
+</blockquote>
+<p>Il n’existe pas de fonctions en <code>R</code> permettant de calculer directement le coefficient de variation. Par contre, nous pouvons utiliser en conjonction les fonctions <code>sd</code> et <code>mean</code> pour le calculer.</p>
+<p>Par exemple, pour calculer le coefficient de variation de la variable <code>carat</code> de la base de données <code>diamonds</code>, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(diamonds<span class="op">$</span>carat)<span class="op">/</span><span class="kw">mean</span>(diamonds<span class="op">$</span>carat)<span class="op">*</span><span class="dv">100</span></code></pre></div>
+<pre><code>## [1] 59.40439</code></pre>
+<p>Le C.V. de la variable <code>carat</code> est donc 59.4043906 %, ce qui signifie que les données sont hétérogènes, car le coefficient de variation est plus grand que 15%.</p>
+</div>
+</div>
+<div id="les-mesures-de-position" class="section level2">
+<h2><span class="header-section-number">3.3</span> Les mesures de position</h2>
+<p>Les mesures de position permettent de situer une donnée par rapport aux autres. Les différentes mesures de position sont la cote Z, les quantiles et les rangs.</p>
+<p>Tout comme les mesures de dispersion, celles-ci ne sont définies que pour une variable quantitative.</p>
+<div id="la-cote-z" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> La cote z</h3>
+<p>Cette mesure de position se base sur la moyenne et l’écart-type.</p>
+<p>La cote Z d’une donnée x est calculée comme suit :</p>
+<span class="math display">\[\begin{equation}
+Z = \dfrac{x-\text{moyenne}}{\text{ecart-type}}
+\end{equation}\]</span>
+<blockquote>
+<p>Important : La cote z ne possède pas d’unités.</p>
+</blockquote>
+<p>Une cote Z peut être positive, négative ou nulle.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Cote Z</th>
+<th align="left">Interprétation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">Z&gt;0</td>
+<td align="left">donnée supérieure à la moyenne</td>
+</tr>
+<tr class="even">
+<td align="right">Z&lt;0</td>
+<td align="left">donnée inférieure à la moyenne</td>
+</tr>
+<tr class="odd">
+<td align="right">Z=0</td>
+<td align="left">donnée égale à la moyenne</td>
+</tr>
+</tbody>
+</table>
+<p>Il n’existe pas de fonctions en <code>R</code> permettant de calculer directement la cote Z. Par contre, nous pouvons utiliser en conjonction les fonctions <code>sd</code> et <code>mean</code> pour la calculer.</p>
+<p>Par exemple, si nous voulons calculer la cote Z d’un diamant de 3 carats, nous avons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">3</span><span class="op">-</span><span class="kw">mean</span>(diamonds<span class="op">$</span>carat))<span class="op">/</span><span class="kw">sd</span>(diamonds<span class="op">$</span>carat)</code></pre></div>
+<pre><code>## [1] 4.645587</code></pre>
+</div>
+<div id="les-quantiles" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Les quantiles</h3>
+<p>Un quantile est une donnée qui correspond à un certain pourcentage cumulé.</p>
+<p>Parmi les quantiles, on distingue les quartiles, les quintiles, les déciles et les centiles.</p>
+<ul>
+<li>Les quartiles Q<sub>1</sub>, Q<sub>2</sub> et Q<sub>3</sub>, séparent les données en quatre parties égales. Environ 25% des données sont inférieures ou égales à Q<sub>1</sub>. Environ 50% des données sont inférieures ou égales à Q<sub>2</sub>. Environ 75% des données sont inférieures ou égales à Q<sub>3</sub>.</li>
+<li>Les quintiles V<sub>1</sub>, V<sub>2</sub>, V<sub>3</sub> et V<sub>4</sub>, séparent les données en cinq parties égales. Environ 20% des données sont inférieures ou égales à V<sub>1</sub>. Environ 40% des données sont inférieures ou égales à V<sub>2</sub>. Etc.</li>
+<li>Les déciles D<sub>1</sub>, D<sub>2</sub>, …, D<sub>8</sub> et D<sub>9</sub>, séparent les données en dix parties égales. Environ 10% des données sont inférieures ou égales à D<sub>1</sub>. Environ 20% des données sont inférieures ou égales à D<sub>2</sub>. Etc.</li>
+<li>Les centiles C<sub>1</sub>, C<sub>2</sub>, …, C<sub>98</sub> et C<sub>99</sub>, séparent les données en cent parties égales. Environ 1% des données sont inférieures ou égales à C<sub>1</sub>. Environ 2% des données sont inférieures ou égales à C<sub>2</sub>. Etc.</li>
+</ul>
+<blockquote>
+<p>Il est utile de noter que certains quantiles se recoupent.</p>
+</blockquote>
+<p>La fonction <code>quantile</code> permet de calculer n’importe quel quantile d’une variable en langage <code>R</code>. Il suffit d’indiquer la variable étudiée ainsi que le pourcentage du quantile voulu.</p>
+<p>Par exemple, si nous voulons calculer D<sub>1</sub> pour la variable <code>carat</code>, nous allons utiliser la fonction <code>quantile</code> avec une probabilité de 0,1.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(diamonds<span class="op">$</span>carat, <span class="fl">0.1</span>)</code></pre></div>
+<pre><code>##  10% 
+## 0.31</code></pre>
+<p>Ceci implique que 10% des diamants ont une valeur en carat inférieure ou égale à 0.31 carat.</p>
+<p>Nous pouvons calculer le troisième quartile Q<sub>3</sub> de la variable <code>price</code> en utilisant la fonction <code>quantile</code> avec une probabilité de 0,75.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(diamonds<span class="op">$</span>price, <span class="fl">0.75</span>)</code></pre></div>
+<pre><code>##     75% 
+## 5324.25</code></pre>
+<p>Ceci implique que 75% des diamants ont un prix en dollars inférieur ou égal à 5324.25 $.</p>
+</div>
+<div id="la-commande-summary" class="section level3">
+<h3><span class="header-section-number">3.3.3</span> La commande <code>summary</code></h3>
+<p>La commande <code>summary</code> produit un sommaire contenant six mesures importantes:</p>
+<ol style="list-style-type: decimal">
+<li><code>Min</code> : le minimum de la variable</li>
+<li><code>1st Qu.</code>: Le premier quartile, Q<sub>1</sub>, de la variable</li>
+<li><code>Median</code> : La médiane de la variable</li>
+<li><code>Mean</code> : La moyenne de la variable</li>
+<li><code>3rd Qu.</code> : Le troisième quartile, Q<sub>3</sub>, de la variable</li>
+<li><code>Max</code> : Le maximum de la variable</li>
+</ol>
+<p>Nous pouvons donc produire le sommaire de la variable <code>price</code> de la base de données <code>diamonds</code> de la façon suivante:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(diamonds<span class="op">$</span>price)</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     326     950    2401    3933    5324   18823</code></pre>
+</div>
+<div id="le-rang-centile" class="section level3">
+<h3><span class="header-section-number">3.3.4</span> Le rang centile</h3>
+<p>Un rang centile représente le pourcentage cumulé, <em>exprimé en nombre entier</em>, qui correspond à une certaine donnée. Nous déterminerons les rangs centiles pour les variables continues seulement.</p>
+<p>Les rangs centiles sont donc exactement l’inverse des centiles.</p>
+<p>Il n’existe pas de fonctions dans <code>R</code> permettant de trouver directement le rang centile, mais il est facile d’utiliser la fonction <code>mean</code> pour le trouver.</p>
+<p>Par exemple, si nous voulons trouver le rang centile d’un diamant qui coûte 500$, il suffit d’utiliser la commande suivante. La commande calcule la moyenne de toutes les valeurs en dollars des diamants coûtant 500$ ou moins.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(diamonds<span class="op">$</span>price<span class="op">&lt;=</span><span class="dv">500</span>)</code></pre></div>
+<pre><code>## [1] 0.03242492</code></pre>
+<p>Ceci signifie que pour un diamant de 500$, il y a 3.2424917 % des diamants qui ont une valeur égale ou inférieure.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="presentation-des-donnees.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="les-series-chronologiques.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-mesures.Rmd",
+"text": "Edit"
+},
+"download": ["intro-r.pdf", "intro-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

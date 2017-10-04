@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Une introduction à R</title>
+  <meta name="description" content="Une introduction au langage R pour les étudiants du collégial.">
+  <meta name="generator" content="bookdown 0.5.2 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Une introduction à R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Une introduction au langage R pour les étudiants du collégial." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Une introduction à R" />
+  
+  <meta name="twitter:description" content="Une introduction au langage R pour les étudiants du collégial." />
+  
+
+<meta name="author" content="Marc-André Désautels">
+
+
+<meta name="date" content="2017-10-04">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="les-differentes-mesures.html">
+<link rel="next" href="la-combinatoire.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Une introduction à R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Avant-propos</a></li>
+<li class="part"><span><b>I La présentation des données</b></span></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#tibbles"><i class="fa fa-check"></i><b>1.1</b> Tibbles</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="intro.html"><a href="intro.html#prerequis"><i class="fa fa-check"></i><b>1.1.1</b> Prérequis</a></li>
+<li class="chapter" data-level="1.1.2" data-path="intro.html"><a href="intro.html#un-exemple-de-tibble"><i class="fa fa-check"></i><b>1.1.2</b> Un exemple de “tibble”</a></li>
+<li class="chapter" data-level="1.1.3" data-path="intro.html"><a href="intro.html#la-base-de-donnees-flights"><i class="fa fa-check"></i><b>1.1.3</b> La base de données flights</a></li>
+<li class="chapter" data-level="1.1.4" data-path="intro.html"><a href="intro.html#donneesdiamonds"><i class="fa fa-check"></i><b>1.1.4</b> La base de données <code>diamonds</code></a></li>
+<li class="chapter" data-level="1.1.5" data-path="intro.html"><a href="intro.html#explorertibbles"><i class="fa fa-check"></i><b>1.1.5</b> Comment explorer des “tibbles”</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#types-de-variables"><i class="fa fa-check"></i><b>1.2</b> Types de variables</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#variables-qualitatives"><i class="fa fa-check"></i><b>1.2.1</b> Variables qualitatives</a></li>
+<li class="chapter" data-level="1.2.2" data-path="intro.html"><a href="intro.html#variables-quantitatives"><i class="fa fa-check"></i><b>1.2.2</b> Variables quantitatives</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html"><i class="fa fa-check"></i><b>2</b> Présentation des données</a><ul>
+<li class="chapter" data-level="2.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#variables-qualitatives-1"><i class="fa fa-check"></i><b>2.1</b> Variables qualitatives</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#tableaux-de-frequences"><i class="fa fa-check"></i><b>2.1.1</b> Tableaux de fréquences</a></li>
+<li class="chapter" data-level="2.1.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-a-bandes"><i class="fa fa-check"></i><b>2.1.2</b> Diagramme à bandes</a></li>
+<li class="chapter" data-level="2.1.3" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-circulaire"><i class="fa fa-check"></i><b>2.1.3</b> Diagramme circulaire</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#variables-quantitatives-1"><i class="fa fa-check"></i><b>2.2</b> Variables quantitatives</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#freqquantitatives"><i class="fa fa-check"></i><b>2.2.1</b> Tableaux de fréquences</a></li>
+<li class="chapter" data-level="2.2.2" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#diagramme-a-batons"><i class="fa fa-check"></i><b>2.2.2</b> Diagramme à bâtons</a></li>
+<li class="chapter" data-level="2.2.3" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#histogramme"><i class="fa fa-check"></i><b>2.2.3</b> Histogramme</a></li>
+<li class="chapter" data-level="2.2.4" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#polygone-de-frequences"><i class="fa fa-check"></i><b>2.2.4</b> Polygone de fréquences</a></li>
+<li class="chapter" data-level="2.2.5" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#ogive-des-pourcentages-cumules"><i class="fa fa-check"></i><b>2.2.5</b> Ogive des pourcentages cumulés</a></li>
+<li class="chapter" data-level="2.2.6" data-path="presentation-des-donnees.html"><a href="presentation-des-donnees.html#histogramme-et-polygone-de-frequences"><i class="fa fa-check"></i><b>2.2.6</b> Histogramme et polygone de fréquences</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Les mesures associées aux données</b></span></li>
+<li class="chapter" data-level="3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html"><i class="fa fa-check"></i><b>3</b> Les différentes mesures</a><ul>
+<li class="chapter" data-level="3.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-tendance-centrale"><i class="fa fa-check"></i><b>3.1</b> Les mesures de tendance centrale</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-mode"><i class="fa fa-check"></i><b>3.1.1</b> Le mode</a></li>
+<li class="chapter" data-level="3.1.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-mediane"><i class="fa fa-check"></i><b>3.1.2</b> La médiane</a></li>
+<li class="chapter" data-level="3.1.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-moyenne"><i class="fa fa-check"></i><b>3.1.3</b> La moyenne</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-dispersion"><i class="fa fa-check"></i><b>3.2</b> Les mesures de dispersion</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#letendue"><i class="fa fa-check"></i><b>3.2.1</b> L’étendue</a></li>
+<li class="chapter" data-level="3.2.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-variance"><i class="fa fa-check"></i><b>3.2.2</b> La variance</a></li>
+<li class="chapter" data-level="3.2.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#lecart-type"><i class="fa fa-check"></i><b>3.2.3</b> L’écart-type</a></li>
+<li class="chapter" data-level="3.2.4" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-coefficient-de-variation"><i class="fa fa-check"></i><b>3.2.4</b> Le coefficient de variation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-mesures-de-position"><i class="fa fa-check"></i><b>3.3</b> Les mesures de position</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-cote-z"><i class="fa fa-check"></i><b>3.3.1</b> La cote z</a></li>
+<li class="chapter" data-level="3.3.2" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#les-quantiles"><i class="fa fa-check"></i><b>3.3.2</b> Les quantiles</a></li>
+<li class="chapter" data-level="3.3.3" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#la-commande-summary"><i class="fa fa-check"></i><b>3.3.3</b> La commande <code>summary</code></a></li>
+<li class="chapter" data-level="3.3.4" data-path="les-differentes-mesures.html"><a href="les-differentes-mesures.html#le-rang-centile"><i class="fa fa-check"></i><b>3.3.4</b> Le rang centile</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html"><i class="fa fa-check"></i><b>4</b> Les séries chronologiques</a><ul>
+<li class="chapter" data-level="4.1" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-graphiques"><i class="fa fa-check"></i><b>4.1</b> Les graphiques</a></li>
+<li class="chapter" data-level="4.2" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-mesures"><i class="fa fa-check"></i><b>4.2</b> Les mesures</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-absolue"><i class="fa fa-check"></i><b>4.2.1</b> La variation absolue</a></li>
+<li class="chapter" data-level="4.2.2" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-moyenne"><i class="fa fa-check"></i><b>4.2.2</b> La variation moyenne</a></li>
+<li class="chapter" data-level="4.2.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#la-variation-relative-pourcentage-de-variation"><i class="fa fa-check"></i><b>4.2.3</b> La variation relative (pourcentage de variation)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-donnees-construites"><i class="fa fa-check"></i><b>4.3</b> Les données construites</a></li>
+</ul></li>
+<li class="part"><span><b>III La combinatoire et les probabilités</b></span></li>
+<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a></li>
+<li class="chapter" data-level="6" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html"><i class="fa fa-check"></i><b>6</b> Les lois de probabilités</a><ul>
+<li class="chapter" data-level="6.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-discretes"><i class="fa fa-check"></i><b>6.1</b> Les lois de probabilités discrètes</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-binomiale"><i class="fa fa-check"></i><b>6.1.1</b> La loi binomiale</a></li>
+<li class="chapter" data-level="6.1.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-de-poisson"><i class="fa fa-check"></i><b>6.1.2</b> La loi de Poisson</a></li>
+<li class="chapter" data-level="6.1.3" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-geometrique"><i class="fa fa-check"></i><b>6.1.3</b> La loi géométrique</a></li>
+<li class="chapter" data-level="6.1.4" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-hypergeometrique"><i class="fa fa-check"></i><b>6.1.4</b> La loi hypergéométrique</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-continues"><i class="fa fa-check"></i><b>6.2</b> Les lois de probabilités continues</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-normale"><i class="fa fa-check"></i><b>6.2.1</b> La loi normale</a></li>
+<li class="chapter" data-level="6.2.2" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-de-student"><i class="fa fa-check"></i><b>6.2.2</b> La loi de Student</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Une introduction à R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="les-series-chronologiques" class="section level1">
+<h1><span class="header-section-number">Chapitre 4</span> Les séries chronologiques</h1>
+<p>Débutons par charger les paquetages qui nous seront utiles.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gapminder)
+<span class="kw">library</span>(nycflights13)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<p>Une série chronologique est un ensemble de valeurs observées d’une variable quantitative. Elle permet d’analyser l’évolution de cette variable dans le temps dans le but éventuel de faire des prévisions.</p>
+<div id="les-graphiques" class="section level2">
+<h2><span class="header-section-number">4.1</span> Les graphiques</h2>
+<p>Nous allons débuter par utiliser la base de données <code>nycflights13</code>. Nous allons étudier la température au mois de janvier 2013 à l’aéroport Newark (code “EWR” dans la variable <code>origin</code>). La variable <code>weather</code> de la base de données contient ces informations mais nous devons tout d’abord filtrer les données pour ne conserver que celles qui correspondent à Newark et au mois de janvier.</p>
+<p>La commande suivante permet de faire ce filtrage. Vous n’avez pas besoin de comprendre la syntaxe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meteo_janvier_ewr &lt;-<span class="st"> </span>weather <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(origin <span class="op">==</span><span class="st"> &quot;EWR&quot;</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">1</span> )</code></pre></div>
+<p>Nous pouvons maintenant tracer les données obtenues:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(meteo_janvier_ewr, <span class="kw">aes</span>(<span class="dt">x =</span> time_hour, <span class="dt">y =</span> temp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Heures du mois de janvier&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Température en degrée Farhenheit&quot;</span>,
+    <span class="dt">title =</span> <span class="st">&quot;Répartition de la température au mois de janvier en fonction de l&#39;heure&quot;</span>
+  )</code></pre></div>
+<p><img src="intro-r_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<p>Nous pouvons aussi utiliser la paquetage <code>gapminder</code> qui contient des données sur l’espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gap_canada &lt;-<span class="st"> </span>gapminder <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(country <span class="op">==</span><span class="st"> &quot;Canada&quot;</span>)</code></pre></div>
+<p>Nous pouvons maintenant tracer les données obtenues:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gap_canada, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Année&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Espérance de vie&quot;</span>,
+    <span class="dt">title =</span> <span class="st">&quot;Répartition de l&#39;espérance de vie au Canada en fonction de l&#39;année&quot;</span>)</code></pre></div>
+<p><img src="intro-r_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+</div>
+<div id="les-mesures" class="section level2">
+<h2><span class="header-section-number">4.2</span> Les mesures</h2>
+<div id="la-variation-absolue" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> La variation absolue</h3>
+<p>La variation absolue mesure l’augmentation (ou la diminution) subie par une variable dans le temps. Pour calculer la variation absolue entre un moment A antérieur à un moment B, on utilise la formule ci-dessous :</p>
+<span class="math display">\[\begin{equation}
+\Delta V = V_B - V_A
+\end{equation}\]</span>
+<p>où V<sub>B</sub> est la valeur de la variable au temps B et V<sub>A</sub> est la valeur de la variable au temps A.</p>
+<blockquote>
+<p>Remarque : Les unités de la variation absolue sont les mêmes que celles de la variable étudiée.</p>
+</blockquote>
+<p>Si nous voulons connaître la variation absolue de la population du Canada, nous allons devoir ajouter une colonne à notre base de données <code>gap_canada</code>. Encore une fois, il n’est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation absolue, notée <code>var_abs</code>, à notre base de données <code>gap_canada</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gap_canada &lt;-<span class="st"> </span>gap_canada <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">var_abs =</span> pop <span class="op">-</span><span class="st"> </span><span class="kw">lag</span>(pop))</code></pre></div>
+<p>Nous pouvons maintenant représenter la variable à l’aide d’un graphique.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gap_canada, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> var_abs)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Année&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Variation absolue de la population&quot;</span>,
+    <span class="dt">title =</span> <span class="st">&quot;Répartition de la variation absolue de la population du Canada selon l&#39;année&quot;</span>
+  )</code></pre></div>
+<p><img src="intro-r_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+</div>
+<div id="la-variation-moyenne" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> La variation moyenne</h3>
+<p>La variation moyenne mesure l’augmentation (ou la diminution) moyenne subie par une variable par unité de temps. La variation moyenne entre les moments 𝐴 et 𝐵 est donnée par :</p>
+<span class="math display">\[\begin{equation}
+\Delta V_{moy} = \dfrac{V_B - V_A}{B-A}
+\end{equation}\]</span>
+<blockquote>
+<p>Remarque : Les unités de la variation moyenne sont les unités de la variable étudiée par unité de temps.</p>
+</blockquote>
+<p>Si nous voulons connaître la variation moyenne de la population du Canada, nous allons devoir ajouter une colonne à notre base de données <code>gap_canada</code>. Encore une fois, il n’est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation moyenne, notée <code>var_moy</code>, à notre base de données <code>gap_canada</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gap_canada &lt;-<span class="st"> </span>gap_canada <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">var_moy =</span> (pop <span class="op">-</span><span class="st"> </span><span class="kw">lag</span>(pop))<span class="op">/</span>(year<span class="op">-</span><span class="kw">lag</span>(year)))</code></pre></div>
+<p>Nous pouvons maintenant représenter la variable à l’aide d’un graphique.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gap_canada, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> var_moy)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Année&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Variation moyenne de la population&quot;</span>,
+    <span class="dt">title =</span> <span class="st">&quot;Répartition de la variation moyenne de la population du Canada selon l&#39;année&quot;</span>
+  )</code></pre></div>
+<p><img src="intro-r_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+</div>
+<div id="la-variation-relative-pourcentage-de-variation" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> La variation relative (pourcentage de variation)</h3>
+<p>La variation relative exprime <em>en pourcentage</em> la variation subie par une variable entre les moments 𝐴 et 𝐵. Le pourcentageest donné par:</p>
+<span class="math display">\[\begin{equation}
+\Delta V_{\%} = \dfrac{V_B - V_A}{V_A}\times 100
+\end{equation}\]</span>
+<blockquote>
+<p>Remarque : Il n’y a pas d’unité autre que le symbole de pourcentage.</p>
+</blockquote>
+<p>Si nous voulons connaître la variation relative de la population du Canada, nous allons devoir ajouter une colonne à notre base de données <code>gap_canada</code>. Encore une fois, il n’est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation relative, notée <code>var_rel</code>, à notre base de données <code>gap_canada</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gap_canada &lt;-<span class="st"> </span>gap_canada <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">var_rel =</span> (pop <span class="op">-</span><span class="st"> </span><span class="kw">lag</span>(pop))<span class="op">/</span><span class="kw">lag</span>(pop) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</code></pre></div>
+<p>Nous pouvons maintenant représenter la variable à l’aide d’un graphique.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gap_canada, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> var_rel)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Année&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Variation relative de la population&quot;</span>,
+    <span class="dt">title =</span> <span class="st">&quot;Répartition de la variation relative de la population du Canada selon l&#39;année&quot;</span>
+  )</code></pre></div>
+<p><img src="intro-r_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+</div>
+</div>
+<div id="les-donnees-construites" class="section level2">
+<h2><span class="header-section-number">4.3</span> Les données construites</h2>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="les-differentes-mesures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="la-combinatoire.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/04-series-chronologiques.Rmd",
+"text": "Edit"
+},
+"download": ["intro-r.pdf", "intro-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
