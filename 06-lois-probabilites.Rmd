@@ -162,3 +162,23 @@ ggplot(fhyper, aes(x = x, y = y)) +
 ## Les lois de probabilités continues
 
 ### La loi normale
+
+Le _nom racine_ pour la loi normale est `norm`.
+
+Si $X$ suit une loi normale de moyenne $\mu$ et de variance $\sigma^2$, nous avons $X\sim N(\mu,\sigma^2)$.
+
+Voici la façon de calculer des probabilités pour la loi normale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pnorm(j, mu, sigma)-pnorm(i, mu, sigma)`|
+|$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
+|$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
+```
+
+###  La loi de Student
+
