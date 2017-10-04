@@ -73,7 +73,7 @@ dpois(2, 1/2)
 
 Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
 
-Nous pouvons représenter graphiquement la loi de Poisson. Soit $X~Po(1/2)$. Nous aurons:
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
 
 ```{r}
 fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
@@ -176,7 +176,7 @@ Voici la façon de calculer des probabilités pour la loi normale à l'aide de `
 |$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
 
 
-Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1). Nous aurons:
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
 
 ```{r}
 ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
