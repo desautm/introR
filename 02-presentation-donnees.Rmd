@@ -1,0 +1,204 @@
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+  
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+  
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+  
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+  
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+  
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# Présentation des données
+
+Pour débuter, nous allons charger les paquetages utiles:
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+Pour introduire la présentation des données, nous allons utiliser la base de données `mtcars` et la base de données `diamonds`, que nous avons utilisé à la section \@ref(donneesdiamonds). 
+
+La base de données `mtcars` a été extraite du magazine Motor Trend de l'année 1974, et comprend la consommation d'essence et 10 autres aspects de design automobile pour 32 automobiles (modèles 1973-1974). 
+
+Les 11 variables de cette base de données sont:
+
+- `mpg` : Miles/ (US) gallon
+- `cyl` : Nombre de cylindres
+- `disp` : Déplacement en pouces cube
+- `hp` : Nombre de chevaux-vapeur
+- `drat` : Ratio
+- `wt` : Poids (1000 livres)
+- `qsec` : Temps pour le quart de mile
+- `vs` : V/S
+- `am` : Transmission (0 = automatique, 1 = manuelle)
+- `gear` : Nombre de vitesses
+- `carb` : Nombre de carburateurs
+
+```{r}
+mtcars
+```
+
+## Variables qualitatives
+
+### Tableaux de fréquences
+
+Nous pouvons représenter des variables qualitatives sous forme de tableau. Nous allons utiliser la commande `tabfreq`. Voici comment l'utiliser pour représenter la variable `cut` de la base de données `diamonds`.
+
+```{r}
+tabfreq(diamonds$cut)
+```
+
+Nous pouvons également étudier la variable `clarity`.
+
+```{r}
+tabfreq(diamonds$clarity)
+```
+
+### Diagramme à bandes
+
+Pour les variables qualitatives, le diagramme à bandes est le graphique de choix.
+
+Pour la variable `clarity`.
+
+```{r}
+ggplot(diamonds, aes(clarity)) + geom_bar() +
+  labs(
+    x = "Clarté", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la clarté des diamants")
+```
+
+Pour la variable `cut`.
+
+```{r}
+ggplot(diamonds, aes(cut)) + geom_bar() +
+  labs(
+    x = "Coupe", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la coupe des diamants")
+```
+
+### Diagramme circulaire
+
+```{r}
+ggplot(diamonds, aes(x = factor(1), fill = cut)) + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+## Variables quantitatives
+
+### Tableaux de fréquences {#freqquantitatives}
+
+Pour une variable quantitative discrète, il suffit d'utiliser la fonction `tabfreq` pour représenter les données sous forme de tableau. Par exemple, pour la variable `cyl` de la base de données `mtcars`.
+
+```{r}
+tabfreq(mtcars$cyl)
+```
+
+Pour représenter une variable quantitative continue sous forme de tableau, il faut effectuer un traitement préalable sur les données. 
+
+Étudions la variable `carat` de la base de données `diamonds`. Si  nous tentons d'utiliser la commande `tabfreq` directement, nous allons obtenir une table beaucoup trop grande. En effet, la variable `carat` possède `r length(unique(diamonds$carat))` valeurs différentes!
+
+Pour représenter la variable correctement, nous allons débuter par observer l'étendue des valeurs possibles de cette variable en utilisant la commande `range`. Nous avons donc:
+
+```{r}
+range(diamonds$carat)
+```
+
+La sortie de `R` signifie que la valeur la plus petite de `carat` est `r range(diamonds$carat)[1]`, et que la plus grande est `r range(diamonds$carat)[2]`. 
+
+Nous voulons maintenant recoder notre variable `carat` pour obtenir des classes. Dans notre exemple, il semble adéquat de créer des classes de largeur 1 en débutant à 0 et en terminant à 6. L'option `breaks` permet de décider des classes et l'option `right` permet de fermer l'intervalle à gauche et de l'ouvrir à droite.
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+tabfreq(carat_class)
+```
+
+### Diagramme à bâtons
+
+Pour les variables quantitatives discrètes, le diagramme à bâtons est le graphique de choix.
+
+```{r}
+ggplot(mtcars, aes(cyl)) + 
+  geom_bar(width = 0.1) + 
+  labs(
+    x = "Nombre de cylindres", 
+    y = "Fréquence", 
+    title = "Diagramme à bâtons du nombre de cylindres")
+```
+
+### Histogramme
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",binwidth = 1000, center = 500) +
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme du prix des diamants")
+```
+
+### Polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_freqpoly(size = 1,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Polygone de fréquences du prix des diamants")
+```
+
+### Ogive des pourcentages cumulés
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'ogive des pourcentages cumulés.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  stat_ecdf(pad = FALSE) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence relative cumulée", 
+    title = "Ogive des pourcentages cumulés du prix des diamants")
+```
+
+### Histogramme et polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme et le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",,binwidth = 1000, center = 500) + 
+  geom_freqpoly(size = 1,,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme et polygone de fréquences du prix des diamants")
+```

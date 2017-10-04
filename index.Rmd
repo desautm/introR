@@ -1,0 +1,16 @@
+--- 
+title: "Une introduction à R"
+author: "Marc-André Désautels"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "Une introduction au langage R pour les étudiants du collégial."
+---
+
+# Avant-propos {-}
+

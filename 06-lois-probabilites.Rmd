@@ -1,0 +1,105 @@
+# Les lois de probabilités
+
+Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Premièrement, la fonction possède un _nom racine_, par exemple le _nom racine_ pour la distribution *binomiale* est `binom`. Cette racine est précédée par une de ces quatre lettre:
+
+- `p` pour *probabilité*, qui représente la fonction de répartition
+- `q` pour *quantile*, l'inverse de la fonction de répartition
+- `d` pour *densité*, la fonction de densité de la distribution
+- `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
+
+Pour la loi binomiale, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+
+## Les lois de probabilités discrètes
+
+### La loi binomiale
+
+Le _nom racine_ pour la loi binomiale est `binom`.
+
+Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon de calculer des probabilités pour la loi binomiale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dbinom(k, n, p)`|
+|$P(i\leq X \leq j)$ | `sum(dbinom(i:j, n, p))`|
+|$P(X\leq k)$ | `pbinom(k, n, p)` |
+|$P(X>k)$ | `1-pbinom(k, n, p)` |
+
+Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
+
+```{r}
+dbinom(3,4,1/6)
+```
+
+Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+
+Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
+
+```{r}
+fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
+ggplot(fbinom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre de succès",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
+  )
+```
+
+### La loi de Poisson
+
+Le _nom racine_ pour la loi de Poisson est `pois`.
+
+Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda)$. Voici la façon de calculer des probabilités pour la loi de Poisson à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dpois(k, lambda)`|
+|$P(i\leq X \leq j)$ | `sum(dpois(i:j, lambda))`|
+|$P(X\leq k)$ | `ppois(k, lambda)` |
+|$P(X>k)$ | `1-ppois(k, lambda)` |
+
+Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dpois(2, 1/2)
+```
+
+Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X~Po(1/2)$. Nous aurons:
+
+```{r}
+fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
+ggplot(fpois, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'e succès d'événements"
+  )
+```
+
+### La loi géométrique
+
+Le _nom racine_ pour la loi géométrique est `geom`.
+
+Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici la façon de calculer des probabilités pour la loi géométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dgeom(k, p)`|
+|$P(i\leq X \leq j)$ | `sum(dpgeom(i:j, p))`|
+|$P(X\leq k)$ | `pgeom(k, p)` |
+|$P(X>k)$ | `1-pgeom(k, p)` |
+
+
+### La loi hypergéométrique
+
+## Les lois de probabilités continues
