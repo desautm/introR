@@ -14,7 +14,7 @@ Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Pr
 - `d` pour *densité*, la fonction de densité de la distribution
 - `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
 
-Pour la loi binomiale, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+Pour la loi binomiale par exemple, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
 
 ## Les lois de probabilités discrètes
 
@@ -82,7 +82,7 @@ ggplot(fpois, aes(x = x, y = y)) +
   labs(
     x = "Nombre d'événements",
     y = "Probabilité",
-    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'e succès d'événements"
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
   )
 ```
 
@@ -99,6 +99,26 @@ Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici 
 |$P(X\leq k)$ | `pgeom(k, p)` |
 |$P(X>k)$ | `1-pgeom(k, p)` |
 
+Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
+
+```{r}
+dgeom(6, 1/5)
+```
+
+Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+
+Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
+
+```{r}
+fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
+ggplot(fgeom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
+  )
+```
 
 ### La loi hypergéométrique
 
