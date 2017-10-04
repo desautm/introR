@@ -146,4 +146,19 @@ dhyper(2, 5, 8, 4)
 
 Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
 
+Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
+
+```{r}
+fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
+ggplot(fhyper, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
+  )
+```
+
 ## Les lois de probabilités continues
+
+### La loi normale
