@@ -120,6 +120,8 @@ ggplot(fgeom, aes(x = x, y = y)) +
   )
 ```
 
+> Remarque : 
+
 ### La loi hypergéométrique
 
 ## Les lois de probabilités continues
