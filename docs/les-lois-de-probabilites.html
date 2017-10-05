@@ -163,7 +163,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-donnees-construites"><i class="fa fa-check"></i><b>4.3</b> Les données construites</a></li>
 </ul></li>
 <li class="part"><span><b>III La combinatoire et les probabilités</b></span></li>
-<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a></li>
+<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a><ul>
+<li class="chapter" data-level="5.1" data-path="la-combinatoire.html"><a href="la-combinatoire.html#la-factorielle"><i class="fa fa-check"></i><b>5.1</b> La factorielle</a></li>
+<li class="chapter" data-level="5.2" data-path="la-combinatoire.html"><a href="la-combinatoire.html#les-combinaisons"><i class="fa fa-check"></i><b>5.2</b> Les combinaisons</a></li>
+<li class="chapter" data-level="5.3" data-path="la-combinatoire.html"><a href="la-combinatoire.html#les-arrangements"><i class="fa fa-check"></i><b>5.3</b> Les arrangements</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html"><i class="fa fa-check"></i><b>6</b> Les lois de probabilités</a><ul>
 <li class="chapter" data-level="6.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-discretes"><i class="fa fa-check"></i><b>6.1</b> Les lois de probabilités discrètes</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-binomiale"><i class="fa fa-check"></i><b>6.1.1</b> La loi binomiale</a></li>
@@ -177,7 +181,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publié à l'aide de bookdown</a></li>
 
 </ul>
 
@@ -254,7 +258,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">y =</span> <span class="st">&quot;Probabilité&quot;</span>,
     <span class="dt">title =</span> <span class="st">&quot;Répartition de la probabilité de la loi binomiale en fonction du nombre de succès&quot;</span>
   )</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 <div id="la-loi-de-poisson" class="section level3">
 <h3><span class="header-section-number">6.1.2</span> La loi de Poisson</h3>
@@ -299,7 +303,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">y =</span> <span class="st">&quot;Probabilité&quot;</span>,
     <span class="dt">title =</span> <span class="st">&quot;Répartition de la probabilité de la loi de Poisson en fonction du nombre d&#39;événements&quot;</span>
   )</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="la-loi-geometrique" class="section level3">
 <h3><span class="header-section-number">6.1.3</span> La loi géométrique</h3>
@@ -344,7 +348,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">y =</span> <span class="st">&quot;Probabilité&quot;</span>,
     <span class="dt">title =</span> <span class="st">&quot;Répartition de la probabilité de la loi géométrique en fonction du nombre d&#39;échecs avant le premier succès&quot;</span>
   )</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <blockquote>
 <p>Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p’(k) est la probabilité, lors d’une succession d’épreuves de Bernoulli indépendantes, d’obtenir k échecs avant un succès. On remarque qu’il ne s’agit que d’un décalage de la précédente loi géométrique. Si <span class="math inline">\(X\)</span> suit la loi <span class="math inline">\(p\)</span>, alors <span class="math inline">\(X+1\)</span> suit la loi <span class="math inline">\(p&#39;\)</span>.</p>
 </blockquote>
@@ -393,7 +397,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">y =</span> <span class="st">&quot;Probabilité&quot;</span>,
     <span class="dt">title =</span> <span class="st">&quot;Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l&#39;échantillon&quot;</span>
   )</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 </div>
 <div id="les-lois-de-probabilites-continues" class="section level2">
@@ -425,13 +429,50 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 </tbody>
 </table>
+<p>Soit <span class="math inline">\(X\sim N(3,25)\)</span> une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité <span class="math inline">\(P(1.25&lt;X&lt;3.6)\)</span> en <code>R</code>, nous pouvons utiliser la commande suivante:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="fl">3.6</span>, <span class="dv">3</span>, <span class="dv">5</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="fl">1.25</span>, <span class="dv">3</span>, <span class="dv">5</span>)</code></pre></div>
+<pre><code>## [1] 0.1845891</code></pre>
+<p>La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc 18.4589077 %.</p>
 <p>Nous pouvons représenter graphiquement la loi normale. Soit <span class="math inline">\(X\sim N(0,1)\)</span>. Nous aurons:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args =</span> <span class="kw">list</span>(<span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>))</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="la-loi-de-student" class="section level3">
 <h3><span class="header-section-number">6.2.2</span> La loi de Student</h3>
+<p>Le <em>nom racine</em> pour la loi de Student est <code>t</code>.</p>
+<p>Si <span class="math inline">\(X\)</span> suit une loi de Student à <span class="math inline">\(\nu\)</span> degrés de liberté, nous avons <span class="math inline">\(X\sim T_{\nu}\)</span>.</p>
+<p>Voici la façon de calculer des probabilités pour la loi de Student à l’aide de <code>R</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Probabilités</th>
+<th align="left">Commande <code>R</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><span class="math inline">\(P(i\leq X \leq j)\)</span></td>
+<td align="left"><code>pt(j, nu)-pt(i, nu)</code></td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(P(X\leq k)\)</span></td>
+<td align="left"><code>pt(k, nu)</code></td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(P(X&gt;k)\)</span></td>
+<td align="left"><code>1-pt(k, nu)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Soit <span class="math inline">\(X\sim T_5\)</span> une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité <span class="math inline">\(P(X&gt;3)\)</span> en <code>R</code>, nous pouvons utiliser la commande suivante:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pt</span>(<span class="dv">3</span>, <span class="dv">5</span>)</code></pre></div>
+<pre><code>## [1] 0.01504962</code></pre>
+<p>La probabilité que notre variable aléatoire soit plus grande que 3 est donc 1.5049624 %.</p>
+<p>Nous pouvons représenter graphiquement la loi de Student. Soit <span class="math inline">\(X\sim T_{5}\)</span>. Nous aurons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dt, <span class="dt">args =</span> <span class="kw">list</span>(<span class="dt">df =</span> <span class="dv">5</span>))</code></pre></div>
+<p><img src="06-lois-probabilites_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -471,8 +512,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-lois-probabilites.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "download": ["intro-r.pdf", "intro-r.epub"],
 "toc": {

@@ -163,7 +163,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="les-series-chronologiques.html"><a href="les-series-chronologiques.html#les-donnees-construites"><i class="fa fa-check"></i><b>4.3</b> Les données construites</a></li>
 </ul></li>
 <li class="part"><span><b>III La combinatoire et les probabilités</b></span></li>
-<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a></li>
+<li class="chapter" data-level="5" data-path="la-combinatoire.html"><a href="la-combinatoire.html"><i class="fa fa-check"></i><b>5</b> La combinatoire</a><ul>
+<li class="chapter" data-level="5.1" data-path="la-combinatoire.html"><a href="la-combinatoire.html#la-factorielle"><i class="fa fa-check"></i><b>5.1</b> La factorielle</a></li>
+<li class="chapter" data-level="5.2" data-path="la-combinatoire.html"><a href="la-combinatoire.html#les-combinaisons"><i class="fa fa-check"></i><b>5.2</b> Les combinaisons</a></li>
+<li class="chapter" data-level="5.3" data-path="la-combinatoire.html"><a href="la-combinatoire.html#les-arrangements"><i class="fa fa-check"></i><b>5.3</b> Les arrangements</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html"><i class="fa fa-check"></i><b>6</b> Les lois de probabilités</a><ul>
 <li class="chapter" data-level="6.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#les-lois-de-probabilites-discretes"><i class="fa fa-check"></i><b>6.1</b> Les lois de probabilités discrètes</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="les-lois-de-probabilites.html"><a href="les-lois-de-probabilites.html#la-loi-binomiale"><i class="fa fa-check"></i><b>6.1.1</b> La loi binomiale</a></li>
@@ -177,7 +181,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publié à l'aide de bookdown</a></li>
 
 </ul>
 
@@ -384,21 +388,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Clarté&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Diagramme à bandes de la clarté des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Pour la variable <code>cut</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(cut)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(
     <span class="dt">x =</span> <span class="st">&quot;Coupe&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Diagramme à bandes de la coupe des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="diagramme-circulaire" class="section level3">
 <h3><span class="header-section-number">2.1.3</span> Diagramme circulaire</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill =</span> cut)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_polar</span>(<span class="dt">theta =</span> <span class="st">&quot;y&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 </div>
 <div id="variables-quantitatives-1" class="section level2">
@@ -518,7 +522,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Nombre de cylindres&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Diagramme à bâtons du nombre de cylindres&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <div id="histogramme" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Histogramme</h3>
@@ -529,7 +533,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Prix&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Histogramme du prix des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 <div id="polygone-de-frequences" class="section level3">
 <h3><span class="header-section-number">2.2.4</span> Polygone de fréquences</h3>
@@ -540,7 +544,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Prix&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Polygone de fréquences du prix des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="ogive-des-pourcentages-cumules" class="section level3">
 <h3><span class="header-section-number">2.2.5</span> Ogive des pourcentages cumulés</h3>
@@ -551,7 +555,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Prix&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence relative cumulée&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Ogive des pourcentages cumulés du prix des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <div id="histogramme-et-polygone-de-frequences" class="section level3">
 <h3><span class="header-section-number">2.2.6</span> Histogramme et polygone de fréquences</h3>
@@ -563,7 +567,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">x =</span> <span class="st">&quot;Prix&quot;</span>, 
     <span class="dt">y =</span> <span class="st">&quot;Fréquence&quot;</span>, 
     <span class="dt">title =</span> <span class="st">&quot;Histogramme et polygone de fréquences du prix des diamants&quot;</span>)</code></pre></div>
-<p><img src="intro-r_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="02-presentation-donnees_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -606,8 +610,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-presentation-donnees.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "download": ["intro-r.pdf", "intro-r.epub"],
 "toc": {

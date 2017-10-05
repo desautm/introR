@@ -2,7 +2,8 @@
 
 Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
 
-```{r}
+
+```r
 library(stats)
 library(ggplot2)
 ```
@@ -33,15 +34,21 @@ Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon 
 
 Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
 
-```{r}
+
+```r
 dbinom(3,4,1/6)
 ```
 
-Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+```
+## [1] 0.0154321
+```
+
+Nous avons donc une probabilité de 1.5432099% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
 
 Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
 
-```{r}
+
+```r
 fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
 ggplot(fbinom, aes(x = x, y = y)) +
   geom_bar(width = 0.1, stat = "identity") +
@@ -51,6 +58,8 @@ ggplot(fbinom, aes(x = x, y = y)) +
     title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
   )
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 ### La loi de Poisson
 
@@ -67,15 +76,21 @@ Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda
 
 Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
 
-```{r}
+
+```r
 dpois(2, 1/2)
 ```
 
-Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+```
+## [1] 0.07581633
+```
+
+Nous avons donc une probabilité de 7.5816332% d'obtenir deux erreurs sur une page.
 
 Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
 
-```{r}
+
+```r
 fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
 ggplot(fpois, aes(x = x, y = y)) +
   geom_bar(width = 0.1, stat = "identity") +
@@ -85,6 +100,8 @@ ggplot(fpois, aes(x = x, y = y)) +
     title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
   )
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 ### La loi géométrique
 
@@ -101,15 +118,21 @@ Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici 
 
 Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
 
-```{r}
+
+```r
 dgeom(6, 1/5)
 ```
 
-Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+```
+## [1] 0.0524288
+```
+
+Nous avons donc une probabilité de 5.24288% d'obtenir 6 échecs avant un premier succès.
 
 Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
 
-```{r}
+
+```r
 fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
 ggplot(fgeom, aes(x = x, y = y)) +
   geom_bar(width = 0.1, stat = "identity") +
@@ -119,6 +142,8 @@ ggplot(fgeom, aes(x = x, y = y)) +
     title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
   )
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 > Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
 
@@ -140,15 +165,21 @@ Voici la façon de calculer des probabilités pour la loi hypergéométrique à 
 
 Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
 
-```{r}
+
+```r
 dhyper(2, 5, 8, 4)
 ```
 
-Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
+```
+## [1] 0.3916084
+```
+
+Nous avons donc une probabilité de 39.1608392% de piger 2 boules blanches dans un échantillon de taille 4.
 
 Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
 
-```{r}
+
+```r
 fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
 ggplot(fhyper, aes(x = x, y = y)) +
   geom_bar(width = 0.1, stat = "identity") +
@@ -158,6 +189,8 @@ ggplot(fhyper, aes(x = x, y = y)) +
     title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
   )
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 ## Les lois de probabilités continues
 
@@ -177,18 +210,26 @@ Voici la façon de calculer des probabilités pour la loi normale à l'aide de `
 
 Soit $X\sim N(3,25)$ une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité $P(1.25<X<3.6)$ en `R`, nous pouvons utiliser la commande suivante:
 
-```{r}
+
+```r
 pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5)
 ```
 
-La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc `r (pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5))*100` %.
+```
+## [1] 0.1845891
+```
+
+La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc 18.4589077 %.
 
 Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
 
-```{r}
+
+```r
 ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 ###  La loi de Student
 
@@ -206,15 +247,23 @@ Voici la façon de calculer des probabilités pour la loi de Student à l'aide d
 
 Soit $X\sim T_5$ une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité $P(X>3)$ en `R`, nous pouvons utiliser la commande suivante:
 
-```{r}
+
+```r
 1 - pt(3, 5)
 ```
 
-La probabilité que notre variable aléatoire soit plus grande que 3 est donc `r (1 - pt(3, 5))*100` %.
+```
+## [1] 0.01504962
+```
+
+La probabilité que notre variable aléatoire soit plus grande que 3 est donc 1.5049624 %.
 
 Nous pouvons représenter graphiquement la loi de Student. Soit $X\sim T_{5}$. Nous aurons:
 
-```{r}
+
+```r
 ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dt, args = list(df = 5))
 ```
+
+<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-13-1.png" width="672" />

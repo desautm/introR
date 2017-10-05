@@ -6,16 +6,26 @@
 
 Pour calculer la factorielle d'un nombre en `R`, il faut utiliser la commande `factorial`. Par exemple, si nous voulons calculer 6!:
 
-```{r}
+
+```r
 factorial(6)
+```
+
+```
+## [1] 720
 ```
 
 ## Les combinaisons
 
 Pour calculer le nombre de combinaisons lorsque nous choisissons $k$ objets parmi $n$ (**sans** ordre), c'est-à-dire $C_k^n$, nous utilisons la commande `choose(n,k)`. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, $C_6^{49}$, nous avons:
 
-```{r}
+
+```r
 choose(49,6)
+```
+
+```
+## [1] 13983816
 ```
 
 ## Les arrangements
@@ -28,7 +38,12 @@ A_k^n = C_k^n \cdot k!
 
 et donc on peut calculer un arrangement en effectuant `choose(n,k)*factorial(k)`. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, $A_5^{12}$, nous avons:
 
-```{r}
+
+```r
 choose(12,5)*factorial(5)
+```
+
+```
+## [1] 95040
 ```
 
