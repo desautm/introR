@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="les-series-chronologiques.html">
-<link rel="next" href="les-lois-de-probabilites.html">
+<link rel="prev" href="les-lois-de-probabilites.html">
+<link rel="next" href="paquetages-utiles.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -207,39 +207,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="la-combinatoire" class="section level1">
-<h1><span class="header-section-number">Chapitre 5</span> La combinatoire</h1>
-<div id="la-factorielle" class="section level2">
-<h2><span class="header-section-number">5.1</span> La factorielle</h2>
-<p>Pour calculer la factorielle d’un nombre en <code>R</code>, il faut utiliser la commande <code>factorial</code>. Par exemple, si nous voulons calculer 6!:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">factorial</span>(<span class="dv">6</span>)</code></pre></div>
-<pre><code>## [1] 720</code></pre>
-</div>
-<div id="les-combinaisons" class="section level2">
-<h2><span class="header-section-number">5.2</span> Les combinaisons</h2>
-<p>Pour calculer le nombre de combinaisons lorsque nous choisissons <span class="math inline">\(k\)</span> objets parmi <span class="math inline">\(n\)</span> (<strong>sans</strong> ordre), c’est-à-dire <span class="math inline">\(C_k^n\)</span>, nous utilisons la commande <code>choose(n,k)</code>. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, <span class="math inline">\(C_6^{49}\)</span>, nous avons:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">choose</span>(<span class="dv">49</span>,<span class="dv">6</span>)</code></pre></div>
-<pre><code>## [1] 13983816</code></pre>
-</div>
-<div id="les-arrangements" class="section level2">
-<h2><span class="header-section-number">5.3</span> Les arrangements</h2>
-<p>Pour calculer le nombre d’arrangements lorsque nous choisissons <span class="math inline">\(k\)</span> objets parmi <span class="math inline">\(n\)</span> (<strong>avec</strong> ordre), c’est-à-dire <span class="math inline">\(A_k^n\)</span>, nous utilisons les commandes <code>choose(n,k)</code> et <code>factorial</code>. En effet, nous savons que:</p>
-<span class="math display">\[\begin{equation}
-A_k^n = C_k^n \cdot k!
-\end{equation}\]</span>
-<p>et donc on peut calculer un arrangement en effectuant <code>choose(n,k)*factorial(k)</code>. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, <span class="math inline">\(A_5^{12}\)</span>, nous avons:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">choose</span>(<span class="dv">12</span>,<span class="dv">5</span>)<span class="op">*</span><span class="kw">factorial</span>(<span class="dv">5</span>)</code></pre></div>
-<pre><code>## [1] 95040</code></pre>
-
-</div>
+<div id="les-distributions-dechantillonnage" class="section level1">
+<h1><span class="header-section-number">Chapitre 7</span> Les distributions d’échantillonnage</h1>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="les-series-chronologiques.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="les-lois-de-probabilites.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="les-lois-de-probabilites.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="paquetages-utiles.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
