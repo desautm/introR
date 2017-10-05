@@ -1,6 +1,7 @@
 # (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
 
 # Les distributions d'échantillonnage
+<<<<<<< HEAD
 
 ## Paquetages utiles {-}
 
@@ -22,3 +23,5 @@ profiles_subset <- profiles %>%
   filter(between(height, 55, 85))
 ```
 
+=======
+>>>>>>> 883b3c494c87d2532fa5fd0e01c54c7c8112769a
