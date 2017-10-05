@@ -1,0 +1,3 @@
+# (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
+
+# Les distributions d'échantillonnage
