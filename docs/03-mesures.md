@@ -14,6 +14,10 @@ library(ggplot2)
 library(nycflights13)
 ```
 
+```
+## Warning: le package 'nycflights13' a été compilé avec la version R 3.4.4
+```
+
 ## Les mesures de tendance centrale
 
 Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.

@@ -1,7 +1,7 @@
 --- 
 title: "Une introduction à R"
 author: "Marc-André Désautels"
-date: "2017-10-05"
+date: "2018-03-27"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book

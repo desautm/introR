@@ -5,7 +5,21 @@ Débutons par charger les paquetages qui nous seront utiles.
 
 ```r
 library(gapminder)
+```
+
+```
+## Warning: le package 'gapminder' a été compilé avec la version R 3.4.4
+```
+
+```r
 library(nycflights13)
+```
+
+```
+## Warning: le package 'nycflights13' a été compilé avec la version R 3.4.4
+```
+
+```r
 library(ggplot2)
 library(dplyr)
 ```
@@ -55,7 +69,7 @@ ggplot(meteo_janvier_ewr, aes(x = time_hour, y = temp)) +
   )
 ```
 
-<img src="04-series-chronologiques_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="04-series-chronologiques_files/figure-html4/unnamed-chunk-3-1.png" width="672" />
 
 Nous pouvons aussi utiliser la paquetage `gapminder` qui contient des données sur l'espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.
 
@@ -77,7 +91,7 @@ ggplot(gap_canada, aes(x = year, y = lifeExp)) +
     title = "Répartition de l'espérance de vie au Canada en fonction de l'année")
 ```
 
-<img src="04-series-chronologiques_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="04-series-chronologiques_files/figure-html4/unnamed-chunk-5-1.png" width="672" />
 
 ## Les mesures
 
@@ -115,7 +129,7 @@ ggplot(gap_canada, aes(x = year, y = var_abs)) +
   )
 ```
 
-<img src="04-series-chronologiques_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="04-series-chronologiques_files/figure-html4/unnamed-chunk-7-1.png" width="672" />
 
 ### La variation moyenne
 
@@ -149,7 +163,7 @@ ggplot(gap_canada, aes(x = year, y = var_moy)) +
   )
 ```
 
-<img src="04-series-chronologiques_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="04-series-chronologiques_files/figure-html4/unnamed-chunk-9-1.png" width="672" />
 
 ### La variation relative (pourcentage de variation)
 
@@ -183,7 +197,7 @@ ggplot(gap_canada, aes(x = year, y = var_rel)) +
   )
 ```
 
-<img src="04-series-chronologiques_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="04-series-chronologiques_files/figure-html4/unnamed-chunk-11-1.png" width="672" />
 
 ## Les données construites
 

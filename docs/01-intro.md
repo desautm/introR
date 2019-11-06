@@ -34,6 +34,13 @@ Pour comprendre ce qu'est un "tibble", nous allons utiliser deux paquetages: "ny
 
 ```r
 library(nycflights13)
+```
+
+```
+## Warning: le package 'nycflights13' a été compilé avec la version R 3.4.4
+```
+
+```r
 library(ggplot2)
 ```
 
@@ -58,16 +65,16 @@ flights
 ## # A tibble: 336,776 x 19
 ##     year month   day dep_time sched_dep_time dep_delay arr_time
 ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-##  1  2013     1     1      517            515         2      830
-##  2  2013     1     1      533            529         4      850
-##  3  2013     1     1      542            540         2      923
-##  4  2013     1     1      544            545        -1     1004
-##  5  2013     1     1      554            600        -6      812
-##  6  2013     1     1      554            558        -4      740
-##  7  2013     1     1      555            600        -5      913
-##  8  2013     1     1      557            600        -3      709
-##  9  2013     1     1      557            600        -3      838
-## 10  2013     1     1      558            600        -2      753
+##  1  2013     1     1      517            515      2.00      830
+##  2  2013     1     1      533            529      4.00      850
+##  3  2013     1     1      542            540      2.00      923
+##  4  2013     1     1      544            545     -1.00     1004
+##  5  2013     1     1      554            600     -6.00      812
+##  6  2013     1     1      554            558     -4.00      740
+##  7  2013     1     1      555            600     -5.00      913
+##  8  2013     1     1      557            600     -3.00      709
+##  9  2013     1     1      557            600     -3.00      838
+## 10  2013     1     1      558            600     -2.00      753
 ## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
 ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
 ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
@@ -107,18 +114,18 @@ diamonds
 
 ```
 ## # A tibble: 53,940 x 10
-##    carat       cut color clarity depth table price     x     y     z
-##    <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-##  1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
-##  2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
-##  3  0.23      Good     E     VS1  56.9    65   327  4.05  4.07  2.31
-##  4  0.29   Premium     I     VS2  62.4    58   334  4.20  4.23  2.63
-##  5  0.31      Good     J     SI2  63.3    58   335  4.34  4.35  2.75
-##  6  0.24 Very Good     J    VVS2  62.8    57   336  3.94  3.96  2.48
-##  7  0.24 Very Good     I    VVS1  62.3    57   336  3.95  3.98  2.47
-##  8  0.26 Very Good     H     SI1  61.9    55   337  4.07  4.11  2.53
-##  9  0.22      Fair     E     VS2  65.1    61   337  3.87  3.78  2.49
-## 10  0.23 Very Good     H     VS1  59.4    61   338  4.00  4.05  2.39
+##    carat cut       color clarity depth table price     x     y     z
+##    <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+##  1 0.230 Ideal     E     SI2      61.5  55.0   326  3.95  3.98  2.43
+##  2 0.210 Premium   E     SI1      59.8  61.0   326  3.89  3.84  2.31
+##  3 0.230 Good      E     VS1      56.9  65.0   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4  58.0   334  4.20  4.23  2.63
+##  5 0.310 Good      J     SI2      63.3  58.0   335  4.34  4.35  2.75
+##  6 0.240 Very Good J     VVS2     62.8  57.0   336  3.94  3.96  2.48
+##  7 0.240 Very Good I     VVS1     62.3  57.0   336  3.95  3.98  2.47
+##  8 0.260 Very Good H     SI1      61.9  55.0   337  4.07  4.11  2.53
+##  9 0.220 Fair      E     VS2      65.1  61.0   337  3.87  3.78  2.49
+## 10 0.230 Very Good H     VS1      59.4  61.0   338  4.00  4.05  2.39
 ## # ... with 53,930 more rows
 ```
 
@@ -183,24 +190,24 @@ airlines
 
 ```
 ## # A tibble: 16 x 2
-##    carrier                        name
-##      <chr>                       <chr>
-##  1      9E           Endeavor Air Inc.
-##  2      AA      American Airlines Inc.
-##  3      AS        Alaska Airlines Inc.
-##  4      B6             JetBlue Airways
-##  5      DL        Delta Air Lines Inc.
-##  6      EV    ExpressJet Airlines Inc.
-##  7      F9      Frontier Airlines Inc.
-##  8      FL AirTran Airways Corporation
-##  9      HA      Hawaiian Airlines Inc.
-## 10      MQ                   Envoy Air
-## 11      OO       SkyWest Airlines Inc.
-## 12      UA       United Air Lines Inc.
-## 13      US             US Airways Inc.
-## 14      VX              Virgin America
-## 15      WN      Southwest Airlines Co.
-## 16      YV          Mesa Airlines Inc.
+##    carrier name                       
+##    <chr>   <chr>                      
+##  1 9E      Endeavor Air Inc.          
+##  2 AA      American Airlines Inc.     
+##  3 AS      Alaska Airlines Inc.       
+##  4 B6      JetBlue Airways            
+##  5 DL      Delta Air Lines Inc.       
+##  6 EV      ExpressJet Airlines Inc.   
+##  7 F9      Frontier Airlines Inc.     
+##  8 FL      AirTran Airways Corporation
+##  9 HA      Hawaiian Airlines Inc.     
+## 10 MQ      Envoy Air                  
+## 11 OO      SkyWest Airlines Inc.      
+## 12 UA      United Air Lines Inc.      
+## 13 US      US Airways Inc.            
+## 14 VX      Virgin America             
+## 15 WN      Southwest Airlines Co.     
+## 16 YV      Mesa Airlines Inc.
 ```
 
 ```r

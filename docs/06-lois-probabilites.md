@@ -59,7 +59,7 @@ ggplot(fbinom, aes(x = x, y = y)) +
   )
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-3-1.png" width="672" />
 
 ### La loi de Poisson
 
@@ -101,7 +101,7 @@ ggplot(fpois, aes(x = x, y = y)) +
   )
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-5-1.png" width="672" />
 
 ### La loi géométrique
 
@@ -143,7 +143,7 @@ ggplot(fgeom, aes(x = x, y = y)) +
   )
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-7-1.png" width="672" />
 
 > Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
 
@@ -190,7 +190,7 @@ ggplot(fhyper, aes(x = x, y = y)) +
   )
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-9-1.png" width="672" />
 
 ## Les lois de probabilités continues
 
@@ -229,7 +229,7 @@ ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-11-1.png" width="672" />
 
 ###  La loi de Student
 
@@ -266,4 +266,4 @@ ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
   stat_function(fun = dt, args = list(df = 5))
 ```
 
-<img src="06-lois-probabilites_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="06-lois-probabilites_files/figure-html4/unnamed-chunk-13-1.png" width="672" />

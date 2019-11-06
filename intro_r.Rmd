@@ -1,0 +1,4841 @@
+--- 
+title: "Une introduction à R"
+author: "Marc-André Désautels"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, package.bib]
+biblio-style: apalike
+link-citations: true
+github-repo: rstudio/bookdown-demo
+description: "Une introduction au langage R pour les étudiants du collégial."
+---
+
+# Avant-propos {-}
+
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) La présentation des données {-} 
+
+# Introduction {#intro}
+
+## Tibbles
+
+Pour être en mesure d'effectuer des  calculs statistiques, il nous faut une structure qui soit en mesure de garder en mémoire une base de données. Ces structures se nomment des "tibbles" dans R.
+
+### Prérequis
+
+Pour être en mesure d'utiliser le paquetage **tibble**, nous devons charger le paquetage **tibble** et le paquetage **knitr**. Pour ce faire, il suffit d'utiliser la commande suivante:
+
+```{r}
+library(tibble)
+library(knitr)
+```
+
+Si vous exécutez ce code et vous recevez le message d'erreur suivant "there is no package called 'tibble'", vous allez devoir installer le paquetage et ensuite charger la librairie.
+
+```
+install.packages("tibble")
+library(tibble)
+```
+
+Vous faites la même chose pour le paquetage **knitr**.
+
+Vous devez installer le paquetage une seule fois, mais vous devez le charger à chaque fois que vous démarrez une session en R.
+
+### Un exemple de "tibble"
+
+Pour comprendre ce qu'est un "tibble", nous allons utiliser deux paquetages: "nycflights13" et "diamonds". Si ce n'est pas déjà fait, vous devez les installer et ensuite les charger.
+
+```{r}
+library(nycflights13)
+library(ggplot2)
+```
+
+Nous allons étudier le paquetage "nycflights13" qui contient 5 bases de données contenant des informations concernant les vols intérieurs en partance de New York en 2013, à partir des aéroports de Newark Liberty International (EWR), John F. Kennedy International (JFK) ou LaGuardia (LGA). Les 5 bases de données sont les suivantes:
+
+- flights: information sur les 336,776 vols
+- airlines: lien entre les codes IATA de deux lettres et les noms de compagnies d'aviation (16 au total)
+- planes: information de construction sur les 3 322 avions utilisés
+- weather: données météo à chaque heure (environ 8 710 observations) pour chacun des trois aéroports.
+- airports: noms des aéroports et localisations
+
+### La base de données flights
+
+Pour visualiser facilement une base de données sous forme "tibble", il suffit de taper son nom dans la console. Nous allons utiliser la base de données flights. Par exemple:
+
+```{r}
+flights
+```
+
+Nous allons décortiquer la sortie console:
+
+- `A tibble: 336,776 x 19`: un "tibble" est une façon de représenter une base de données en R. Cette base de données possède:
+    * `336 776` lignes
+    * `19` colonnes correspondant aux 19 variables décrivant chacune des observations
+- `year month` `day` `dep_time` `sched_dep_time` `dep_delay` `arr_time` sont différentes colonnes, en d'autres mots des variables, de cette base de données.
+- Nous avons ensuite 10 lignes d'obervations correspondant à 10 vols
+- `... with 336,766 more rows, and 12 more variables:` nous indique que 336 766 lignes et 12 autres variables ne pouvaient pas être affichées à l'écran.
+
+Malheureusement cette sortie écran ne nous permet pas d'explorer les données correctement. Nous verrons à la section \@ref(explorertibbles) comment explorer des `tibbles`.
+
+### La base de données `diamonds` {#donneesdiamonds}
+
+La base de données `diamonds` est composée des variables suivantes:
+
+- `price` : prix en dollars US
+- `carat` : poids du diamant en grammes
+- `cut` : qualité de la coupe (Fair, Good, Very Good, Premium, Ideal)
+- `color` : couleur du diamant (J (pire) jusqu'à D (meilleur))
+- `clarity` : une mesure de la clarté du diamant (I1 (pire), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (meilleur))
+- `x` : longueur en mm
+- `y` : largeur en mm
+- `z` : hauteur en mm
+- `depth` : z / mean(x, y) = 2 * z / (x + y)
+- `table` : largeur du dessus du diamant par  rapport à son point le plus large
+
+```{r}
+diamonds
+```
+
+### Comment explorer des "tibbles" {#explorertibbles}
+
+Voici les façons les plus communes de comprendre les données se trouvant à l'intérieur d'un "tibble":
+
+    1. En utilisant la fonction `View()` de RStudio.C'est la commande que nous utiliserons le plus fr?quemment.
+    2. En utilisant la fonction `glimpse()` du paquetage knitr
+    3. En utilisant la fonction `kable()`
+    4. En utilisant l'opérateur `$` pour étudier une seule variable d'une base de données
+
+1. `View()`:
+
+Éxécutez `View(flights)` dans la console de RStudio et explorez la base de données obtenue. 
+
+Nous remarquons que chaque colonnes représentent une variable différente et que ces variables peuvent être de différents types. Certaines de ces variables, comme `distance`, `day` et `arr_delay` sont des variables dites quantitatives. Ces variables sont numériques par nature. D'autres variables sont dites qualitatives.
+
+Si vous regardez la colonne à l'extrème-gauche de la sortie de `View(flights)`, vous verrez une colonne de nombres. Ces nombres représentent les numéros de ligne de la base de données. Si vous vous promenez sur une ligne de même nombre, par exemple la ligne 5, vous étudiez une unité statistique.
+
+2. `glimpse`:
+
+La seconde façon d'explorer une base de données est d'utiliser la fonction `glimpse()`. Cette fonction nous donne la majorité de l'information précédente et encore plus.
+
+```{r}
+glimpse(flights)
+```
+
+3. `kable()`:
+
+La dernière façon d'étudier l'entièreté de la base de données est d'utiliser la fonction `kable()`. Nous allons explorer les codes des différentes compagnies d'aviation de deux façons.
+
+```{r}
+airlines
+kable(airlines)
+```
+
+À première vue, les deux sorties sont semblables sauf que la seconde est beaucoup plus agréable visuellement dans un document R Markdown.
+
+4. L'opérateur `$`:
+
+Finalement, l'opérateur `$` nous permet d'explorer une seule variable à l'intérieur d'une base de données. Par exemple, si nous désirons étudier la variable `name` de la base de données `airlines`, nous obtenons:
+
+```{r}
+airlines$name
+```
+
+## Types de variables
+
+Nous pouvons utiliser différents types de variables avec le langage `R`.
+
+### Variables qualitatives
+
+Une variable qualitative est une variable dont les résultats possibles sont des **mots**. Les différents **mots** que peuvent prendre une telle variable sont appelées des **modalités**.
+
+#### Variables qualitatives à échelle nominale
+
+On observe ce type de variable lorsqu’il n’y a pas d’ordre croissant naturel dans les **modalités** de la variable. Par exemple, la variable _couleur des cheveux_ est à échelle nominale. L'ordre « blonds, bruns, roux, noirs, autre » est un ordre aussi valable que 
+« bruns, noirs, roux, blonds, autre ».
+
+Dans la base de données `nycflights13`, la variable `origin` provenant des données `flights` est une variable qualitative nominale.
+
+```{r}
+unique(flights$origin)
+```
+
+Autre que l'ordre alphabétique, nous n'avons pas d'autre ordre logique à imposer à l'aéroport d'origine des vols.
+
+#### Variables qualitatives à échelle ordinale
+
+On observe ce type de variable lorsqu’il existe un ordre croissant dans les modalités de la variable. Par exemple, la variable _degré de satisfaction_ est à échelle ordinale. Il est possible de classer les modalités en ordre décroissant en écrivant : Très satisfait  >  Satisfait  >  Insatisfait  >  Très insatisfait.
+
+Dans la base de données `diamonds`, la variable `cut` est une variable qualitative à échelle ordinale.
+
+```{r}
+unique(diamonds$cut)
+```
+
+Nous remarquons que les modalités de cette variable possèdent un ordre. Cet ordre est indiqué par les symboles `<` dans la sortie `R`.
+
+### Variables quantitatives
+
+Une variable quantitative est une variable dont les résultats possibles sont des **nombres**. Les différents nombres que peuvent prendre une telle variable sont appelées des **valeurs**.
+
+#### Variables quantitatives discrètes
+
+On observe ce type de variable lorsque les valeurs sont énumérables, c’est-à-dire lorsqu’il n’existe pas de valeur possible entre deux valeurs consécutives. Par exemple, la variable _nombre de cours suivis pendant cette session_ est une variable quantitative discrète. Les valeurs de ces variables peuvent être : 3, 4, 5, 6, 7,... Il est impossible de suivre 4,6 cours durant une session.
+
+Dans la base de données `nycflights13`, la variable `engines` provenant des données `planes` est une variable quantitative discrète. Cette variable représente le nombre de moteurs de l'avion en question.
+
+```{r}
+unique(planes$engines)
+```
+
+Dans la sortie `R` les valeurs ne sont pas en ordre croissant mais elles le seront lorsque nous les représenterons sous forme de tableau ou de graphique.
+
+#### Variables quantitatives continues
+
+On observe ce type de variable lorsqu’il existe une infinité de valeurs entre deux autres. Par exemple, la variable _masse d’un étudiant (en lbs)_ est une variable quantitative continue. Entre 130 et 131 lbs, il existe une infinité de valeurs telles que 130,54 lbs.
+
+Dans la base de données `diamonds`, nous allons observer la variable `carat`. Voici les 25 premiers éléments de ces valeurs.
+
+```{r}
+diamonds$carat[1:25]
+```
+
+<!--chapter:end:01-intro.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+  
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+  
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+  
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+  
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+  
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# Présentation des données
+
+Pour débuter, nous allons charger les paquetages utiles:
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+Pour introduire la présentation des données, nous allons utiliser la base de données `mtcars` et la base de données `diamonds`, que nous avons utilisé à la section \@ref(donneesdiamonds). 
+
+La base de données `mtcars` a été extraite du magazine Motor Trend de l'année 1974, et comprend la consommation d'essence et 10 autres aspects de design automobile pour 32 automobiles (modèles 1973-1974). 
+
+Les 11 variables de cette base de données sont:
+
+- `mpg` : Miles/ (US) gallon
+- `cyl` : Nombre de cylindres
+- `disp` : Déplacement en pouces cube
+- `hp` : Nombre de chevaux-vapeur
+- `drat` : Ratio
+- `wt` : Poids (1000 livres)
+- `qsec` : Temps pour le quart de mile
+- `vs` : V/S
+- `am` : Transmission (0 = automatique, 1 = manuelle)
+- `gear` : Nombre de vitesses
+- `carb` : Nombre de carburateurs
+
+```{r}
+mtcars
+```
+
+## Variables qualitatives
+
+### Tableaux de fréquences
+
+Nous pouvons représenter des variables qualitatives sous forme de tableau. Nous allons utiliser la commande `tabfreq`. Voici comment l'utiliser pour représenter la variable `cut` de la base de données `diamonds`.
+
+```{r}
+tabfreq(diamonds$cut)
+```
+
+Nous pouvons également étudier la variable `clarity`.
+
+```{r}
+tabfreq(diamonds$clarity)
+```
+
+### Diagramme à bandes
+
+Pour les variables qualitatives, le diagramme à bandes est le graphique de choix.
+
+Pour la variable `clarity`.
+
+```{r}
+ggplot(diamonds, aes(clarity)) + geom_bar() +
+  labs(
+    x = "Clarté", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la clarté des diamants")
+```
+
+Pour la variable `cut`.
+
+```{r}
+ggplot(diamonds, aes(cut)) + geom_bar() +
+  labs(
+    x = "Coupe", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la coupe des diamants")
+```
+
+### Diagramme circulaire
+
+```{r}
+ggplot(diamonds, aes(x = factor(1), fill = cut)) + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+## Variables quantitatives
+
+### Tableaux de fréquences {#freqquantitatives}
+
+Pour une variable quantitative discrète, il suffit d'utiliser la fonction `tabfreq` pour représenter les données sous forme de tableau. Par exemple, pour la variable `cyl` de la base de données `mtcars`.
+
+```{r}
+tabfreq(mtcars$cyl)
+```
+
+Pour représenter une variable quantitative continue sous forme de tableau, il faut effectuer un traitement préalable sur les données. 
+
+Étudions la variable `carat` de la base de données `diamonds`. Si  nous tentons d'utiliser la commande `tabfreq` directement, nous allons obtenir une table beaucoup trop grande. En effet, la variable `carat` possède `r length(unique(diamonds$carat))` valeurs différentes!
+
+Pour représenter la variable correctement, nous allons débuter par observer l'étendue des valeurs possibles de cette variable en utilisant la commande `range`. Nous avons donc:
+
+```{r}
+range(diamonds$carat)
+```
+
+La sortie de `R` signifie que la valeur la plus petite de `carat` est `r range(diamonds$carat)[1]`, et que la plus grande est `r range(diamonds$carat)[2]`. 
+
+Nous voulons maintenant recoder notre variable `carat` pour obtenir des classes. Dans notre exemple, il semble adéquat de créer des classes de largeur 1 en débutant à 0 et en terminant à 6. L'option `breaks` permet de décider des classes et l'option `right` permet de fermer l'intervalle à gauche et de l'ouvrir à droite.
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+tabfreq(carat_class)
+```
+
+### Diagramme à bâtons
+
+Pour les variables quantitatives discrètes, le diagramme à bâtons est le graphique de choix.
+
+```{r}
+ggplot(mtcars, aes(cyl)) + 
+  geom_bar(width = 0.1) + 
+  labs(
+    x = "Nombre de cylindres", 
+    y = "Fréquence", 
+    title = "Diagramme à bâtons du nombre de cylindres")
+```
+
+### Histogramme
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",binwidth = 1000, center = 500) +
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme du prix des diamants")
+```
+
+### Polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_freqpoly(size = 1,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Polygone de fréquences du prix des diamants")
+```
+
+### Ogive des pourcentages cumulés
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'ogive des pourcentages cumulés.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  stat_ecdf(pad = FALSE) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence relative cumulée", 
+    title = "Ogive des pourcentages cumulés du prix des diamants")
+```
+
+### Histogramme et polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme et le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",,binwidth = 1000, center = 500) + 
+  geom_freqpoly(size = 1,,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme et polygone de fréquences du prix des diamants")
+```
+
+<!--chapter:end:02-presentation-donnees.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# (PART) Les mesures associées aux données {-} 
+
+# Les différentes mesures
+
+Dans ce chapitre, nous verrons comment utiliser `R` pour calculer les mesures importantes permettant de résumer des données.
+
+Nous allons charger les paquetages que nous allons utiliser:
+
+```{r}
+library(ggplot2)
+library(nycflights13)
+```
+
+## Les mesures de tendance centrale
+
+Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.
+
+### Le mode
+
+Le mode est la **modalité**, **valeur** ou **classe** possédant la plus grande fréquence. En d’autres mots, c’est la donnée la plus fréquente. 
+
+Puisque le mode se préoccupe seulement de la donnée la plus fréquente, il n’est pas influencé par les valeurs extrêmes.
+
+Lorsque le mode est une classe, il est appelé **classe modale**. 
+
+Le mode est noté **Mo**. 
+
+Le langage `R` ne possède pas de fonction permettant de calculer le mode. La façon la plus simple de le calculer est d'utiliser la fonction `table` de `R`.
+
+Par exemple, si nous voulons connaître le mode de la variable `cut` de la base de données `diamonds`:
+
+```{r}
+table(diamonds$cut)
+```
+
+Nous remarquons que le maximum est à la modalité _Ideal_ avec une fréquence de `r max(table(diamonds$cut))`.
+
+Si nous nous intéressons au mode d'une variable quantitative discrète comme `cyl` de la base de données `mtcars` nous obtenons:
+
+```{r}
+table(mtcars$cyl)
+```
+
+Nous remarquons que le maximum est à la valeur _8_ avec une fréquence de `r max(table(mtcars$cyl))`.
+
+Dans le cas d'une variable quantitative continue, pour calculer le mode, il faut commencer par séparer les données en classes. Nous utiliserons les mêmes classes utilisées à la section \@ref(freqquantitatives)
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+table(carat_class)
+```
+
+La classe modale est donc la classe _[0,1)_ avec une fréquence de `r max(table(carat_class))`.
+
+### La médiane
+
+La médiane, notée **Md**, est la valeur qui sépare une série de données classée en ordre croissant en deux parties égales. 
+
+La médiane étant la valeur du milieu, elle est la valeur où le pourcentage cumulé atteint 50%. 
+
+Puisque la médiane se préoccupe seulement de déterminer où se situe le centre des données, elle n’est pas influencée par les valeurs extrêmes. Elle est donc une mesure de tendance centrale plus fiable que la moyenne.
+
+> Important : La médiane n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la médiane pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `median` permet de calculer la médiane en langage `R`.
+
+Par exemple, pour calculer la médiane de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+median(diamonds$carat)
+```
+
+Ceci signifie que 50% des diamants ont une valeur en carat inférieure ou égale à `r median(diamonds$carat)` et que 50% des diamants ont une valeur en carat supérieure ou égale à `r median(diamonds$carat)`.
+
+Nous pouvons aussi obtenir que la médiane de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+median(diamonds$price)
+```
+
+### La moyenne
+
+La moyenne est la valeur qui pourrait remplacer chacune des données d’une série pour que leur somme demeure identique. Intuitivement, elle représente le centre d’équilibre d’une série de données. La somme des distances qui sépare les données plus petites que la moyenne devrait être la même que la somme des distances qui sépare les données plus grandes. 
+
+> Important : La moyenne n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la moyenne pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `mean` permet de calculer la moyenne en langage `R`.
+
+Par exemple, pour calculer la moyenne de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+mean(diamonds$carat)
+```
+
+Nous pouvons aussi obtenir que la moyenne de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+mean(diamonds$price)
+```
+
+## Les mesures de dispersion
+
+Les mesures de tendance centrale (mode, moyenne et médiane) ne permettent pas de déterminer si une série de données est principalement située autour de son centre, ou si au contraire elle est très dispersée. 
+
+Les mesures de dispersion, elles, permettent de déterminer si une série de données est centralisée autour de sa moyenne, ou si elle est au contraire très dispersée. 
+
+Les mesures de dispersion sont l’étendue, la variance, l’écart-type et le coefficient de variation. 
+
+### L'étendue
+
+La première mesure de dispersion, l’étendue, est la différence entre la valeur maximale et la valeur minimale.
+
+L’étendue ne tenant compte que du maximum et du minimum, elle est grandement influencée par les valeurs extrêmes. Elle est donc une mesure de dispersion peu fiable.
+
+La fonction `range` permet de calculer l'étendue d'une variable en langage `R`.
+
+Par exemple, pour calculer l'étendue de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+range(diamonds$carat)
+```
+
+Nous pouvons donc calculer l'étendue de la variable `carat` en soustrayant les deux valeurs obtenues par la fonction `range`, c'est-à-dire que l'étendue est  `r range(diamonds$carat)[2]`-`r range(diamonds$carat)[1]` = `r range(diamonds$carat)[2]-range(diamonds$carat)[1]`.
+
+### La variance
+
+La variance sert principalement à calculer l’écart-type, la mesure de dispersion la plus connue.
+
+> Attention : Les unités de la variance sont des unités^2^.
+
+La fonction `var` permet de calculer la variance d'une variable en langage `R`.
+
+Par exemple, pour calculer la variance de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+var(diamonds$carat)
+```
+
+Ceci signifie que la variance de la variable `carat` est `r var(diamonds$carat)` carat^2^.
+
+### L'écart-type
+
+L’écart-type est la mesure de dispersion la plus couramment utilisée. Il peut être vu comme la « moyenne » des écarts entre les données et la moyenne.
+
+Puisque l’écart-type tient compte de chacune des données, il est une mesure de dispersion beaucoup plus fiable que l’étendue.
+
+Il est défini comme la racine carrée de la variance.
+
+La fonction `sd` permet de calculer l''écart-type d'une variable en langage `R`.
+
+Par exemple, pour calculer l'écart-type de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)
+```
+
+Ceci signifie que l'écart-type de la variable `carat` est `r sd(diamonds$carat)` carat.
+
+### Le coefficient de variation
+
+Le coefficient de variation, noté C. V., est calculé comme suit : 
+
+\begin{equation}
+C.V. = \dfrac{\text{ecart-type}}{\text{moyenne}}\times 100\%
+\end{equation}
+
+Si le coefficient est inférieur à 15%, les données sont dites **homogènes**. Cela veut dire que les données sont situées près les unes des autres.
+
+Dans le cas contraire, les données sont dites **hétérogènes**. Cela veut dire que les données sont très dispersées.
+
+> Important : Le coefficient de variation ne possède pas d’unité, outre le symbole de pourcentage.
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement le coefficient de variation. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour le calculer.
+
+Par exemple, pour calculer le coefficient de variation de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)/mean(diamonds$carat)*100
+```
+
+Le C.V. de la variable `carat` est donc `r sd(diamonds$carat)/mean(diamonds$carat)*100` %, ce qui signifie que les données sont `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"homogènes","hétérogènes")`, car le coefficient de variation est `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"plus petit ou égal à 15%","plus grand que 15%")`.
+
+## Les mesures de position
+
+Les mesures de position permettent de situer une donnée par rapport aux autres. Les différentes mesures de position sont la cote Z, les quantiles et les rangs.
+
+Tout comme les mesures de dispersion, celles-ci ne sont définies que pour une variable quantitative.
+
+### La cote z
+
+Cette mesure de position se base sur la moyenne et l’écart-type.
+
+La cote Z d’une donnée x est calculée comme suit : 
+
+\begin{equation}
+Z = \dfrac{x-\text{moyenne}}{\text{ecart-type}}
+\end{equation}
+
+> Important : La cote z ne possède pas d'unités.
+
+Une cote Z peut être positive, négative ou nulle. 
+
+| Cote Z | Interprétation |
+|-------:|:---------------|
+| Z>0 | donnée supérieure à la moyenne | 
+| Z<0 | donnée inférieure à la moyenne |
+| Z=0 | donnée égale à la moyenne |
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement la cote Z. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour la calculer.
+
+Par exemple, si nous voulons calculer la cote Z d'un diamant de 3 carats, nous avons:
+
+```{r}
+(3-mean(diamonds$carat))/sd(diamonds$carat)
+```
+
+### Les quantiles
+
+Un quantile est une donnée qui correspond à un certain pourcentage cumulé.
+
+Parmi les quantiles, on distingue les quartiles, les quintiles, les déciles et les centiles. 
+
+- Les quartiles Q~1~, Q~2~ et Q~3~, séparent les données en quatre parties égales.
+Environ 25% des données sont inférieures ou égales à Q~1~.
+Environ 50% des données sont inférieures ou égales à Q~2~.
+Environ 75% des données sont inférieures ou égales à Q~3~.
+- Les quintiles V~1~, V~2~, V~3~ et V~4~, séparent les données en cinq parties égales.
+Environ 20% des données sont inférieures ou égales à V~1~.
+Environ 40% des données sont inférieures ou égales à V~2~.
+Etc.
+- Les déciles D~1~, D~2~, ..., D~8~ et D~9~, séparent les données en dix parties égales. 
+Environ 10% des données sont inférieures ou égales à D~1~. 
+Environ 20% des données sont inférieures ou égales à D~2~.
+Etc.
+- Les centiles C~1~, C~2~, ..., C~98~ et C~99~, séparent les données en cent parties égales.
+Environ 1% des données sont inférieures ou égales à C~1~.
+Environ 2% des données sont inférieures ou égales à C~2~.
+Etc.
+
+> Il est utile de noter que certains quantiles se recoupent. 
+
+La fonction `quantile` permet de calculer n'importe quel quantile d'une variable en langage `R`. Il suffit d'indiquer la variable étudiée ainsi que le pourcentage du quantile voulu.
+
+Par exemple, si nous voulons calculer D~1~ pour la variable `carat`, nous allons utiliser la fonction `quantile` avec une probabilité de 0,1.
+
+```{r}
+quantile(diamonds$carat, 0.1)
+```
+
+Ceci implique que 10% des diamants ont une valeur en carat inférieure ou égale à `r quantile(diamonds$carat, 0.1)` carat.
+
+Nous pouvons calculer le troisième quartile Q~3~ de la variable `price` en utilisant la fonction `quantile` avec une probabilité de 0,75.
+
+```{r}
+quantile(diamonds$price, 0.75)
+```
+
+Ceci implique que 75% des diamants ont un prix en dollars inférieur ou égal à `r quantile(diamonds$price, 0.75)` $.
+
+### La commande `summary`
+
+La commande `summary` produit un sommaire contenant six mesures importantes:
+
+1. `Min` : le minimum de la variable
+2. `1st Qu.`: Le premier quartile, Q~1~, de la variable
+3. `Median` : La médiane de la variable
+4. `Mean` : La moyenne de la variable
+5. `3rd Qu.` : Le troisième quartile, Q~3~, de la variable
+6. `Max` : Le maximum de la variable
+
+Nous pouvons donc produire le sommaire de la variable `price` de la base de données `diamonds` de la façon suivante:
+
+```{r}
+summary(diamonds$price)
+```
+
+### Le rang centile
+
+Un rang centile représente le pourcentage cumulé, *exprimé en nombre entier*, qui correspond à une certaine donnée. Nous déterminerons les rangs centiles pour les variables continues seulement.
+
+Les rangs centiles sont donc exactement l’inverse des centiles.
+
+Il n'existe pas de fonctions dans `R` permettant de trouver directement le rang centile, mais il est facile d'utiliser la fonction `mean` pour le trouver. 
+
+Par exemple, si nous voulons trouver le rang centile d'un diamant qui coûte 500\$, il suffit d'utiliser la commande suivante. La commande calcule la moyenne de toutes les valeurs en dollars des diamants coûtant 500\$ ou moins.
+
+```{r}
+mean(diamonds$price<=500)
+```
+
+Ceci signifie que pour un diamant de 500\$, il y a `r mean(diamonds$price<=500)*100` % des diamants qui ont une valeur égale ou inférieure.
+
+<!--chapter:end:03-mesures.Rmd-->
+
+# Les séries chronologiques
+
+Débutons par charger les paquetages qui nous seront utiles.
+
+```{r}
+library(gapminder)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+```
+
+Une série chronologique est un ensemble de valeurs observées d’une variable quantitative. Elle permet d’analyser l’évolution de cette variable dans le temps dans le but éventuel de faire des prévisions.
+
+## Les graphiques
+
+Nous allons débuter par utiliser la base de données `nycflights13`. Nous allons étudier la température au mois de janvier 2013 à l'aéroport Newark (code "EWR" dans la variable `origin`). La variable `weather` de la base de données contient ces informations mais nous devons tout d'abord filtrer les données pour ne conserver que celles qui correspondent à Newark et au mois de janvier.
+
+La commande suivante permet de faire ce filtrage. Vous n'avez pas besoin de comprendre la syntaxe.
+
+```{r}
+meteo_janvier_ewr <- weather %>% 
+  filter(origin == "EWR" & month == 1 )
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(meteo_janvier_ewr, aes(x = time_hour, y = temp)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Heures du mois de janvier",
+    y = "Température en degrée Farhenheit",
+    title = "Répartition de la température au mois de janvier en fonction de l'heure"
+  )
+```
+
+Nous pouvons aussi utiliser la paquetage `gapminder` qui contient des données sur l'espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.
+
+```{r}
+gap_canada <- gapminder %>%
+  filter(country == "Canada")
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(gap_canada, aes(x = year, y = lifeExp)) + 
+  geom_line() + geom_point() +
+  labs(
+    x = "Année",
+    y = "Espérance de vie",
+    title = "Répartition de l'espérance de vie au Canada en fonction de l'année")
+```
+
+## Les mesures
+
+### La variation absolue
+
+La variation absolue mesure l’augmentation (ou la diminution) subie par une variable dans le temps. Pour calculer la variation absolue entre un moment A antérieur à un moment B, on utilise la formule ci-dessous :
+
+\begin{equation}
+\Delta V = V_B - V_A
+\end{equation}
+
+où V~B~ est la valeur de la variable au temps B et V~A~ est la valeur de la variable au temps A.
+
+> Remarque : Les unités de la variation absolue sont les mêmes que celles de la variable étudiée.
+
+Si nous voulons connaître la variation absolue de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation absolue, notée `var_abs`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_abs = pop - lag(pop))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_abs)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation absolue de la population",
+    title = "Répartition de la variation absolue de la population du Canada selon l'année"
+  )
+```
+
+### La variation moyenne
+
+La variation moyenne mesure l’augmentation (ou la diminution) moyenne subie par une variable par unité de temps. La variation moyenne entre les moments 𝐴 et 𝐵 est donnée par :
+
+\begin{equation}
+\Delta V_{moy} = \dfrac{V_B - V_A}{B-A}
+\end{equation}
+
+> Remarque : Les unités de la variation moyenne sont les unités de la variable étudiée par unité de temps.
+
+Si nous voulons connaître la variation moyenne de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation moyenne, notée `var_moy`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_moy = (pop - lag(pop))/(year-lag(year)))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_moy)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation moyenne de la population",
+    title = "Répartition de la variation moyenne de la population du Canada selon l'année"
+  )
+```
+
+### La variation relative (pourcentage de variation)
+
+La variation relative exprime *en pourcentage* la variation subie par une variable entre les moments 𝐴 et 𝐵. Le pourcentageest donné par:
+
+\begin{equation}
+\Delta V_{\%} = \dfrac{V_B - V_A}{V_A}\times 100
+\end{equation}
+
+> Remarque : Il n’y a pas d’unité autre que le symbole de pourcentage.
+
+Si nous voulons connaître la variation relative de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation relative, notée `var_rel`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_rel = (pop - lag(pop))/lag(pop) * 100)
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_rel)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation relative de la population",
+    title = "Répartition de la variation relative de la population du Canada selon l'année"
+  )
+```
+
+## Les données construites
+
+
+<!--chapter:end:04-series-chronologiques.Rmd-->
+
+# (PART) La combinatoire et les probabilités {-} 
+
+# La combinatoire
+
+## La factorielle
+
+Pour calculer la factorielle d'un nombre en `R`, il faut utiliser la commande `factorial`. Par exemple, si nous voulons calculer 6!:
+
+```{r}
+factorial(6)
+```
+
+## Les combinaisons
+
+Pour calculer le nombre de combinaisons lorsque nous choisissons $k$ objets parmi $n$ (**sans** ordre), c'est-à-dire $C_k^n$, nous utilisons la commande `choose(n,k)`. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, $C_6^{49}$, nous avons:
+
+```{r}
+choose(49,6)
+```
+
+## Les arrangements
+
+Pour calculer le nombre d'arrangements lorsque nous choisissons $k$ objets parmi $n$ (**avec** ordre), c'est-à-dire $A_k^n$, nous utilisons les commandes `choose(n,k)` et `factorial`. En effet, nous savons que:
+
+\begin{equation}
+A_k^n = C_k^n \cdot k!
+\end{equation}
+
+et donc on peut calculer un arrangement en effectuant `choose(n,k)*factorial(k)`. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, $A_5^{12}$, nous avons:
+
+```{r}
+choose(12,5)*factorial(5)
+```
+
+
+<!--chapter:end:05-combinatoire.Rmd-->
+
+# Les lois de probabilités
+
+Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Premièrement, la fonction possède un _nom racine_, par exemple le _nom racine_ pour la distribution *binomiale* est `binom`. Cette racine est précédée par une de ces quatre lettre:
+
+- `p` pour *probabilité*, qui représente la fonction de répartition
+- `q` pour *quantile*, l'inverse de la fonction de répartition
+- `d` pour *densité*, la fonction de densité de la distribution
+- `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
+
+Pour la loi binomiale par exemple, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+
+## Les lois de probabilités discrètes
+
+### La loi binomiale
+
+Le _nom racine_ pour la loi binomiale est `binom`.
+
+Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon de calculer des probabilités pour la loi binomiale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dbinom(k, n, p)`|
+|$P(i\leq X \leq j)$ | `sum(dbinom(i:j, n, p))`|
+|$P(X\leq k)$ | `pbinom(k, n, p)` |
+|$P(X>k)$ | `1-pbinom(k, n, p)` |
+
+Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
+
+```{r}
+dbinom(3,4,1/6)
+```
+
+Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+
+Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
+
+```{r}
+fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
+ggplot(fbinom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre de succès",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
+  )
+```
+
+### La loi de Poisson
+
+Le _nom racine_ pour la loi de Poisson est `pois`.
+
+Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda)$. Voici la façon de calculer des probabilités pour la loi de Poisson à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dpois(k, lambda)`|
+|$P(i\leq X \leq j)$ | `sum(dpois(i:j, lambda))`|
+|$P(X\leq k)$ | `ppois(k, lambda)` |
+|$P(X>k)$ | `1-ppois(k, lambda)` |
+
+Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dpois(2, 1/2)
+```
+
+Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
+
+```{r}
+fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
+ggplot(fpois, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
+  )
+```
+
+### La loi géométrique
+
+Le _nom racine_ pour la loi géométrique est `geom`.
+
+Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici la façon de calculer des probabilités pour la loi géométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dgeom(k, p)`|
+|$P(i\leq X \leq j)$ | `sum(dgeom(i:j, p))`|
+|$P(X\leq k)$ | `pgeom(k, p)` |
+|$P(X>k)$ | `1-pgeom(k, p)` |
+
+Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
+
+```{r}
+dgeom(6, 1/5)
+```
+
+Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+
+Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
+
+```{r}
+fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
+ggplot(fgeom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
+  )
+```
+
+> Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
+
+### La loi hypergéométrique
+
+Le _nom racine_ pour la loi hypergéométrique est `hyper`.
+
+On tire sans remise $n$ objets d'un ensemble de $N$ objets dont $A$
+possèdent une caractéristique particulière (et les autres $B=N-A$ ne la possèdent pas). Soit $X$ le nombre d'objets de l'échantillon qui possèdent la caractéristique. Nous avons que $X\sim H(N,A,n)$.
+
+Voici la façon de calculer des probabilités pour la loi hypergéométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dhyper(k, A, B, n)`|
+|$P(i\leq X \leq j)$ | `sum(dhyper(i:j, A, B, n))`|
+|$P(X\leq k)$ | `phyper(k, A, B, n)` |
+|$P(X>k)$ | `1-phyper(k, A, B, n)` |
+
+Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dhyper(2, 5, 8, 4)
+```
+
+Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
+
+Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
+
+```{r}
+fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
+ggplot(fhyper, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
+  )
+```
+
+## Les lois de probabilités continues
+
+### La loi normale
+
+Le _nom racine_ pour la loi normale est `norm`.
+
+Si $X$ suit une loi normale de moyenne $\mu$ et de variance $\sigma^2$, nous avons $X\sim N(\mu,\sigma^2)$.
+
+Voici la façon de calculer des probabilités pour la loi normale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pnorm(j, mu, sigma)-pnorm(i, mu, sigma)`|
+|$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
+|$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
+
+Soit $X\sim N(3,25)$ une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité $P(1.25<X<3.6)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5)
+```
+
+La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc `r (pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
+```
+
+###  La loi de Student
+
+Le _nom racine_ pour la loi de Student est `t`.
+
+Si $X$ suit une loi de Student à $\nu$ degrés de liberté, nous avons $X\sim T_{\nu}$.
+
+Voici la façon de calculer des probabilités pour la loi de Student à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pt(j, nu)-pt(i, nu)`|
+|$P(X\leq k)$ | `pt(k, nu)` |
+|$P(X>k)$ | `1-pt(k, nu)` |
+
+Soit $X\sim T_5$ une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité $P(X>3)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+1 - pt(3, 5)
+```
+
+La probabilité que notre variable aléatoire soit plus grande que 3 est donc `r (1 - pt(3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi de Student. Soit $X\sim T_{5}$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args = list(df = 5))
+```
+
+<!--chapter:end:06-lois-probabilites.Rmd-->
+
+# (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
+
+# Les distributions d'échantillonnage
+
+## Paquetages utiles {-}
+
+Chargeons tous les paquetages qui nous seront utiles.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(okcupiddata)
+library(mosaic)
+```
+
+## L'échantillonnage
+
+Le paquetage `okcupiddata` [@R-okcupiddata] se trouve [ici](https://github.com/rudeboybert/okcupiddata).
+
+```{r}
+profiles_subset <- profiles %>% 
+  filter(between(height, 55, 85))
+```
+
+```{r}
+ggplot(profiles_subset,aes(height)) +
+  geom_histogram(bins = 20, color = "white") +
+  labs(
+    x = "Taille",
+    y = "Fréquence",
+    title = "Histogramme"
+  )
+```
+
+```{r}
+knitr::include_app("http://ismay.shinyapps.io/okcupidheights/")
+```
+
+
+
+<!--chapter:end:07-distributions-echantillonnage.Rmd-->
+
+# L'estimation par intervalle de confiance
+
+
+<!--chapter:end:08-estimation.Rmd-->
+
+# Les tests d'hypothèses
+
+
+<!--chapter:end:09-tests-hypotheses.Rmd-->
+
+`r if (knitr:::is_html_output()) '# Bibliographie {-}'`
+
+<!--chapter:end:99-bibliographie.Rmd-->
+
+--- 
+title: "Une introduction à R"
+author: "Marc-André Désautels"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, package.bib]
+biblio-style: apalike
+link-citations: true
+github-repo: rstudio/bookdown-demo
+description: "Une introduction au langage R pour les étudiants du collégial."
+---
+
+# Avant-propos {-}
+
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) La présentation des données {-} 
+
+# Introduction {#intro}
+
+## Tibbles
+
+Pour être en mesure d'effectuer des  calculs statistiques, il nous faut une structure qui soit en mesure de garder en mémoire une base de données. Ces structures se nomment des "tibbles" dans R.
+
+### Prérequis
+
+Pour être en mesure d'utiliser le paquetage **tibble**, nous devons charger le paquetage **tibble** et le paquetage **knitr**. Pour ce faire, il suffit d'utiliser la commande suivante:
+
+```{r}
+library(tibble)
+library(knitr)
+```
+
+Si vous exécutez ce code et vous recevez le message d'erreur suivant "there is no package called 'tibble'", vous allez devoir installer le paquetage et ensuite charger la librairie.
+
+```
+install.packages("tibble")
+library(tibble)
+```
+
+Vous faites la même chose pour le paquetage **knitr**.
+
+Vous devez installer le paquetage une seule fois, mais vous devez le charger à chaque fois que vous démarrez une session en R.
+
+### Un exemple de "tibble"
+
+Pour comprendre ce qu'est un "tibble", nous allons utiliser deux paquetages: "nycflights13" et "diamonds". Si ce n'est pas déjà fait, vous devez les installer et ensuite les charger.
+
+```{r}
+library(nycflights13)
+library(ggplot2)
+```
+
+Nous allons étudier le paquetage "nycflights13" qui contient 5 bases de données contenant des informations concernant les vols intérieurs en partance de New York en 2013, à partir des aéroports de Newark Liberty International (EWR), John F. Kennedy International (JFK) ou LaGuardia (LGA). Les 5 bases de données sont les suivantes:
+
+- flights: information sur les 336,776 vols
+- airlines: lien entre les codes IATA de deux lettres et les noms de compagnies d'aviation (16 au total)
+- planes: information de construction sur les 3 322 avions utilisés
+- weather: données météo à chaque heure (environ 8 710 observations) pour chacun des trois aéroports.
+- airports: noms des aéroports et localisations
+
+### La base de données flights
+
+Pour visualiser facilement une base de données sous forme "tibble", il suffit de taper son nom dans la console. Nous allons utiliser la base de données flights. Par exemple:
+
+```{r}
+flights
+```
+
+Nous allons décortiquer la sortie console:
+
+- `A tibble: 336,776 x 19`: un "tibble" est une façon de représenter une base de données en R. Cette base de données possède:
+    * `336 776` lignes
+    * `19` colonnes correspondant aux 19 variables décrivant chacune des observations
+- `year month` `day` `dep_time` `sched_dep_time` `dep_delay` `arr_time` sont différentes colonnes, en d'autres mots des variables, de cette base de données.
+- Nous avons ensuite 10 lignes d'obervations correspondant à 10 vols
+- `... with 336,766 more rows, and 12 more variables:` nous indique que 336 766 lignes et 12 autres variables ne pouvaient pas être affichées à l'écran.
+
+Malheureusement cette sortie écran ne nous permet pas d'explorer les données correctement. Nous verrons à la section \@ref(explorertibbles) comment explorer des `tibbles`.
+
+### La base de données `diamonds` {#donneesdiamonds}
+
+La base de données `diamonds` est composée des variables suivantes:
+
+- `price` : prix en dollars US
+- `carat` : poids du diamant en grammes
+- `cut` : qualité de la coupe (Fair, Good, Very Good, Premium, Ideal)
+- `color` : couleur du diamant (J (pire) jusqu'à D (meilleur))
+- `clarity` : une mesure de la clarté du diamant (I1 (pire), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (meilleur))
+- `x` : longueur en mm
+- `y` : largeur en mm
+- `z` : hauteur en mm
+- `depth` : z / mean(x, y) = 2 * z / (x + y)
+- `table` : largeur du dessus du diamant par  rapport à son point le plus large
+
+```{r}
+diamonds
+```
+
+### Comment explorer des "tibbles" {#explorertibbles}
+
+Voici les façons les plus communes de comprendre les données se trouvant à l'intérieur d'un "tibble":
+
+    1. En utilisant la fonction `View()` de RStudio.C'est la commande que nous utiliserons le plus fr?quemment.
+    2. En utilisant la fonction `glimpse()` du paquetage knitr
+    3. En utilisant la fonction `kable()`
+    4. En utilisant l'opérateur `$` pour étudier une seule variable d'une base de données
+
+1. `View()`:
+
+Éxécutez `View(flights)` dans la console de RStudio et explorez la base de données obtenue. 
+
+Nous remarquons que chaque colonnes représentent une variable différente et que ces variables peuvent être de différents types. Certaines de ces variables, comme `distance`, `day` et `arr_delay` sont des variables dites quantitatives. Ces variables sont numériques par nature. D'autres variables sont dites qualitatives.
+
+Si vous regardez la colonne à l'extrème-gauche de la sortie de `View(flights)`, vous verrez une colonne de nombres. Ces nombres représentent les numéros de ligne de la base de données. Si vous vous promenez sur une ligne de même nombre, par exemple la ligne 5, vous étudiez une unité statistique.
+
+2. `glimpse`:
+
+La seconde façon d'explorer une base de données est d'utiliser la fonction `glimpse()`. Cette fonction nous donne la majorité de l'information précédente et encore plus.
+
+```{r}
+glimpse(flights)
+```
+
+3. `kable()`:
+
+La dernière façon d'étudier l'entièreté de la base de données est d'utiliser la fonction `kable()`. Nous allons explorer les codes des différentes compagnies d'aviation de deux façons.
+
+```{r}
+airlines
+kable(airlines)
+```
+
+À première vue, les deux sorties sont semblables sauf que la seconde est beaucoup plus agréable visuellement dans un document R Markdown.
+
+4. L'opérateur `$`:
+
+Finalement, l'opérateur `$` nous permet d'explorer une seule variable à l'intérieur d'une base de données. Par exemple, si nous désirons étudier la variable `name` de la base de données `airlines`, nous obtenons:
+
+```{r}
+airlines$name
+```
+
+## Types de variables
+
+Nous pouvons utiliser différents types de variables avec le langage `R`.
+
+### Variables qualitatives
+
+Une variable qualitative est une variable dont les résultats possibles sont des **mots**. Les différents **mots** que peuvent prendre une telle variable sont appelées des **modalités**.
+
+#### Variables qualitatives à échelle nominale
+
+On observe ce type de variable lorsqu’il n’y a pas d’ordre croissant naturel dans les **modalités** de la variable. Par exemple, la variable _couleur des cheveux_ est à échelle nominale. L'ordre « blonds, bruns, roux, noirs, autre » est un ordre aussi valable que 
+« bruns, noirs, roux, blonds, autre ».
+
+Dans la base de données `nycflights13`, la variable `origin` provenant des données `flights` est une variable qualitative nominale.
+
+```{r}
+unique(flights$origin)
+```
+
+Autre que l'ordre alphabétique, nous n'avons pas d'autre ordre logique à imposer à l'aéroport d'origine des vols.
+
+#### Variables qualitatives à échelle ordinale
+
+On observe ce type de variable lorsqu’il existe un ordre croissant dans les modalités de la variable. Par exemple, la variable _degré de satisfaction_ est à échelle ordinale. Il est possible de classer les modalités en ordre décroissant en écrivant : Très satisfait  >  Satisfait  >  Insatisfait  >  Très insatisfait.
+
+Dans la base de données `diamonds`, la variable `cut` est une variable qualitative à échelle ordinale.
+
+```{r}
+unique(diamonds$cut)
+```
+
+Nous remarquons que les modalités de cette variable possèdent un ordre. Cet ordre est indiqué par les symboles `<` dans la sortie `R`.
+
+### Variables quantitatives
+
+Une variable quantitative est une variable dont les résultats possibles sont des **nombres**. Les différents nombres que peuvent prendre une telle variable sont appelées des **valeurs**.
+
+#### Variables quantitatives discrètes
+
+On observe ce type de variable lorsque les valeurs sont énumérables, c’est-à-dire lorsqu’il n’existe pas de valeur possible entre deux valeurs consécutives. Par exemple, la variable _nombre de cours suivis pendant cette session_ est une variable quantitative discrète. Les valeurs de ces variables peuvent être : 3, 4, 5, 6, 7,... Il est impossible de suivre 4,6 cours durant une session.
+
+Dans la base de données `nycflights13`, la variable `engines` provenant des données `planes` est une variable quantitative discrète. Cette variable représente le nombre de moteurs de l'avion en question.
+
+```{r}
+unique(planes$engines)
+```
+
+Dans la sortie `R` les valeurs ne sont pas en ordre croissant mais elles le seront lorsque nous les représenterons sous forme de tableau ou de graphique.
+
+#### Variables quantitatives continues
+
+On observe ce type de variable lorsqu’il existe une infinité de valeurs entre deux autres. Par exemple, la variable _masse d’un étudiant (en lbs)_ est une variable quantitative continue. Entre 130 et 131 lbs, il existe une infinité de valeurs telles que 130,54 lbs.
+
+Dans la base de données `diamonds`, nous allons observer la variable `carat`. Voici les 25 premiers éléments de ces valeurs.
+
+```{r}
+diamonds$carat[1:25]
+```
+
+<!--chapter:end:01-intro.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+  
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+  
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+  
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+  
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+  
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# Présentation des données
+
+Pour débuter, nous allons charger les paquetages utiles:
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+Pour introduire la présentation des données, nous allons utiliser la base de données `mtcars` et la base de données `diamonds`, que nous avons utilisé à la section \@ref(donneesdiamonds). 
+
+La base de données `mtcars` a été extraite du magazine Motor Trend de l'année 1974, et comprend la consommation d'essence et 10 autres aspects de design automobile pour 32 automobiles (modèles 1973-1974). 
+
+Les 11 variables de cette base de données sont:
+
+- `mpg` : Miles/ (US) gallon
+- `cyl` : Nombre de cylindres
+- `disp` : Déplacement en pouces cube
+- `hp` : Nombre de chevaux-vapeur
+- `drat` : Ratio
+- `wt` : Poids (1000 livres)
+- `qsec` : Temps pour le quart de mile
+- `vs` : V/S
+- `am` : Transmission (0 = automatique, 1 = manuelle)
+- `gear` : Nombre de vitesses
+- `carb` : Nombre de carburateurs
+
+```{r}
+mtcars
+```
+
+## Variables qualitatives
+
+### Tableaux de fréquences
+
+Nous pouvons représenter des variables qualitatives sous forme de tableau. Nous allons utiliser la commande `tabfreq`. Voici comment l'utiliser pour représenter la variable `cut` de la base de données `diamonds`.
+
+```{r}
+tabfreq(diamonds$cut)
+```
+
+Nous pouvons également étudier la variable `clarity`.
+
+```{r}
+tabfreq(diamonds$clarity)
+```
+
+### Diagramme à bandes
+
+Pour les variables qualitatives, le diagramme à bandes est le graphique de choix.
+
+Pour la variable `clarity`.
+
+```{r}
+ggplot(diamonds, aes(clarity)) + geom_bar() +
+  labs(
+    x = "Clarté", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la clarté des diamants")
+```
+
+Pour la variable `cut`.
+
+```{r}
+ggplot(diamonds, aes(cut)) + geom_bar() +
+  labs(
+    x = "Coupe", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la coupe des diamants")
+```
+
+### Diagramme circulaire
+
+```{r}
+ggplot(diamonds, aes(x = factor(1), fill = cut)) + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+## Variables quantitatives
+
+### Tableaux de fréquences {#freqquantitatives}
+
+Pour une variable quantitative discrète, il suffit d'utiliser la fonction `tabfreq` pour représenter les données sous forme de tableau. Par exemple, pour la variable `cyl` de la base de données `mtcars`.
+
+```{r}
+tabfreq(mtcars$cyl)
+```
+
+Pour représenter une variable quantitative continue sous forme de tableau, il faut effectuer un traitement préalable sur les données. 
+
+Étudions la variable `carat` de la base de données `diamonds`. Si  nous tentons d'utiliser la commande `tabfreq` directement, nous allons obtenir une table beaucoup trop grande. En effet, la variable `carat` possède `r length(unique(diamonds$carat))` valeurs différentes!
+
+Pour représenter la variable correctement, nous allons débuter par observer l'étendue des valeurs possibles de cette variable en utilisant la commande `range`. Nous avons donc:
+
+```{r}
+range(diamonds$carat)
+```
+
+La sortie de `R` signifie que la valeur la plus petite de `carat` est `r range(diamonds$carat)[1]`, et que la plus grande est `r range(diamonds$carat)[2]`. 
+
+Nous voulons maintenant recoder notre variable `carat` pour obtenir des classes. Dans notre exemple, il semble adéquat de créer des classes de largeur 1 en débutant à 0 et en terminant à 6. L'option `breaks` permet de décider des classes et l'option `right` permet de fermer l'intervalle à gauche et de l'ouvrir à droite.
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+tabfreq(carat_class)
+```
+
+### Diagramme à bâtons
+
+Pour les variables quantitatives discrètes, le diagramme à bâtons est le graphique de choix.
+
+```{r}
+ggplot(mtcars, aes(cyl)) + 
+  geom_bar(width = 0.1) + 
+  labs(
+    x = "Nombre de cylindres", 
+    y = "Fréquence", 
+    title = "Diagramme à bâtons du nombre de cylindres")
+```
+
+### Histogramme
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",binwidth = 1000, center = 500) +
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme du prix des diamants")
+```
+
+### Polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_freqpoly(size = 1,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Polygone de fréquences du prix des diamants")
+```
+
+### Ogive des pourcentages cumulés
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'ogive des pourcentages cumulés.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  stat_ecdf(pad = FALSE) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence relative cumulée", 
+    title = "Ogive des pourcentages cumulés du prix des diamants")
+```
+
+### Histogramme et polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme et le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",,binwidth = 1000, center = 500) + 
+  geom_freqpoly(size = 1,,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme et polygone de fréquences du prix des diamants")
+```
+
+<!--chapter:end:02-presentation-donnees.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# (PART) Les mesures associées aux données {-} 
+
+# Les différentes mesures
+
+Dans ce chapitre, nous verrons comment utiliser `R` pour calculer les mesures importantes permettant de résumer des données.
+
+Nous allons charger les paquetages que nous allons utiliser:
+
+```{r}
+library(ggplot2)
+library(nycflights13)
+```
+
+## Les mesures de tendance centrale
+
+Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.
+
+### Le mode
+
+Le mode est la **modalité**, **valeur** ou **classe** possédant la plus grande fréquence. En d’autres mots, c’est la donnée la plus fréquente. 
+
+Puisque le mode se préoccupe seulement de la donnée la plus fréquente, il n’est pas influencé par les valeurs extrêmes.
+
+Lorsque le mode est une classe, il est appelé **classe modale**. 
+
+Le mode est noté **Mo**. 
+
+Le langage `R` ne possède pas de fonction permettant de calculer le mode. La façon la plus simple de le calculer est d'utiliser la fonction `table` de `R`.
+
+Par exemple, si nous voulons connaître le mode de la variable `cut` de la base de données `diamonds`:
+
+```{r}
+table(diamonds$cut)
+```
+
+Nous remarquons que le maximum est à la modalité _Ideal_ avec une fréquence de `r max(table(diamonds$cut))`.
+
+Si nous nous intéressons au mode d'une variable quantitative discrète comme `cyl` de la base de données `mtcars` nous obtenons:
+
+```{r}
+table(mtcars$cyl)
+```
+
+Nous remarquons que le maximum est à la valeur _8_ avec une fréquence de `r max(table(mtcars$cyl))`.
+
+Dans le cas d'une variable quantitative continue, pour calculer le mode, il faut commencer par séparer les données en classes. Nous utiliserons les mêmes classes utilisées à la section \@ref(freqquantitatives)
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+table(carat_class)
+```
+
+La classe modale est donc la classe _[0,1)_ avec une fréquence de `r max(table(carat_class))`.
+
+### La médiane
+
+La médiane, notée **Md**, est la valeur qui sépare une série de données classée en ordre croissant en deux parties égales. 
+
+La médiane étant la valeur du milieu, elle est la valeur où le pourcentage cumulé atteint 50%. 
+
+Puisque la médiane se préoccupe seulement de déterminer où se situe le centre des données, elle n’est pas influencée par les valeurs extrêmes. Elle est donc une mesure de tendance centrale plus fiable que la moyenne.
+
+> Important : La médiane n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la médiane pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `median` permet de calculer la médiane en langage `R`.
+
+Par exemple, pour calculer la médiane de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+median(diamonds$carat)
+```
+
+Ceci signifie que 50% des diamants ont une valeur en carat inférieure ou égale à `r median(diamonds$carat)` et que 50% des diamants ont une valeur en carat supérieure ou égale à `r median(diamonds$carat)`.
+
+Nous pouvons aussi obtenir que la médiane de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+median(diamonds$price)
+```
+
+### La moyenne
+
+La moyenne est la valeur qui pourrait remplacer chacune des données d’une série pour que leur somme demeure identique. Intuitivement, elle représente le centre d’équilibre d’une série de données. La somme des distances qui sépare les données plus petites que la moyenne devrait être la même que la somme des distances qui sépare les données plus grandes. 
+
+> Important : La moyenne n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la moyenne pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `mean` permet de calculer la moyenne en langage `R`.
+
+Par exemple, pour calculer la moyenne de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+mean(diamonds$carat)
+```
+
+Nous pouvons aussi obtenir que la moyenne de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+mean(diamonds$price)
+```
+
+## Les mesures de dispersion
+
+Les mesures de tendance centrale (mode, moyenne et médiane) ne permettent pas de déterminer si une série de données est principalement située autour de son centre, ou si au contraire elle est très dispersée. 
+
+Les mesures de dispersion, elles, permettent de déterminer si une série de données est centralisée autour de sa moyenne, ou si elle est au contraire très dispersée. 
+
+Les mesures de dispersion sont l’étendue, la variance, l’écart-type et le coefficient de variation. 
+
+### L'étendue
+
+La première mesure de dispersion, l’étendue, est la différence entre la valeur maximale et la valeur minimale.
+
+L’étendue ne tenant compte que du maximum et du minimum, elle est grandement influencée par les valeurs extrêmes. Elle est donc une mesure de dispersion peu fiable.
+
+La fonction `range` permet de calculer l'étendue d'une variable en langage `R`.
+
+Par exemple, pour calculer l'étendue de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+range(diamonds$carat)
+```
+
+Nous pouvons donc calculer l'étendue de la variable `carat` en soustrayant les deux valeurs obtenues par la fonction `range`, c'est-à-dire que l'étendue est  `r range(diamonds$carat)[2]`-`r range(diamonds$carat)[1]` = `r range(diamonds$carat)[2]-range(diamonds$carat)[1]`.
+
+### La variance
+
+La variance sert principalement à calculer l’écart-type, la mesure de dispersion la plus connue.
+
+> Attention : Les unités de la variance sont des unités^2^.
+
+La fonction `var` permet de calculer la variance d'une variable en langage `R`.
+
+Par exemple, pour calculer la variance de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+var(diamonds$carat)
+```
+
+Ceci signifie que la variance de la variable `carat` est `r var(diamonds$carat)` carat^2^.
+
+### L'écart-type
+
+L’écart-type est la mesure de dispersion la plus couramment utilisée. Il peut être vu comme la « moyenne » des écarts entre les données et la moyenne.
+
+Puisque l’écart-type tient compte de chacune des données, il est une mesure de dispersion beaucoup plus fiable que l’étendue.
+
+Il est défini comme la racine carrée de la variance.
+
+La fonction `sd` permet de calculer l''écart-type d'une variable en langage `R`.
+
+Par exemple, pour calculer l'écart-type de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)
+```
+
+Ceci signifie que l'écart-type de la variable `carat` est `r sd(diamonds$carat)` carat.
+
+### Le coefficient de variation
+
+Le coefficient de variation, noté C. V., est calculé comme suit : 
+
+\begin{equation}
+C.V. = \dfrac{\text{ecart-type}}{\text{moyenne}}\times 100\%
+\end{equation}
+
+Si le coefficient est inférieur à 15%, les données sont dites **homogènes**. Cela veut dire que les données sont situées près les unes des autres.
+
+Dans le cas contraire, les données sont dites **hétérogènes**. Cela veut dire que les données sont très dispersées.
+
+> Important : Le coefficient de variation ne possède pas d’unité, outre le symbole de pourcentage.
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement le coefficient de variation. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour le calculer.
+
+Par exemple, pour calculer le coefficient de variation de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)/mean(diamonds$carat)*100
+```
+
+Le C.V. de la variable `carat` est donc `r sd(diamonds$carat)/mean(diamonds$carat)*100` %, ce qui signifie que les données sont `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"homogènes","hétérogènes")`, car le coefficient de variation est `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"plus petit ou égal à 15%","plus grand que 15%")`.
+
+## Les mesures de position
+
+Les mesures de position permettent de situer une donnée par rapport aux autres. Les différentes mesures de position sont la cote Z, les quantiles et les rangs.
+
+Tout comme les mesures de dispersion, celles-ci ne sont définies que pour une variable quantitative.
+
+### La cote z
+
+Cette mesure de position se base sur la moyenne et l’écart-type.
+
+La cote Z d’une donnée x est calculée comme suit : 
+
+\begin{equation}
+Z = \dfrac{x-\text{moyenne}}{\text{ecart-type}}
+\end{equation}
+
+> Important : La cote z ne possède pas d'unités.
+
+Une cote Z peut être positive, négative ou nulle. 
+
+| Cote Z | Interprétation |
+|-------:|:---------------|
+| Z>0 | donnée supérieure à la moyenne | 
+| Z<0 | donnée inférieure à la moyenne |
+| Z=0 | donnée égale à la moyenne |
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement la cote Z. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour la calculer.
+
+Par exemple, si nous voulons calculer la cote Z d'un diamant de 3 carats, nous avons:
+
+```{r}
+(3-mean(diamonds$carat))/sd(diamonds$carat)
+```
+
+### Les quantiles
+
+Un quantile est une donnée qui correspond à un certain pourcentage cumulé.
+
+Parmi les quantiles, on distingue les quartiles, les quintiles, les déciles et les centiles. 
+
+- Les quartiles Q~1~, Q~2~ et Q~3~, séparent les données en quatre parties égales.
+Environ 25% des données sont inférieures ou égales à Q~1~.
+Environ 50% des données sont inférieures ou égales à Q~2~.
+Environ 75% des données sont inférieures ou égales à Q~3~.
+- Les quintiles V~1~, V~2~, V~3~ et V~4~, séparent les données en cinq parties égales.
+Environ 20% des données sont inférieures ou égales à V~1~.
+Environ 40% des données sont inférieures ou égales à V~2~.
+Etc.
+- Les déciles D~1~, D~2~, ..., D~8~ et D~9~, séparent les données en dix parties égales. 
+Environ 10% des données sont inférieures ou égales à D~1~. 
+Environ 20% des données sont inférieures ou égales à D~2~.
+Etc.
+- Les centiles C~1~, C~2~, ..., C~98~ et C~99~, séparent les données en cent parties égales.
+Environ 1% des données sont inférieures ou égales à C~1~.
+Environ 2% des données sont inférieures ou égales à C~2~.
+Etc.
+
+> Il est utile de noter que certains quantiles se recoupent. 
+
+La fonction `quantile` permet de calculer n'importe quel quantile d'une variable en langage `R`. Il suffit d'indiquer la variable étudiée ainsi que le pourcentage du quantile voulu.
+
+Par exemple, si nous voulons calculer D~1~ pour la variable `carat`, nous allons utiliser la fonction `quantile` avec une probabilité de 0,1.
+
+```{r}
+quantile(diamonds$carat, 0.1)
+```
+
+Ceci implique que 10% des diamants ont une valeur en carat inférieure ou égale à `r quantile(diamonds$carat, 0.1)` carat.
+
+Nous pouvons calculer le troisième quartile Q~3~ de la variable `price` en utilisant la fonction `quantile` avec une probabilité de 0,75.
+
+```{r}
+quantile(diamonds$price, 0.75)
+```
+
+Ceci implique que 75% des diamants ont un prix en dollars inférieur ou égal à `r quantile(diamonds$price, 0.75)` $.
+
+### La commande `summary`
+
+La commande `summary` produit un sommaire contenant six mesures importantes:
+
+1. `Min` : le minimum de la variable
+2. `1st Qu.`: Le premier quartile, Q~1~, de la variable
+3. `Median` : La médiane de la variable
+4. `Mean` : La moyenne de la variable
+5. `3rd Qu.` : Le troisième quartile, Q~3~, de la variable
+6. `Max` : Le maximum de la variable
+
+Nous pouvons donc produire le sommaire de la variable `price` de la base de données `diamonds` de la façon suivante:
+
+```{r}
+summary(diamonds$price)
+```
+
+### Le rang centile
+
+Un rang centile représente le pourcentage cumulé, *exprimé en nombre entier*, qui correspond à une certaine donnée. Nous déterminerons les rangs centiles pour les variables continues seulement.
+
+Les rangs centiles sont donc exactement l’inverse des centiles.
+
+Il n'existe pas de fonctions dans `R` permettant de trouver directement le rang centile, mais il est facile d'utiliser la fonction `mean` pour le trouver. 
+
+Par exemple, si nous voulons trouver le rang centile d'un diamant qui coûte 500\$, il suffit d'utiliser la commande suivante. La commande calcule la moyenne de toutes les valeurs en dollars des diamants coûtant 500\$ ou moins.
+
+```{r}
+mean(diamonds$price<=500)
+```
+
+Ceci signifie que pour un diamant de 500\$, il y a `r mean(diamonds$price<=500)*100` % des diamants qui ont une valeur égale ou inférieure.
+
+<!--chapter:end:03-mesures.Rmd-->
+
+# Les séries chronologiques
+
+Débutons par charger les paquetages qui nous seront utiles.
+
+```{r}
+library(gapminder)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+```
+
+Une série chronologique est un ensemble de valeurs observées d’une variable quantitative. Elle permet d’analyser l’évolution de cette variable dans le temps dans le but éventuel de faire des prévisions.
+
+## Les graphiques
+
+Nous allons débuter par utiliser la base de données `nycflights13`. Nous allons étudier la température au mois de janvier 2013 à l'aéroport Newark (code "EWR" dans la variable `origin`). La variable `weather` de la base de données contient ces informations mais nous devons tout d'abord filtrer les données pour ne conserver que celles qui correspondent à Newark et au mois de janvier.
+
+La commande suivante permet de faire ce filtrage. Vous n'avez pas besoin de comprendre la syntaxe.
+
+```{r}
+meteo_janvier_ewr <- weather %>% 
+  filter(origin == "EWR" & month == 1 )
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(meteo_janvier_ewr, aes(x = time_hour, y = temp)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Heures du mois de janvier",
+    y = "Température en degrée Farhenheit",
+    title = "Répartition de la température au mois de janvier en fonction de l'heure"
+  )
+```
+
+Nous pouvons aussi utiliser la paquetage `gapminder` qui contient des données sur l'espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.
+
+```{r}
+gap_canada <- gapminder %>%
+  filter(country == "Canada")
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(gap_canada, aes(x = year, y = lifeExp)) + 
+  geom_line() + geom_point() +
+  labs(
+    x = "Année",
+    y = "Espérance de vie",
+    title = "Répartition de l'espérance de vie au Canada en fonction de l'année")
+```
+
+## Les mesures
+
+### La variation absolue
+
+La variation absolue mesure l’augmentation (ou la diminution) subie par une variable dans le temps. Pour calculer la variation absolue entre un moment A antérieur à un moment B, on utilise la formule ci-dessous :
+
+\begin{equation}
+\Delta V = V_B - V_A
+\end{equation}
+
+où V~B~ est la valeur de la variable au temps B et V~A~ est la valeur de la variable au temps A.
+
+> Remarque : Les unités de la variation absolue sont les mêmes que celles de la variable étudiée.
+
+Si nous voulons connaître la variation absolue de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation absolue, notée `var_abs`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_abs = pop - lag(pop))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_abs)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation absolue de la population",
+    title = "Répartition de la variation absolue de la population du Canada selon l'année"
+  )
+```
+
+### La variation moyenne
+
+La variation moyenne mesure l’augmentation (ou la diminution) moyenne subie par une variable par unité de temps. La variation moyenne entre les moments 𝐴 et 𝐵 est donnée par :
+
+\begin{equation}
+\Delta V_{moy} = \dfrac{V_B - V_A}{B-A}
+\end{equation}
+
+> Remarque : Les unités de la variation moyenne sont les unités de la variable étudiée par unité de temps.
+
+Si nous voulons connaître la variation moyenne de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation moyenne, notée `var_moy`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_moy = (pop - lag(pop))/(year-lag(year)))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_moy)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation moyenne de la population",
+    title = "Répartition de la variation moyenne de la population du Canada selon l'année"
+  )
+```
+
+### La variation relative (pourcentage de variation)
+
+La variation relative exprime *en pourcentage* la variation subie par une variable entre les moments 𝐴 et 𝐵. Le pourcentageest donné par:
+
+\begin{equation}
+\Delta V_{\%} = \dfrac{V_B - V_A}{V_A}\times 100
+\end{equation}
+
+> Remarque : Il n’y a pas d’unité autre que le symbole de pourcentage.
+
+Si nous voulons connaître la variation relative de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation relative, notée `var_rel`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_rel = (pop - lag(pop))/lag(pop) * 100)
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_rel)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation relative de la population",
+    title = "Répartition de la variation relative de la population du Canada selon l'année"
+  )
+```
+
+## Les données construites
+
+
+<!--chapter:end:04-series-chronologiques.Rmd-->
+
+# (PART) La combinatoire et les probabilités {-} 
+
+# La combinatoire
+
+## La factorielle
+
+Pour calculer la factorielle d'un nombre en `R`, il faut utiliser la commande `factorial`. Par exemple, si nous voulons calculer 6!:
+
+```{r}
+factorial(6)
+```
+
+## Les combinaisons
+
+Pour calculer le nombre de combinaisons lorsque nous choisissons $k$ objets parmi $n$ (**sans** ordre), c'est-à-dire $C_k^n$, nous utilisons la commande `choose(n,k)`. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, $C_6^{49}$, nous avons:
+
+```{r}
+choose(49,6)
+```
+
+## Les arrangements
+
+Pour calculer le nombre d'arrangements lorsque nous choisissons $k$ objets parmi $n$ (**avec** ordre), c'est-à-dire $A_k^n$, nous utilisons les commandes `choose(n,k)` et `factorial`. En effet, nous savons que:
+
+\begin{equation}
+A_k^n = C_k^n \cdot k!
+\end{equation}
+
+et donc on peut calculer un arrangement en effectuant `choose(n,k)*factorial(k)`. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, $A_5^{12}$, nous avons:
+
+```{r}
+choose(12,5)*factorial(5)
+```
+
+
+<!--chapter:end:05-combinatoire.Rmd-->
+
+# Les lois de probabilités
+
+Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Premièrement, la fonction possède un _nom racine_, par exemple le _nom racine_ pour la distribution *binomiale* est `binom`. Cette racine est précédée par une de ces quatre lettre:
+
+- `p` pour *probabilité*, qui représente la fonction de répartition
+- `q` pour *quantile*, l'inverse de la fonction de répartition
+- `d` pour *densité*, la fonction de densité de la distribution
+- `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
+
+Pour la loi binomiale par exemple, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+
+## Les lois de probabilités discrètes
+
+### La loi binomiale
+
+Le _nom racine_ pour la loi binomiale est `binom`.
+
+Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon de calculer des probabilités pour la loi binomiale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dbinom(k, n, p)`|
+|$P(i\leq X \leq j)$ | `sum(dbinom(i:j, n, p))`|
+|$P(X\leq k)$ | `pbinom(k, n, p)` |
+|$P(X>k)$ | `1-pbinom(k, n, p)` |
+
+Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
+
+```{r}
+dbinom(3,4,1/6)
+```
+
+Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+
+Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
+
+```{r}
+fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
+ggplot(fbinom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre de succès",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
+  )
+```
+
+### La loi de Poisson
+
+Le _nom racine_ pour la loi de Poisson est `pois`.
+
+Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda)$. Voici la façon de calculer des probabilités pour la loi de Poisson à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dpois(k, lambda)`|
+|$P(i\leq X \leq j)$ | `sum(dpois(i:j, lambda))`|
+|$P(X\leq k)$ | `ppois(k, lambda)` |
+|$P(X>k)$ | `1-ppois(k, lambda)` |
+
+Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dpois(2, 1/2)
+```
+
+Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
+
+```{r}
+fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
+ggplot(fpois, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
+  )
+```
+
+### La loi géométrique
+
+Le _nom racine_ pour la loi géométrique est `geom`.
+
+Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici la façon de calculer des probabilités pour la loi géométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dgeom(k, p)`|
+|$P(i\leq X \leq j)$ | `sum(dgeom(i:j, p))`|
+|$P(X\leq k)$ | `pgeom(k, p)` |
+|$P(X>k)$ | `1-pgeom(k, p)` |
+
+Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
+
+```{r}
+dgeom(6, 1/5)
+```
+
+Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+
+Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
+
+```{r}
+fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
+ggplot(fgeom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
+  )
+```
+
+> Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
+
+### La loi hypergéométrique
+
+Le _nom racine_ pour la loi hypergéométrique est `hyper`.
+
+On tire sans remise $n$ objets d'un ensemble de $N$ objets dont $A$
+possèdent une caractéristique particulière (et les autres $B=N-A$ ne la possèdent pas). Soit $X$ le nombre d'objets de l'échantillon qui possèdent la caractéristique. Nous avons que $X\sim H(N,A,n)$.
+
+Voici la façon de calculer des probabilités pour la loi hypergéométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dhyper(k, A, B, n)`|
+|$P(i\leq X \leq j)$ | `sum(dhyper(i:j, A, B, n))`|
+|$P(X\leq k)$ | `phyper(k, A, B, n)` |
+|$P(X>k)$ | `1-phyper(k, A, B, n)` |
+
+Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dhyper(2, 5, 8, 4)
+```
+
+Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
+
+Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
+
+```{r}
+fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
+ggplot(fhyper, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
+  )
+```
+
+## Les lois de probabilités continues
+
+### La loi normale
+
+Le _nom racine_ pour la loi normale est `norm`.
+
+Si $X$ suit une loi normale de moyenne $\mu$ et de variance $\sigma^2$, nous avons $X\sim N(\mu,\sigma^2)$.
+
+Voici la façon de calculer des probabilités pour la loi normale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pnorm(j, mu, sigma)-pnorm(i, mu, sigma)`|
+|$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
+|$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
+
+Soit $X\sim N(3,25)$ une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité $P(1.25<X<3.6)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5)
+```
+
+La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc `r (pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
+```
+
+###  La loi de Student
+
+Le _nom racine_ pour la loi de Student est `t`.
+
+Si $X$ suit une loi de Student à $\nu$ degrés de liberté, nous avons $X\sim T_{\nu}$.
+
+Voici la façon de calculer des probabilités pour la loi de Student à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pt(j, nu)-pt(i, nu)`|
+|$P(X\leq k)$ | `pt(k, nu)` |
+|$P(X>k)$ | `1-pt(k, nu)` |
+
+Soit $X\sim T_5$ une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité $P(X>3)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+1 - pt(3, 5)
+```
+
+La probabilité que notre variable aléatoire soit plus grande que 3 est donc `r (1 - pt(3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi de Student. Soit $X\sim T_{5}$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args = list(df = 5))
+```
+
+<!--chapter:end:06-lois-probabilites.Rmd-->
+
+# (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
+
+# Les distributions d'échantillonnage
+
+## Paquetages utiles {-}
+
+Chargeons tous les paquetages qui nous seront utiles.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(okcupiddata)
+library(mosaic)
+```
+
+## L'échantillonnage
+
+Le paquetage `okcupiddata` [@R-okcupiddata] se trouve [ici](https://github.com/rudeboybert/okcupiddata).
+
+```{r}
+profiles_subset <- profiles %>% 
+  filter(between(height, 55, 85))
+```
+
+```{r}
+ggplot(profiles_subset,aes(height)) +
+  geom_histogram(bins = 20, color = "white") +
+  labs(
+    x = "Taille",
+    y = "Fréquence",
+    title = "Histogramme"
+  )
+```
+
+```{r}
+knitr::include_app("http://ismay.shinyapps.io/okcupidheights/")
+```
+
+
+
+<!--chapter:end:07-distributions-echantillonnage.Rmd-->
+
+# L'estimation par intervalle de confiance
+
+
+<!--chapter:end:08-estimation.Rmd-->
+
+# Les tests d'hypothèses
+
+
+<!--chapter:end:09-tests-hypotheses.Rmd-->
+
+`r if (knitr:::is_html_output()) '# Bibliographie {-}'`
+
+<!--chapter:end:99-bibliographie.Rmd-->
+
+
+<!--chapter:end:intro-r-test.Rmd-->
+
+--- 
+title: "Une introduction à R"
+author: "Marc-André Désautels"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, package.bib]
+biblio-style: apalike
+link-citations: true
+github-repo: rstudio/bookdown-demo
+description: "Une introduction au langage R pour les étudiants du collégial."
+---
+
+# Avant-propos {-}
+
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) La présentation des données {-} 
+
+# Introduction {#intro}
+
+## Tibbles
+
+Pour être en mesure d'effectuer des  calculs statistiques, il nous faut une structure qui soit en mesure de garder en mémoire une base de données. Ces structures se nomment des "tibbles" dans R.
+
+### Prérequis
+
+Pour être en mesure d'utiliser le paquetage **tibble**, nous devons charger le paquetage **tibble** et le paquetage **knitr**. Pour ce faire, il suffit d'utiliser la commande suivante:
+
+```{r}
+library(tibble)
+library(knitr)
+```
+
+Si vous exécutez ce code et vous recevez le message d'erreur suivant "there is no package called 'tibble'", vous allez devoir installer le paquetage et ensuite charger la librairie.
+
+```
+install.packages("tibble")
+library(tibble)
+```
+
+Vous faites la même chose pour le paquetage **knitr**.
+
+Vous devez installer le paquetage une seule fois, mais vous devez le charger à chaque fois que vous démarrez une session en R.
+
+### Un exemple de "tibble"
+
+Pour comprendre ce qu'est un "tibble", nous allons utiliser deux paquetages: "nycflights13" et "diamonds". Si ce n'est pas déjà fait, vous devez les installer et ensuite les charger.
+
+```{r}
+library(nycflights13)
+library(ggplot2)
+```
+
+Nous allons étudier le paquetage "nycflights13" qui contient 5 bases de données contenant des informations concernant les vols intérieurs en partance de New York en 2013, à partir des aéroports de Newark Liberty International (EWR), John F. Kennedy International (JFK) ou LaGuardia (LGA). Les 5 bases de données sont les suivantes:
+
+- flights: information sur les 336,776 vols
+- airlines: lien entre les codes IATA de deux lettres et les noms de compagnies d'aviation (16 au total)
+- planes: information de construction sur les 3 322 avions utilisés
+- weather: données météo à chaque heure (environ 8 710 observations) pour chacun des trois aéroports.
+- airports: noms des aéroports et localisations
+
+### La base de données flights
+
+Pour visualiser facilement une base de données sous forme "tibble", il suffit de taper son nom dans la console. Nous allons utiliser la base de données flights. Par exemple:
+
+```{r}
+flights
+```
+
+Nous allons décortiquer la sortie console:
+
+- `A tibble: 336,776 x 19`: un "tibble" est une façon de représenter une base de données en R. Cette base de données possède:
+    * `336 776` lignes
+    * `19` colonnes correspondant aux 19 variables décrivant chacune des observations
+- `year month` `day` `dep_time` `sched_dep_time` `dep_delay` `arr_time` sont différentes colonnes, en d'autres mots des variables, de cette base de données.
+- Nous avons ensuite 10 lignes d'obervations correspondant à 10 vols
+- `... with 336,766 more rows, and 12 more variables:` nous indique que 336 766 lignes et 12 autres variables ne pouvaient pas être affichées à l'écran.
+
+Malheureusement cette sortie écran ne nous permet pas d'explorer les données correctement. Nous verrons à la section \@ref(explorertibbles) comment explorer des `tibbles`.
+
+### La base de données `diamonds` {#donneesdiamonds}
+
+La base de données `diamonds` est composée des variables suivantes:
+
+- `price` : prix en dollars US
+- `carat` : poids du diamant en grammes
+- `cut` : qualité de la coupe (Fair, Good, Very Good, Premium, Ideal)
+- `color` : couleur du diamant (J (pire) jusqu'à D (meilleur))
+- `clarity` : une mesure de la clarté du diamant (I1 (pire), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (meilleur))
+- `x` : longueur en mm
+- `y` : largeur en mm
+- `z` : hauteur en mm
+- `depth` : z / mean(x, y) = 2 * z / (x + y)
+- `table` : largeur du dessus du diamant par  rapport à son point le plus large
+
+```{r}
+diamonds
+```
+
+### Comment explorer des "tibbles" {#explorertibbles}
+
+Voici les façons les plus communes de comprendre les données se trouvant à l'intérieur d'un "tibble":
+
+    1. En utilisant la fonction `View()` de RStudio.C'est la commande que nous utiliserons le plus fr?quemment.
+    2. En utilisant la fonction `glimpse()` du paquetage knitr
+    3. En utilisant la fonction `kable()`
+    4. En utilisant l'opérateur `$` pour étudier une seule variable d'une base de données
+
+1. `View()`:
+
+Éxécutez `View(flights)` dans la console de RStudio et explorez la base de données obtenue. 
+
+Nous remarquons que chaque colonnes représentent une variable différente et que ces variables peuvent être de différents types. Certaines de ces variables, comme `distance`, `day` et `arr_delay` sont des variables dites quantitatives. Ces variables sont numériques par nature. D'autres variables sont dites qualitatives.
+
+Si vous regardez la colonne à l'extrème-gauche de la sortie de `View(flights)`, vous verrez une colonne de nombres. Ces nombres représentent les numéros de ligne de la base de données. Si vous vous promenez sur une ligne de même nombre, par exemple la ligne 5, vous étudiez une unité statistique.
+
+2. `glimpse`:
+
+La seconde façon d'explorer une base de données est d'utiliser la fonction `glimpse()`. Cette fonction nous donne la majorité de l'information précédente et encore plus.
+
+```{r}
+glimpse(flights)
+```
+
+3. `kable()`:
+
+La dernière façon d'étudier l'entièreté de la base de données est d'utiliser la fonction `kable()`. Nous allons explorer les codes des différentes compagnies d'aviation de deux façons.
+
+```{r}
+airlines
+kable(airlines)
+```
+
+À première vue, les deux sorties sont semblables sauf que la seconde est beaucoup plus agréable visuellement dans un document R Markdown.
+
+4. L'opérateur `$`:
+
+Finalement, l'opérateur `$` nous permet d'explorer une seule variable à l'intérieur d'une base de données. Par exemple, si nous désirons étudier la variable `name` de la base de données `airlines`, nous obtenons:
+
+```{r}
+airlines$name
+```
+
+## Types de variables
+
+Nous pouvons utiliser différents types de variables avec le langage `R`.
+
+### Variables qualitatives
+
+Une variable qualitative est une variable dont les résultats possibles sont des **mots**. Les différents **mots** que peuvent prendre une telle variable sont appelées des **modalités**.
+
+#### Variables qualitatives à échelle nominale
+
+On observe ce type de variable lorsqu’il n’y a pas d’ordre croissant naturel dans les **modalités** de la variable. Par exemple, la variable _couleur des cheveux_ est à échelle nominale. L'ordre « blonds, bruns, roux, noirs, autre » est un ordre aussi valable que 
+« bruns, noirs, roux, blonds, autre ».
+
+Dans la base de données `nycflights13`, la variable `origin` provenant des données `flights` est une variable qualitative nominale.
+
+```{r}
+unique(flights$origin)
+```
+
+Autre que l'ordre alphabétique, nous n'avons pas d'autre ordre logique à imposer à l'aéroport d'origine des vols.
+
+#### Variables qualitatives à échelle ordinale
+
+On observe ce type de variable lorsqu’il existe un ordre croissant dans les modalités de la variable. Par exemple, la variable _degré de satisfaction_ est à échelle ordinale. Il est possible de classer les modalités en ordre décroissant en écrivant : Très satisfait  >  Satisfait  >  Insatisfait  >  Très insatisfait.
+
+Dans la base de données `diamonds`, la variable `cut` est une variable qualitative à échelle ordinale.
+
+```{r}
+unique(diamonds$cut)
+```
+
+Nous remarquons que les modalités de cette variable possèdent un ordre. Cet ordre est indiqué par les symboles `<` dans la sortie `R`.
+
+### Variables quantitatives
+
+Une variable quantitative est une variable dont les résultats possibles sont des **nombres**. Les différents nombres que peuvent prendre une telle variable sont appelées des **valeurs**.
+
+#### Variables quantitatives discrètes
+
+On observe ce type de variable lorsque les valeurs sont énumérables, c’est-à-dire lorsqu’il n’existe pas de valeur possible entre deux valeurs consécutives. Par exemple, la variable _nombre de cours suivis pendant cette session_ est une variable quantitative discrète. Les valeurs de ces variables peuvent être : 3, 4, 5, 6, 7,... Il est impossible de suivre 4,6 cours durant une session.
+
+Dans la base de données `nycflights13`, la variable `engines` provenant des données `planes` est une variable quantitative discrète. Cette variable représente le nombre de moteurs de l'avion en question.
+
+```{r}
+unique(planes$engines)
+```
+
+Dans la sortie `R` les valeurs ne sont pas en ordre croissant mais elles le seront lorsque nous les représenterons sous forme de tableau ou de graphique.
+
+#### Variables quantitatives continues
+
+On observe ce type de variable lorsqu’il existe une infinité de valeurs entre deux autres. Par exemple, la variable _masse d’un étudiant (en lbs)_ est une variable quantitative continue. Entre 130 et 131 lbs, il existe une infinité de valeurs telles que 130,54 lbs.
+
+Dans la base de données `diamonds`, nous allons observer la variable `carat`. Voici les 25 premiers éléments de ces valeurs.
+
+```{r}
+diamonds$carat[1:25]
+```
+
+<!--chapter:end:01-intro.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+  
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+  
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+  
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+  
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+  
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# Présentation des données
+
+Pour débuter, nous allons charger les paquetages utiles:
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+Pour introduire la présentation des données, nous allons utiliser la base de données `mtcars` et la base de données `diamonds`, que nous avons utilisé à la section \@ref(donneesdiamonds). 
+
+La base de données `mtcars` a été extraite du magazine Motor Trend de l'année 1974, et comprend la consommation d'essence et 10 autres aspects de design automobile pour 32 automobiles (modèles 1973-1974). 
+
+Les 11 variables de cette base de données sont:
+
+- `mpg` : Miles/ (US) gallon
+- `cyl` : Nombre de cylindres
+- `disp` : Déplacement en pouces cube
+- `hp` : Nombre de chevaux-vapeur
+- `drat` : Ratio
+- `wt` : Poids (1000 livres)
+- `qsec` : Temps pour le quart de mile
+- `vs` : V/S
+- `am` : Transmission (0 = automatique, 1 = manuelle)
+- `gear` : Nombre de vitesses
+- `carb` : Nombre de carburateurs
+
+```{r}
+mtcars
+```
+
+## Variables qualitatives
+
+### Tableaux de fréquences
+
+Nous pouvons représenter des variables qualitatives sous forme de tableau. Nous allons utiliser la commande `tabfreq`. Voici comment l'utiliser pour représenter la variable `cut` de la base de données `diamonds`.
+
+```{r}
+tabfreq(diamonds$cut)
+```
+
+Nous pouvons également étudier la variable `clarity`.
+
+```{r}
+tabfreq(diamonds$clarity)
+```
+
+### Diagramme à bandes
+
+Pour les variables qualitatives, le diagramme à bandes est le graphique de choix.
+
+Pour la variable `clarity`.
+
+```{r}
+ggplot(diamonds, aes(clarity)) + geom_bar() +
+  labs(
+    x = "Clarté", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la clarté des diamants")
+```
+
+Pour la variable `cut`.
+
+```{r}
+ggplot(diamonds, aes(cut)) + geom_bar() +
+  labs(
+    x = "Coupe", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la coupe des diamants")
+```
+
+### Diagramme circulaire
+
+```{r}
+ggplot(diamonds, aes(x = factor(1), fill = cut)) + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+## Variables quantitatives
+
+### Tableaux de fréquences {#freqquantitatives}
+
+Pour une variable quantitative discrète, il suffit d'utiliser la fonction `tabfreq` pour représenter les données sous forme de tableau. Par exemple, pour la variable `cyl` de la base de données `mtcars`.
+
+```{r}
+tabfreq(mtcars$cyl)
+```
+
+Pour représenter une variable quantitative continue sous forme de tableau, il faut effectuer un traitement préalable sur les données. 
+
+Étudions la variable `carat` de la base de données `diamonds`. Si  nous tentons d'utiliser la commande `tabfreq` directement, nous allons obtenir une table beaucoup trop grande. En effet, la variable `carat` possède `r length(unique(diamonds$carat))` valeurs différentes!
+
+Pour représenter la variable correctement, nous allons débuter par observer l'étendue des valeurs possibles de cette variable en utilisant la commande `range`. Nous avons donc:
+
+```{r}
+range(diamonds$carat)
+```
+
+La sortie de `R` signifie que la valeur la plus petite de `carat` est `r range(diamonds$carat)[1]`, et que la plus grande est `r range(diamonds$carat)[2]`. 
+
+Nous voulons maintenant recoder notre variable `carat` pour obtenir des classes. Dans notre exemple, il semble adéquat de créer des classes de largeur 1 en débutant à 0 et en terminant à 6. L'option `breaks` permet de décider des classes et l'option `right` permet de fermer l'intervalle à gauche et de l'ouvrir à droite.
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+tabfreq(carat_class)
+```
+
+### Diagramme à bâtons
+
+Pour les variables quantitatives discrètes, le diagramme à bâtons est le graphique de choix.
+
+```{r}
+ggplot(mtcars, aes(cyl)) + 
+  geom_bar(width = 0.1) + 
+  labs(
+    x = "Nombre de cylindres", 
+    y = "Fréquence", 
+    title = "Diagramme à bâtons du nombre de cylindres")
+```
+
+### Histogramme
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",binwidth = 1000, center = 500) +
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme du prix des diamants")
+```
+
+### Polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_freqpoly(size = 1,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Polygone de fréquences du prix des diamants")
+```
+
+### Ogive des pourcentages cumulés
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'ogive des pourcentages cumulés.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  stat_ecdf(pad = FALSE) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence relative cumulée", 
+    title = "Ogive des pourcentages cumulés du prix des diamants")
+```
+
+### Histogramme et polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme et le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",,binwidth = 1000, center = 500) + 
+  geom_freqpoly(size = 1,,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme et polygone de fréquences du prix des diamants")
+```
+
+<!--chapter:end:02-presentation-donnees.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# (PART) Les mesures associées aux données {-} 
+
+# Les différentes mesures
+
+Dans ce chapitre, nous verrons comment utiliser `R` pour calculer les mesures importantes permettant de résumer des données.
+
+Nous allons charger les paquetages que nous allons utiliser:
+
+```{r}
+library(ggplot2)
+library(nycflights13)
+```
+
+## Les mesures de tendance centrale
+
+Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.
+
+### Le mode
+
+Le mode est la **modalité**, **valeur** ou **classe** possédant la plus grande fréquence. En d’autres mots, c’est la donnée la plus fréquente. 
+
+Puisque le mode se préoccupe seulement de la donnée la plus fréquente, il n’est pas influencé par les valeurs extrêmes.
+
+Lorsque le mode est une classe, il est appelé **classe modale**. 
+
+Le mode est noté **Mo**. 
+
+Le langage `R` ne possède pas de fonction permettant de calculer le mode. La façon la plus simple de le calculer est d'utiliser la fonction `table` de `R`.
+
+Par exemple, si nous voulons connaître le mode de la variable `cut` de la base de données `diamonds`:
+
+```{r}
+table(diamonds$cut)
+```
+
+Nous remarquons que le maximum est à la modalité _Ideal_ avec une fréquence de `r max(table(diamonds$cut))`.
+
+Si nous nous intéressons au mode d'une variable quantitative discrète comme `cyl` de la base de données `mtcars` nous obtenons:
+
+```{r}
+table(mtcars$cyl)
+```
+
+Nous remarquons que le maximum est à la valeur _8_ avec une fréquence de `r max(table(mtcars$cyl))`.
+
+Dans le cas d'une variable quantitative continue, pour calculer le mode, il faut commencer par séparer les données en classes. Nous utiliserons les mêmes classes utilisées à la section \@ref(freqquantitatives)
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+table(carat_class)
+```
+
+La classe modale est donc la classe _[0,1)_ avec une fréquence de `r max(table(carat_class))`.
+
+### La médiane
+
+La médiane, notée **Md**, est la valeur qui sépare une série de données classée en ordre croissant en deux parties égales. 
+
+La médiane étant la valeur du milieu, elle est la valeur où le pourcentage cumulé atteint 50%. 
+
+Puisque la médiane se préoccupe seulement de déterminer où se situe le centre des données, elle n’est pas influencée par les valeurs extrêmes. Elle est donc une mesure de tendance centrale plus fiable que la moyenne.
+
+> Important : La médiane n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la médiane pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `median` permet de calculer la médiane en langage `R`.
+
+Par exemple, pour calculer la médiane de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+median(diamonds$carat)
+```
+
+Ceci signifie que 50% des diamants ont une valeur en carat inférieure ou égale à `r median(diamonds$carat)` et que 50% des diamants ont une valeur en carat supérieure ou égale à `r median(diamonds$carat)`.
+
+Nous pouvons aussi obtenir que la médiane de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+median(diamonds$price)
+```
+
+### La moyenne
+
+La moyenne est la valeur qui pourrait remplacer chacune des données d’une série pour que leur somme demeure identique. Intuitivement, elle représente le centre d’équilibre d’une série de données. La somme des distances qui sépare les données plus petites que la moyenne devrait être la même que la somme des distances qui sépare les données plus grandes. 
+
+> Important : La moyenne n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la moyenne pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `mean` permet de calculer la moyenne en langage `R`.
+
+Par exemple, pour calculer la moyenne de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+mean(diamonds$carat)
+```
+
+Nous pouvons aussi obtenir que la moyenne de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+mean(diamonds$price)
+```
+
+## Les mesures de dispersion
+
+Les mesures de tendance centrale (mode, moyenne et médiane) ne permettent pas de déterminer si une série de données est principalement située autour de son centre, ou si au contraire elle est très dispersée. 
+
+Les mesures de dispersion, elles, permettent de déterminer si une série de données est centralisée autour de sa moyenne, ou si elle est au contraire très dispersée. 
+
+Les mesures de dispersion sont l’étendue, la variance, l’écart-type et le coefficient de variation. 
+
+### L'étendue
+
+La première mesure de dispersion, l’étendue, est la différence entre la valeur maximale et la valeur minimale.
+
+L’étendue ne tenant compte que du maximum et du minimum, elle est grandement influencée par les valeurs extrêmes. Elle est donc une mesure de dispersion peu fiable.
+
+La fonction `range` permet de calculer l'étendue d'une variable en langage `R`.
+
+Par exemple, pour calculer l'étendue de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+range(diamonds$carat)
+```
+
+Nous pouvons donc calculer l'étendue de la variable `carat` en soustrayant les deux valeurs obtenues par la fonction `range`, c'est-à-dire que l'étendue est  `r range(diamonds$carat)[2]`-`r range(diamonds$carat)[1]` = `r range(diamonds$carat)[2]-range(diamonds$carat)[1]`.
+
+### La variance
+
+La variance sert principalement à calculer l’écart-type, la mesure de dispersion la plus connue.
+
+> Attention : Les unités de la variance sont des unités^2^.
+
+La fonction `var` permet de calculer la variance d'une variable en langage `R`.
+
+Par exemple, pour calculer la variance de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+var(diamonds$carat)
+```
+
+Ceci signifie que la variance de la variable `carat` est `r var(diamonds$carat)` carat^2^.
+
+### L'écart-type
+
+L’écart-type est la mesure de dispersion la plus couramment utilisée. Il peut être vu comme la « moyenne » des écarts entre les données et la moyenne.
+
+Puisque l’écart-type tient compte de chacune des données, il est une mesure de dispersion beaucoup plus fiable que l’étendue.
+
+Il est défini comme la racine carrée de la variance.
+
+La fonction `sd` permet de calculer l''écart-type d'une variable en langage `R`.
+
+Par exemple, pour calculer l'écart-type de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)
+```
+
+Ceci signifie que l'écart-type de la variable `carat` est `r sd(diamonds$carat)` carat.
+
+### Le coefficient de variation
+
+Le coefficient de variation, noté C. V., est calculé comme suit : 
+
+\begin{equation}
+C.V. = \dfrac{\text{ecart-type}}{\text{moyenne}}\times 100\%
+\end{equation}
+
+Si le coefficient est inférieur à 15%, les données sont dites **homogènes**. Cela veut dire que les données sont situées près les unes des autres.
+
+Dans le cas contraire, les données sont dites **hétérogènes**. Cela veut dire que les données sont très dispersées.
+
+> Important : Le coefficient de variation ne possède pas d’unité, outre le symbole de pourcentage.
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement le coefficient de variation. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour le calculer.
+
+Par exemple, pour calculer le coefficient de variation de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)/mean(diamonds$carat)*100
+```
+
+Le C.V. de la variable `carat` est donc `r sd(diamonds$carat)/mean(diamonds$carat)*100` %, ce qui signifie que les données sont `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"homogènes","hétérogènes")`, car le coefficient de variation est `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"plus petit ou égal à 15%","plus grand que 15%")`.
+
+## Les mesures de position
+
+Les mesures de position permettent de situer une donnée par rapport aux autres. Les différentes mesures de position sont la cote Z, les quantiles et les rangs.
+
+Tout comme les mesures de dispersion, celles-ci ne sont définies que pour une variable quantitative.
+
+### La cote z
+
+Cette mesure de position se base sur la moyenne et l’écart-type.
+
+La cote Z d’une donnée x est calculée comme suit : 
+
+\begin{equation}
+Z = \dfrac{x-\text{moyenne}}{\text{ecart-type}}
+\end{equation}
+
+> Important : La cote z ne possède pas d'unités.
+
+Une cote Z peut être positive, négative ou nulle. 
+
+| Cote Z | Interprétation |
+|-------:|:---------------|
+| Z>0 | donnée supérieure à la moyenne | 
+| Z<0 | donnée inférieure à la moyenne |
+| Z=0 | donnée égale à la moyenne |
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement la cote Z. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour la calculer.
+
+Par exemple, si nous voulons calculer la cote Z d'un diamant de 3 carats, nous avons:
+
+```{r}
+(3-mean(diamonds$carat))/sd(diamonds$carat)
+```
+
+### Les quantiles
+
+Un quantile est une donnée qui correspond à un certain pourcentage cumulé.
+
+Parmi les quantiles, on distingue les quartiles, les quintiles, les déciles et les centiles. 
+
+- Les quartiles Q~1~, Q~2~ et Q~3~, séparent les données en quatre parties égales.
+Environ 25% des données sont inférieures ou égales à Q~1~.
+Environ 50% des données sont inférieures ou égales à Q~2~.
+Environ 75% des données sont inférieures ou égales à Q~3~.
+- Les quintiles V~1~, V~2~, V~3~ et V~4~, séparent les données en cinq parties égales.
+Environ 20% des données sont inférieures ou égales à V~1~.
+Environ 40% des données sont inférieures ou égales à V~2~.
+Etc.
+- Les déciles D~1~, D~2~, ..., D~8~ et D~9~, séparent les données en dix parties égales. 
+Environ 10% des données sont inférieures ou égales à D~1~. 
+Environ 20% des données sont inférieures ou égales à D~2~.
+Etc.
+- Les centiles C~1~, C~2~, ..., C~98~ et C~99~, séparent les données en cent parties égales.
+Environ 1% des données sont inférieures ou égales à C~1~.
+Environ 2% des données sont inférieures ou égales à C~2~.
+Etc.
+
+> Il est utile de noter que certains quantiles se recoupent. 
+
+La fonction `quantile` permet de calculer n'importe quel quantile d'une variable en langage `R`. Il suffit d'indiquer la variable étudiée ainsi que le pourcentage du quantile voulu.
+
+Par exemple, si nous voulons calculer D~1~ pour la variable `carat`, nous allons utiliser la fonction `quantile` avec une probabilité de 0,1.
+
+```{r}
+quantile(diamonds$carat, 0.1)
+```
+
+Ceci implique que 10% des diamants ont une valeur en carat inférieure ou égale à `r quantile(diamonds$carat, 0.1)` carat.
+
+Nous pouvons calculer le troisième quartile Q~3~ de la variable `price` en utilisant la fonction `quantile` avec une probabilité de 0,75.
+
+```{r}
+quantile(diamonds$price, 0.75)
+```
+
+Ceci implique que 75% des diamants ont un prix en dollars inférieur ou égal à `r quantile(diamonds$price, 0.75)` $.
+
+### La commande `summary`
+
+La commande `summary` produit un sommaire contenant six mesures importantes:
+
+1. `Min` : le minimum de la variable
+2. `1st Qu.`: Le premier quartile, Q~1~, de la variable
+3. `Median` : La médiane de la variable
+4. `Mean` : La moyenne de la variable
+5. `3rd Qu.` : Le troisième quartile, Q~3~, de la variable
+6. `Max` : Le maximum de la variable
+
+Nous pouvons donc produire le sommaire de la variable `price` de la base de données `diamonds` de la façon suivante:
+
+```{r}
+summary(diamonds$price)
+```
+
+### Le rang centile
+
+Un rang centile représente le pourcentage cumulé, *exprimé en nombre entier*, qui correspond à une certaine donnée. Nous déterminerons les rangs centiles pour les variables continues seulement.
+
+Les rangs centiles sont donc exactement l’inverse des centiles.
+
+Il n'existe pas de fonctions dans `R` permettant de trouver directement le rang centile, mais il est facile d'utiliser la fonction `mean` pour le trouver. 
+
+Par exemple, si nous voulons trouver le rang centile d'un diamant qui coûte 500\$, il suffit d'utiliser la commande suivante. La commande calcule la moyenne de toutes les valeurs en dollars des diamants coûtant 500\$ ou moins.
+
+```{r}
+mean(diamonds$price<=500)
+```
+
+Ceci signifie que pour un diamant de 500\$, il y a `r mean(diamonds$price<=500)*100` % des diamants qui ont une valeur égale ou inférieure.
+
+<!--chapter:end:03-mesures.Rmd-->
+
+# Les séries chronologiques
+
+Débutons par charger les paquetages qui nous seront utiles.
+
+```{r}
+library(gapminder)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+```
+
+Une série chronologique est un ensemble de valeurs observées d’une variable quantitative. Elle permet d’analyser l’évolution de cette variable dans le temps dans le but éventuel de faire des prévisions.
+
+## Les graphiques
+
+Nous allons débuter par utiliser la base de données `nycflights13`. Nous allons étudier la température au mois de janvier 2013 à l'aéroport Newark (code "EWR" dans la variable `origin`). La variable `weather` de la base de données contient ces informations mais nous devons tout d'abord filtrer les données pour ne conserver que celles qui correspondent à Newark et au mois de janvier.
+
+La commande suivante permet de faire ce filtrage. Vous n'avez pas besoin de comprendre la syntaxe.
+
+```{r}
+meteo_janvier_ewr <- weather %>% 
+  filter(origin == "EWR" & month == 1 )
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(meteo_janvier_ewr, aes(x = time_hour, y = temp)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Heures du mois de janvier",
+    y = "Température en degrée Farhenheit",
+    title = "Répartition de la température au mois de janvier en fonction de l'heure"
+  )
+```
+
+Nous pouvons aussi utiliser la paquetage `gapminder` qui contient des données sur l'espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.
+
+```{r}
+gap_canada <- gapminder %>%
+  filter(country == "Canada")
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(gap_canada, aes(x = year, y = lifeExp)) + 
+  geom_line() + geom_point() +
+  labs(
+    x = "Année",
+    y = "Espérance de vie",
+    title = "Répartition de l'espérance de vie au Canada en fonction de l'année")
+```
+
+## Les mesures
+
+### La variation absolue
+
+La variation absolue mesure l’augmentation (ou la diminution) subie par une variable dans le temps. Pour calculer la variation absolue entre un moment A antérieur à un moment B, on utilise la formule ci-dessous :
+
+\begin{equation}
+\Delta V = V_B - V_A
+\end{equation}
+
+où V~B~ est la valeur de la variable au temps B et V~A~ est la valeur de la variable au temps A.
+
+> Remarque : Les unités de la variation absolue sont les mêmes que celles de la variable étudiée.
+
+Si nous voulons connaître la variation absolue de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation absolue, notée `var_abs`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_abs = pop - lag(pop))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_abs)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation absolue de la population",
+    title = "Répartition de la variation absolue de la population du Canada selon l'année"
+  )
+```
+
+### La variation moyenne
+
+La variation moyenne mesure l’augmentation (ou la diminution) moyenne subie par une variable par unité de temps. La variation moyenne entre les moments 𝐴 et 𝐵 est donnée par :
+
+\begin{equation}
+\Delta V_{moy} = \dfrac{V_B - V_A}{B-A}
+\end{equation}
+
+> Remarque : Les unités de la variation moyenne sont les unités de la variable étudiée par unité de temps.
+
+Si nous voulons connaître la variation moyenne de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation moyenne, notée `var_moy`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_moy = (pop - lag(pop))/(year-lag(year)))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_moy)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation moyenne de la population",
+    title = "Répartition de la variation moyenne de la population du Canada selon l'année"
+  )
+```
+
+### La variation relative (pourcentage de variation)
+
+La variation relative exprime *en pourcentage* la variation subie par une variable entre les moments 𝐴 et 𝐵. Le pourcentageest donné par:
+
+\begin{equation}
+\Delta V_{\%} = \dfrac{V_B - V_A}{V_A}\times 100
+\end{equation}
+
+> Remarque : Il n’y a pas d’unité autre que le symbole de pourcentage.
+
+Si nous voulons connaître la variation relative de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation relative, notée `var_rel`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_rel = (pop - lag(pop))/lag(pop) * 100)
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_rel)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation relative de la population",
+    title = "Répartition de la variation relative de la population du Canada selon l'année"
+  )
+```
+
+## Les données construites
+
+
+<!--chapter:end:04-series-chronologiques.Rmd-->
+
+# (PART) La combinatoire et les probabilités {-} 
+
+# La combinatoire
+
+## La factorielle
+
+Pour calculer la factorielle d'un nombre en `R`, il faut utiliser la commande `factorial`. Par exemple, si nous voulons calculer 6!:
+
+```{r}
+factorial(6)
+```
+
+## Les combinaisons
+
+Pour calculer le nombre de combinaisons lorsque nous choisissons $k$ objets parmi $n$ (**sans** ordre), c'est-à-dire $C_k^n$, nous utilisons la commande `choose(n,k)`. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, $C_6^{49}$, nous avons:
+
+```{r}
+choose(49,6)
+```
+
+## Les arrangements
+
+Pour calculer le nombre d'arrangements lorsque nous choisissons $k$ objets parmi $n$ (**avec** ordre), c'est-à-dire $A_k^n$, nous utilisons les commandes `choose(n,k)` et `factorial`. En effet, nous savons que:
+
+\begin{equation}
+A_k^n = C_k^n \cdot k!
+\end{equation}
+
+et donc on peut calculer un arrangement en effectuant `choose(n,k)*factorial(k)`. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, $A_5^{12}$, nous avons:
+
+```{r}
+choose(12,5)*factorial(5)
+```
+
+
+<!--chapter:end:05-combinatoire.Rmd-->
+
+# Les lois de probabilités
+
+Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Premièrement, la fonction possède un _nom racine_, par exemple le _nom racine_ pour la distribution *binomiale* est `binom`. Cette racine est précédée par une de ces quatre lettre:
+
+- `p` pour *probabilité*, qui représente la fonction de répartition
+- `q` pour *quantile*, l'inverse de la fonction de répartition
+- `d` pour *densité*, la fonction de densité de la distribution
+- `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
+
+Pour la loi binomiale par exemple, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+
+## Les lois de probabilités discrètes
+
+### La loi binomiale
+
+Le _nom racine_ pour la loi binomiale est `binom`.
+
+Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon de calculer des probabilités pour la loi binomiale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dbinom(k, n, p)`|
+|$P(i\leq X \leq j)$ | `sum(dbinom(i:j, n, p))`|
+|$P(X\leq k)$ | `pbinom(k, n, p)` |
+|$P(X>k)$ | `1-pbinom(k, n, p)` |
+
+Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
+
+```{r}
+dbinom(3,4,1/6)
+```
+
+Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+
+Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
+
+```{r}
+fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
+ggplot(fbinom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre de succès",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
+  )
+```
+
+### La loi de Poisson
+
+Le _nom racine_ pour la loi de Poisson est `pois`.
+
+Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda)$. Voici la façon de calculer des probabilités pour la loi de Poisson à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dpois(k, lambda)`|
+|$P(i\leq X \leq j)$ | `sum(dpois(i:j, lambda))`|
+|$P(X\leq k)$ | `ppois(k, lambda)` |
+|$P(X>k)$ | `1-ppois(k, lambda)` |
+
+Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dpois(2, 1/2)
+```
+
+Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
+
+```{r}
+fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
+ggplot(fpois, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
+  )
+```
+
+### La loi géométrique
+
+Le _nom racine_ pour la loi géométrique est `geom`.
+
+Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici la façon de calculer des probabilités pour la loi géométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dgeom(k, p)`|
+|$P(i\leq X \leq j)$ | `sum(dgeom(i:j, p))`|
+|$P(X\leq k)$ | `pgeom(k, p)` |
+|$P(X>k)$ | `1-pgeom(k, p)` |
+
+Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
+
+```{r}
+dgeom(6, 1/5)
+```
+
+Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+
+Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
+
+```{r}
+fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
+ggplot(fgeom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
+  )
+```
+
+> Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
+
+### La loi hypergéométrique
+
+Le _nom racine_ pour la loi hypergéométrique est `hyper`.
+
+On tire sans remise $n$ objets d'un ensemble de $N$ objets dont $A$
+possèdent une caractéristique particulière (et les autres $B=N-A$ ne la possèdent pas). Soit $X$ le nombre d'objets de l'échantillon qui possèdent la caractéristique. Nous avons que $X\sim H(N,A,n)$.
+
+Voici la façon de calculer des probabilités pour la loi hypergéométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dhyper(k, A, B, n)`|
+|$P(i\leq X \leq j)$ | `sum(dhyper(i:j, A, B, n))`|
+|$P(X\leq k)$ | `phyper(k, A, B, n)` |
+|$P(X>k)$ | `1-phyper(k, A, B, n)` |
+
+Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dhyper(2, 5, 8, 4)
+```
+
+Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
+
+Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
+
+```{r}
+fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
+ggplot(fhyper, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
+  )
+```
+
+## Les lois de probabilités continues
+
+### La loi normale
+
+Le _nom racine_ pour la loi normale est `norm`.
+
+Si $X$ suit une loi normale de moyenne $\mu$ et de variance $\sigma^2$, nous avons $X\sim N(\mu,\sigma^2)$.
+
+Voici la façon de calculer des probabilités pour la loi normale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pnorm(j, mu, sigma)-pnorm(i, mu, sigma)`|
+|$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
+|$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
+
+Soit $X\sim N(3,25)$ une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité $P(1.25<X<3.6)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5)
+```
+
+La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc `r (pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
+```
+
+###  La loi de Student
+
+Le _nom racine_ pour la loi de Student est `t`.
+
+Si $X$ suit une loi de Student à $\nu$ degrés de liberté, nous avons $X\sim T_{\nu}$.
+
+Voici la façon de calculer des probabilités pour la loi de Student à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pt(j, nu)-pt(i, nu)`|
+|$P(X\leq k)$ | `pt(k, nu)` |
+|$P(X>k)$ | `1-pt(k, nu)` |
+
+Soit $X\sim T_5$ une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité $P(X>3)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+1 - pt(3, 5)
+```
+
+La probabilité que notre variable aléatoire soit plus grande que 3 est donc `r (1 - pt(3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi de Student. Soit $X\sim T_{5}$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args = list(df = 5))
+```
+
+<!--chapter:end:06-lois-probabilites.Rmd-->
+
+# (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
+
+# Les distributions d'échantillonnage
+
+## Paquetages utiles {-}
+
+Chargeons tous les paquetages qui nous seront utiles.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(okcupiddata)
+library(mosaic)
+```
+
+## L'échantillonnage
+
+Le paquetage `okcupiddata` [@R-okcupiddata] se trouve [ici](https://github.com/rudeboybert/okcupiddata).
+
+```{r}
+profiles_subset <- profiles %>% 
+  filter(between(height, 55, 85))
+```
+
+```{r}
+ggplot(profiles_subset,aes(height)) +
+  geom_histogram(bins = 20, color = "white") +
+  labs(
+    x = "Taille",
+    y = "Fréquence",
+    title = "Histogramme"
+  )
+```
+
+```{r}
+knitr::include_app("http://ismay.shinyapps.io/okcupidheights/")
+```
+
+
+
+<!--chapter:end:07-distributions-echantillonnage.Rmd-->
+
+# L'estimation par intervalle de confiance
+
+
+<!--chapter:end:08-estimation.Rmd-->
+
+# Les tests d'hypothèses
+
+
+<!--chapter:end:09-tests-hypotheses.Rmd-->
+
+`r if (knitr:::is_html_output()) '# Bibliographie {-}'`
+
+<!--chapter:end:99-bibliographie.Rmd-->
+
+--- 
+title: "Une introduction à R"
+author: "Marc-André Désautels"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, package.bib]
+biblio-style: apalike
+link-citations: true
+github-repo: rstudio/bookdown-demo
+description: "Une introduction au langage R pour les étudiants du collégial."
+---
+
+# Avant-propos {-}
+
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) La présentation des données {-} 
+
+# Introduction {#intro}
+
+## Tibbles
+
+Pour être en mesure d'effectuer des  calculs statistiques, il nous faut une structure qui soit en mesure de garder en mémoire une base de données. Ces structures se nomment des "tibbles" dans R.
+
+### Prérequis
+
+Pour être en mesure d'utiliser le paquetage **tibble**, nous devons charger le paquetage **tibble** et le paquetage **knitr**. Pour ce faire, il suffit d'utiliser la commande suivante:
+
+```{r}
+library(tibble)
+library(knitr)
+```
+
+Si vous exécutez ce code et vous recevez le message d'erreur suivant "there is no package called 'tibble'", vous allez devoir installer le paquetage et ensuite charger la librairie.
+
+```
+install.packages("tibble")
+library(tibble)
+```
+
+Vous faites la même chose pour le paquetage **knitr**.
+
+Vous devez installer le paquetage une seule fois, mais vous devez le charger à chaque fois que vous démarrez une session en R.
+
+### Un exemple de "tibble"
+
+Pour comprendre ce qu'est un "tibble", nous allons utiliser deux paquetages: "nycflights13" et "diamonds". Si ce n'est pas déjà fait, vous devez les installer et ensuite les charger.
+
+```{r}
+library(nycflights13)
+library(ggplot2)
+```
+
+Nous allons étudier le paquetage "nycflights13" qui contient 5 bases de données contenant des informations concernant les vols intérieurs en partance de New York en 2013, à partir des aéroports de Newark Liberty International (EWR), John F. Kennedy International (JFK) ou LaGuardia (LGA). Les 5 bases de données sont les suivantes:
+
+- flights: information sur les 336,776 vols
+- airlines: lien entre les codes IATA de deux lettres et les noms de compagnies d'aviation (16 au total)
+- planes: information de construction sur les 3 322 avions utilisés
+- weather: données météo à chaque heure (environ 8 710 observations) pour chacun des trois aéroports.
+- airports: noms des aéroports et localisations
+
+### La base de données flights
+
+Pour visualiser facilement une base de données sous forme "tibble", il suffit de taper son nom dans la console. Nous allons utiliser la base de données flights. Par exemple:
+
+```{r}
+flights
+```
+
+Nous allons décortiquer la sortie console:
+
+- `A tibble: 336,776 x 19`: un "tibble" est une façon de représenter une base de données en R. Cette base de données possède:
+    * `336 776` lignes
+    * `19` colonnes correspondant aux 19 variables décrivant chacune des observations
+- `year month` `day` `dep_time` `sched_dep_time` `dep_delay` `arr_time` sont différentes colonnes, en d'autres mots des variables, de cette base de données.
+- Nous avons ensuite 10 lignes d'obervations correspondant à 10 vols
+- `... with 336,766 more rows, and 12 more variables:` nous indique que 336 766 lignes et 12 autres variables ne pouvaient pas être affichées à l'écran.
+
+Malheureusement cette sortie écran ne nous permet pas d'explorer les données correctement. Nous verrons à la section \@ref(explorertibbles) comment explorer des `tibbles`.
+
+### La base de données `diamonds` {#donneesdiamonds}
+
+La base de données `diamonds` est composée des variables suivantes:
+
+- `price` : prix en dollars US
+- `carat` : poids du diamant en grammes
+- `cut` : qualité de la coupe (Fair, Good, Very Good, Premium, Ideal)
+- `color` : couleur du diamant (J (pire) jusqu'à D (meilleur))
+- `clarity` : une mesure de la clarté du diamant (I1 (pire), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (meilleur))
+- `x` : longueur en mm
+- `y` : largeur en mm
+- `z` : hauteur en mm
+- `depth` : z / mean(x, y) = 2 * z / (x + y)
+- `table` : largeur du dessus du diamant par  rapport à son point le plus large
+
+```{r}
+diamonds
+```
+
+### Comment explorer des "tibbles" {#explorertibbles}
+
+Voici les façons les plus communes de comprendre les données se trouvant à l'intérieur d'un "tibble":
+
+    1. En utilisant la fonction `View()` de RStudio.C'est la commande que nous utiliserons le plus fr?quemment.
+    2. En utilisant la fonction `glimpse()` du paquetage knitr
+    3. En utilisant la fonction `kable()`
+    4. En utilisant l'opérateur `$` pour étudier une seule variable d'une base de données
+
+1. `View()`:
+
+Éxécutez `View(flights)` dans la console de RStudio et explorez la base de données obtenue. 
+
+Nous remarquons que chaque colonnes représentent une variable différente et que ces variables peuvent être de différents types. Certaines de ces variables, comme `distance`, `day` et `arr_delay` sont des variables dites quantitatives. Ces variables sont numériques par nature. D'autres variables sont dites qualitatives.
+
+Si vous regardez la colonne à l'extrème-gauche de la sortie de `View(flights)`, vous verrez une colonne de nombres. Ces nombres représentent les numéros de ligne de la base de données. Si vous vous promenez sur une ligne de même nombre, par exemple la ligne 5, vous étudiez une unité statistique.
+
+2. `glimpse`:
+
+La seconde façon d'explorer une base de données est d'utiliser la fonction `glimpse()`. Cette fonction nous donne la majorité de l'information précédente et encore plus.
+
+```{r}
+glimpse(flights)
+```
+
+3. `kable()`:
+
+La dernière façon d'étudier l'entièreté de la base de données est d'utiliser la fonction `kable()`. Nous allons explorer les codes des différentes compagnies d'aviation de deux façons.
+
+```{r}
+airlines
+kable(airlines)
+```
+
+À première vue, les deux sorties sont semblables sauf que la seconde est beaucoup plus agréable visuellement dans un document R Markdown.
+
+4. L'opérateur `$`:
+
+Finalement, l'opérateur `$` nous permet d'explorer une seule variable à l'intérieur d'une base de données. Par exemple, si nous désirons étudier la variable `name` de la base de données `airlines`, nous obtenons:
+
+```{r}
+airlines$name
+```
+
+## Types de variables
+
+Nous pouvons utiliser différents types de variables avec le langage `R`.
+
+### Variables qualitatives
+
+Une variable qualitative est une variable dont les résultats possibles sont des **mots**. Les différents **mots** que peuvent prendre une telle variable sont appelées des **modalités**.
+
+#### Variables qualitatives à échelle nominale
+
+On observe ce type de variable lorsqu’il n’y a pas d’ordre croissant naturel dans les **modalités** de la variable. Par exemple, la variable _couleur des cheveux_ est à échelle nominale. L'ordre « blonds, bruns, roux, noirs, autre » est un ordre aussi valable que 
+« bruns, noirs, roux, blonds, autre ».
+
+Dans la base de données `nycflights13`, la variable `origin` provenant des données `flights` est une variable qualitative nominale.
+
+```{r}
+unique(flights$origin)
+```
+
+Autre que l'ordre alphabétique, nous n'avons pas d'autre ordre logique à imposer à l'aéroport d'origine des vols.
+
+#### Variables qualitatives à échelle ordinale
+
+On observe ce type de variable lorsqu’il existe un ordre croissant dans les modalités de la variable. Par exemple, la variable _degré de satisfaction_ est à échelle ordinale. Il est possible de classer les modalités en ordre décroissant en écrivant : Très satisfait  >  Satisfait  >  Insatisfait  >  Très insatisfait.
+
+Dans la base de données `diamonds`, la variable `cut` est une variable qualitative à échelle ordinale.
+
+```{r}
+unique(diamonds$cut)
+```
+
+Nous remarquons que les modalités de cette variable possèdent un ordre. Cet ordre est indiqué par les symboles `<` dans la sortie `R`.
+
+### Variables quantitatives
+
+Une variable quantitative est une variable dont les résultats possibles sont des **nombres**. Les différents nombres que peuvent prendre une telle variable sont appelées des **valeurs**.
+
+#### Variables quantitatives discrètes
+
+On observe ce type de variable lorsque les valeurs sont énumérables, c’est-à-dire lorsqu’il n’existe pas de valeur possible entre deux valeurs consécutives. Par exemple, la variable _nombre de cours suivis pendant cette session_ est une variable quantitative discrète. Les valeurs de ces variables peuvent être : 3, 4, 5, 6, 7,... Il est impossible de suivre 4,6 cours durant une session.
+
+Dans la base de données `nycflights13`, la variable `engines` provenant des données `planes` est une variable quantitative discrète. Cette variable représente le nombre de moteurs de l'avion en question.
+
+```{r}
+unique(planes$engines)
+```
+
+Dans la sortie `R` les valeurs ne sont pas en ordre croissant mais elles le seront lorsque nous les représenterons sous forme de tableau ou de graphique.
+
+#### Variables quantitatives continues
+
+On observe ce type de variable lorsqu’il existe une infinité de valeurs entre deux autres. Par exemple, la variable _masse d’un étudiant (en lbs)_ est une variable quantitative continue. Entre 130 et 131 lbs, il existe une infinité de valeurs telles que 130,54 lbs.
+
+Dans la base de données `diamonds`, nous allons observer la variable `carat`. Voici les 25 premiers éléments de ces valeurs.
+
+```{r}
+diamonds$carat[1:25]
+```
+
+<!--chapter:end:01-intro.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+  
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+  
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+  
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+  
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+  
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# Présentation des données
+
+Pour débuter, nous allons charger les paquetages utiles:
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+Pour introduire la présentation des données, nous allons utiliser la base de données `mtcars` et la base de données `diamonds`, que nous avons utilisé à la section \@ref(donneesdiamonds). 
+
+La base de données `mtcars` a été extraite du magazine Motor Trend de l'année 1974, et comprend la consommation d'essence et 10 autres aspects de design automobile pour 32 automobiles (modèles 1973-1974). 
+
+Les 11 variables de cette base de données sont:
+
+- `mpg` : Miles/ (US) gallon
+- `cyl` : Nombre de cylindres
+- `disp` : Déplacement en pouces cube
+- `hp` : Nombre de chevaux-vapeur
+- `drat` : Ratio
+- `wt` : Poids (1000 livres)
+- `qsec` : Temps pour le quart de mile
+- `vs` : V/S
+- `am` : Transmission (0 = automatique, 1 = manuelle)
+- `gear` : Nombre de vitesses
+- `carb` : Nombre de carburateurs
+
+```{r}
+mtcars
+```
+
+## Variables qualitatives
+
+### Tableaux de fréquences
+
+Nous pouvons représenter des variables qualitatives sous forme de tableau. Nous allons utiliser la commande `tabfreq`. Voici comment l'utiliser pour représenter la variable `cut` de la base de données `diamonds`.
+
+```{r}
+tabfreq(diamonds$cut)
+```
+
+Nous pouvons également étudier la variable `clarity`.
+
+```{r}
+tabfreq(diamonds$clarity)
+```
+
+### Diagramme à bandes
+
+Pour les variables qualitatives, le diagramme à bandes est le graphique de choix.
+
+Pour la variable `clarity`.
+
+```{r}
+ggplot(diamonds, aes(clarity)) + geom_bar() +
+  labs(
+    x = "Clarté", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la clarté des diamants")
+```
+
+Pour la variable `cut`.
+
+```{r}
+ggplot(diamonds, aes(cut)) + geom_bar() +
+  labs(
+    x = "Coupe", 
+    y = "Fréquence", 
+    title = "Diagramme à bandes de la coupe des diamants")
+```
+
+### Diagramme circulaire
+
+```{r}
+ggplot(diamonds, aes(x = factor(1), fill = cut)) + 
+  geom_bar() +
+  coord_polar(theta = "y")
+```
+
+## Variables quantitatives
+
+### Tableaux de fréquences {#freqquantitatives}
+
+Pour une variable quantitative discrète, il suffit d'utiliser la fonction `tabfreq` pour représenter les données sous forme de tableau. Par exemple, pour la variable `cyl` de la base de données `mtcars`.
+
+```{r}
+tabfreq(mtcars$cyl)
+```
+
+Pour représenter une variable quantitative continue sous forme de tableau, il faut effectuer un traitement préalable sur les données. 
+
+Étudions la variable `carat` de la base de données `diamonds`. Si  nous tentons d'utiliser la commande `tabfreq` directement, nous allons obtenir une table beaucoup trop grande. En effet, la variable `carat` possède `r length(unique(diamonds$carat))` valeurs différentes!
+
+Pour représenter la variable correctement, nous allons débuter par observer l'étendue des valeurs possibles de cette variable en utilisant la commande `range`. Nous avons donc:
+
+```{r}
+range(diamonds$carat)
+```
+
+La sortie de `R` signifie que la valeur la plus petite de `carat` est `r range(diamonds$carat)[1]`, et que la plus grande est `r range(diamonds$carat)[2]`. 
+
+Nous voulons maintenant recoder notre variable `carat` pour obtenir des classes. Dans notre exemple, il semble adéquat de créer des classes de largeur 1 en débutant à 0 et en terminant à 6. L'option `breaks` permet de décider des classes et l'option `right` permet de fermer l'intervalle à gauche et de l'ouvrir à droite.
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+tabfreq(carat_class)
+```
+
+### Diagramme à bâtons
+
+Pour les variables quantitatives discrètes, le diagramme à bâtons est le graphique de choix.
+
+```{r}
+ggplot(mtcars, aes(cyl)) + 
+  geom_bar(width = 0.1) + 
+  labs(
+    x = "Nombre de cylindres", 
+    y = "Fréquence", 
+    title = "Diagramme à bâtons du nombre de cylindres")
+```
+
+### Histogramme
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",binwidth = 1000, center = 500) +
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme du prix des diamants")
+```
+
+### Polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_freqpoly(size = 1,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Polygone de fréquences du prix des diamants")
+```
+
+### Ogive des pourcentages cumulés
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'ogive des pourcentages cumulés.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  stat_ecdf(pad = FALSE) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence relative cumulée", 
+    title = "Ogive des pourcentages cumulés du prix des diamants")
+```
+
+### Histogramme et polygone de fréquences
+
+Pour les variables quantitatives discrètes, il est possible d'utiliser l'histogramme et le polygone de fréquences.
+
+```{r}
+ggplot(diamonds, aes(price)) + 
+  geom_histogram(color = "white",,binwidth = 1000, center = 500) + 
+  geom_freqpoly(size = 1,,binwidth = 1000, center = 500) + 
+  labs(
+    x = "Prix", 
+    y = "Fréquence", 
+    title = "Histogramme et polygone de fréquences du prix des diamants")
+```
+
+<!--chapter:end:02-presentation-donnees.Rmd-->
+
+```{r, echo = FALSE}
+tabfreq <- function(x)
+{
+  library(knitr)
+
+  mytable <- table(x)
+  freq <- data.frame(mytable)
+  freq_rel <- data.frame(prop.table(mytable))[2]
+  freq_rel_cum <- data.frame(cumsum(prop.table(mytable)))[,1]
+
+  tabfreq <- cbind(freq,freq_rel,freq_rel_cum)
+
+  totalN <- sum(tabfreq[,2])
+  totalF <- sum(tabfreq[,3])
+  ligne <- data.frame("Total",totalN,totalF,1.0)
+  names(ligne) <- colnames(tabfreq)
+  tabfreq <-  rbind(tabfreq,ligne)
+
+
+  colnames(tabfreq)<-c(deparse(substitute(x)),
+                       "Fréquence",
+                       "Fréquence relative",
+                       "Fréquence relative cumulée")
+
+  return(kable(tabfreq,digits=3,align=c("l","c","c","c")))
+}
+```
+
+# (PART) Les mesures associées aux données {-} 
+
+# Les différentes mesures
+
+Dans ce chapitre, nous verrons comment utiliser `R` pour calculer les mesures importantes permettant de résumer des données.
+
+Nous allons charger les paquetages que nous allons utiliser:
+
+```{r}
+library(ggplot2)
+library(nycflights13)
+```
+
+## Les mesures de tendance centrale
+
+Les mesures de tendance centrale permettent de déterminer où se situe le « centre » des données. Les trois mesures de tendance centrale sont le mode, la moyenne et la médiane.
+
+### Le mode
+
+Le mode est la **modalité**, **valeur** ou **classe** possédant la plus grande fréquence. En d’autres mots, c’est la donnée la plus fréquente. 
+
+Puisque le mode se préoccupe seulement de la donnée la plus fréquente, il n’est pas influencé par les valeurs extrêmes.
+
+Lorsque le mode est une classe, il est appelé **classe modale**. 
+
+Le mode est noté **Mo**. 
+
+Le langage `R` ne possède pas de fonction permettant de calculer le mode. La façon la plus simple de le calculer est d'utiliser la fonction `table` de `R`.
+
+Par exemple, si nous voulons connaître le mode de la variable `cut` de la base de données `diamonds`:
+
+```{r}
+table(diamonds$cut)
+```
+
+Nous remarquons que le maximum est à la modalité _Ideal_ avec une fréquence de `r max(table(diamonds$cut))`.
+
+Si nous nous intéressons au mode d'une variable quantitative discrète comme `cyl` de la base de données `mtcars` nous obtenons:
+
+```{r}
+table(mtcars$cyl)
+```
+
+Nous remarquons que le maximum est à la valeur _8_ avec une fréquence de `r max(table(mtcars$cyl))`.
+
+Dans le cas d'une variable quantitative continue, pour calculer le mode, il faut commencer par séparer les données en classes. Nous utiliserons les mêmes classes utilisées à la section \@ref(freqquantitatives)
+
+```{r}
+carat_class = cut(diamonds$carat,
+                  breaks = seq(from = 0, to = 6, by = 1),
+                  right = FALSE)
+table(carat_class)
+```
+
+La classe modale est donc la classe _[0,1)_ avec une fréquence de `r max(table(carat_class))`.
+
+### La médiane
+
+La médiane, notée **Md**, est la valeur qui sépare une série de données classée en ordre croissant en deux parties égales. 
+
+La médiane étant la valeur du milieu, elle est la valeur où le pourcentage cumulé atteint 50%. 
+
+Puisque la médiane se préoccupe seulement de déterminer où se situe le centre des données, elle n’est pas influencée par les valeurs extrêmes. Elle est donc une mesure de tendance centrale plus fiable que la moyenne.
+
+> Important : La médiane n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la médiane pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `median` permet de calculer la médiane en langage `R`.
+
+Par exemple, pour calculer la médiane de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+median(diamonds$carat)
+```
+
+Ceci signifie que 50% des diamants ont une valeur en carat inférieure ou égale à `r median(diamonds$carat)` et que 50% des diamants ont une valeur en carat supérieure ou égale à `r median(diamonds$carat)`.
+
+Nous pouvons aussi obtenir que la médiane de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+median(diamonds$price)
+```
+
+### La moyenne
+
+La moyenne est la valeur qui pourrait remplacer chacune des données d’une série pour que leur somme demeure identique. Intuitivement, elle représente le centre d’équilibre d’une série de données. La somme des distances qui sépare les données plus petites que la moyenne devrait être la même que la somme des distances qui sépare les données plus grandes. 
+
+> Important : La moyenne n’est définie que pour les variables quantitatives. En effet, si vous tentez d'utiliser la moyenne pour des données autres que numériques, `R` vous donnera un message d'erreur.
+
+La fonction `mean` permet de calculer la moyenne en langage `R`.
+
+Par exemple, pour calculer la moyenne de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+mean(diamonds$carat)
+```
+
+Nous pouvons aussi obtenir que la moyenne de la variable `price` de la base de données `diamonds` est donnée par:
+
+```{r}
+mean(diamonds$price)
+```
+
+## Les mesures de dispersion
+
+Les mesures de tendance centrale (mode, moyenne et médiane) ne permettent pas de déterminer si une série de données est principalement située autour de son centre, ou si au contraire elle est très dispersée. 
+
+Les mesures de dispersion, elles, permettent de déterminer si une série de données est centralisée autour de sa moyenne, ou si elle est au contraire très dispersée. 
+
+Les mesures de dispersion sont l’étendue, la variance, l’écart-type et le coefficient de variation. 
+
+### L'étendue
+
+La première mesure de dispersion, l’étendue, est la différence entre la valeur maximale et la valeur minimale.
+
+L’étendue ne tenant compte que du maximum et du minimum, elle est grandement influencée par les valeurs extrêmes. Elle est donc une mesure de dispersion peu fiable.
+
+La fonction `range` permet de calculer l'étendue d'une variable en langage `R`.
+
+Par exemple, pour calculer l'étendue de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+range(diamonds$carat)
+```
+
+Nous pouvons donc calculer l'étendue de la variable `carat` en soustrayant les deux valeurs obtenues par la fonction `range`, c'est-à-dire que l'étendue est  `r range(diamonds$carat)[2]`-`r range(diamonds$carat)[1]` = `r range(diamonds$carat)[2]-range(diamonds$carat)[1]`.
+
+### La variance
+
+La variance sert principalement à calculer l’écart-type, la mesure de dispersion la plus connue.
+
+> Attention : Les unités de la variance sont des unités^2^.
+
+La fonction `var` permet de calculer la variance d'une variable en langage `R`.
+
+Par exemple, pour calculer la variance de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+var(diamonds$carat)
+```
+
+Ceci signifie que la variance de la variable `carat` est `r var(diamonds$carat)` carat^2^.
+
+### L'écart-type
+
+L’écart-type est la mesure de dispersion la plus couramment utilisée. Il peut être vu comme la « moyenne » des écarts entre les données et la moyenne.
+
+Puisque l’écart-type tient compte de chacune des données, il est une mesure de dispersion beaucoup plus fiable que l’étendue.
+
+Il est défini comme la racine carrée de la variance.
+
+La fonction `sd` permet de calculer l''écart-type d'une variable en langage `R`.
+
+Par exemple, pour calculer l'écart-type de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)
+```
+
+Ceci signifie que l'écart-type de la variable `carat` est `r sd(diamonds$carat)` carat.
+
+### Le coefficient de variation
+
+Le coefficient de variation, noté C. V., est calculé comme suit : 
+
+\begin{equation}
+C.V. = \dfrac{\text{ecart-type}}{\text{moyenne}}\times 100\%
+\end{equation}
+
+Si le coefficient est inférieur à 15%, les données sont dites **homogènes**. Cela veut dire que les données sont situées près les unes des autres.
+
+Dans le cas contraire, les données sont dites **hétérogènes**. Cela veut dire que les données sont très dispersées.
+
+> Important : Le coefficient de variation ne possède pas d’unité, outre le symbole de pourcentage.
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement le coefficient de variation. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour le calculer.
+
+Par exemple, pour calculer le coefficient de variation de la variable `carat` de la base de données `diamonds`, nous avons:
+
+```{r}
+sd(diamonds$carat)/mean(diamonds$carat)*100
+```
+
+Le C.V. de la variable `carat` est donc `r sd(diamonds$carat)/mean(diamonds$carat)*100` %, ce qui signifie que les données sont `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"homogènes","hétérogènes")`, car le coefficient de variation est `r ifelse(sd(diamonds$carat)/mean(diamonds$carat)<=0.15,"plus petit ou égal à 15%","plus grand que 15%")`.
+
+## Les mesures de position
+
+Les mesures de position permettent de situer une donnée par rapport aux autres. Les différentes mesures de position sont la cote Z, les quantiles et les rangs.
+
+Tout comme les mesures de dispersion, celles-ci ne sont définies que pour une variable quantitative.
+
+### La cote z
+
+Cette mesure de position se base sur la moyenne et l’écart-type.
+
+La cote Z d’une donnée x est calculée comme suit : 
+
+\begin{equation}
+Z = \dfrac{x-\text{moyenne}}{\text{ecart-type}}
+\end{equation}
+
+> Important : La cote z ne possède pas d'unités.
+
+Une cote Z peut être positive, négative ou nulle. 
+
+| Cote Z | Interprétation |
+|-------:|:---------------|
+| Z>0 | donnée supérieure à la moyenne | 
+| Z<0 | donnée inférieure à la moyenne |
+| Z=0 | donnée égale à la moyenne |
+
+Il n'existe pas de fonctions en `R` permettant de calculer directement la cote Z. Par contre, nous pouvons utiliser en conjonction les fonctions `sd` et `mean` pour la calculer.
+
+Par exemple, si nous voulons calculer la cote Z d'un diamant de 3 carats, nous avons:
+
+```{r}
+(3-mean(diamonds$carat))/sd(diamonds$carat)
+```
+
+### Les quantiles
+
+Un quantile est une donnée qui correspond à un certain pourcentage cumulé.
+
+Parmi les quantiles, on distingue les quartiles, les quintiles, les déciles et les centiles. 
+
+- Les quartiles Q~1~, Q~2~ et Q~3~, séparent les données en quatre parties égales.
+Environ 25% des données sont inférieures ou égales à Q~1~.
+Environ 50% des données sont inférieures ou égales à Q~2~.
+Environ 75% des données sont inférieures ou égales à Q~3~.
+- Les quintiles V~1~, V~2~, V~3~ et V~4~, séparent les données en cinq parties égales.
+Environ 20% des données sont inférieures ou égales à V~1~.
+Environ 40% des données sont inférieures ou égales à V~2~.
+Etc.
+- Les déciles D~1~, D~2~, ..., D~8~ et D~9~, séparent les données en dix parties égales. 
+Environ 10% des données sont inférieures ou égales à D~1~. 
+Environ 20% des données sont inférieures ou égales à D~2~.
+Etc.
+- Les centiles C~1~, C~2~, ..., C~98~ et C~99~, séparent les données en cent parties égales.
+Environ 1% des données sont inférieures ou égales à C~1~.
+Environ 2% des données sont inférieures ou égales à C~2~.
+Etc.
+
+> Il est utile de noter que certains quantiles se recoupent. 
+
+La fonction `quantile` permet de calculer n'importe quel quantile d'une variable en langage `R`. Il suffit d'indiquer la variable étudiée ainsi que le pourcentage du quantile voulu.
+
+Par exemple, si nous voulons calculer D~1~ pour la variable `carat`, nous allons utiliser la fonction `quantile` avec une probabilité de 0,1.
+
+```{r}
+quantile(diamonds$carat, 0.1)
+```
+
+Ceci implique que 10% des diamants ont une valeur en carat inférieure ou égale à `r quantile(diamonds$carat, 0.1)` carat.
+
+Nous pouvons calculer le troisième quartile Q~3~ de la variable `price` en utilisant la fonction `quantile` avec une probabilité de 0,75.
+
+```{r}
+quantile(diamonds$price, 0.75)
+```
+
+Ceci implique que 75% des diamants ont un prix en dollars inférieur ou égal à `r quantile(diamonds$price, 0.75)` $.
+
+### La commande `summary`
+
+La commande `summary` produit un sommaire contenant six mesures importantes:
+
+1. `Min` : le minimum de la variable
+2. `1st Qu.`: Le premier quartile, Q~1~, de la variable
+3. `Median` : La médiane de la variable
+4. `Mean` : La moyenne de la variable
+5. `3rd Qu.` : Le troisième quartile, Q~3~, de la variable
+6. `Max` : Le maximum de la variable
+
+Nous pouvons donc produire le sommaire de la variable `price` de la base de données `diamonds` de la façon suivante:
+
+```{r}
+summary(diamonds$price)
+```
+
+### Le rang centile
+
+Un rang centile représente le pourcentage cumulé, *exprimé en nombre entier*, qui correspond à une certaine donnée. Nous déterminerons les rangs centiles pour les variables continues seulement.
+
+Les rangs centiles sont donc exactement l’inverse des centiles.
+
+Il n'existe pas de fonctions dans `R` permettant de trouver directement le rang centile, mais il est facile d'utiliser la fonction `mean` pour le trouver. 
+
+Par exemple, si nous voulons trouver le rang centile d'un diamant qui coûte 500\$, il suffit d'utiliser la commande suivante. La commande calcule la moyenne de toutes les valeurs en dollars des diamants coûtant 500\$ ou moins.
+
+```{r}
+mean(diamonds$price<=500)
+```
+
+Ceci signifie que pour un diamant de 500\$, il y a `r mean(diamonds$price<=500)*100` % des diamants qui ont une valeur égale ou inférieure.
+
+<!--chapter:end:03-mesures.Rmd-->
+
+# Les séries chronologiques
+
+Débutons par charger les paquetages qui nous seront utiles.
+
+```{r}
+library(gapminder)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+```
+
+Une série chronologique est un ensemble de valeurs observées d’une variable quantitative. Elle permet d’analyser l’évolution de cette variable dans le temps dans le but éventuel de faire des prévisions.
+
+## Les graphiques
+
+Nous allons débuter par utiliser la base de données `nycflights13`. Nous allons étudier la température au mois de janvier 2013 à l'aéroport Newark (code "EWR" dans la variable `origin`). La variable `weather` de la base de données contient ces informations mais nous devons tout d'abord filtrer les données pour ne conserver que celles qui correspondent à Newark et au mois de janvier.
+
+La commande suivante permet de faire ce filtrage. Vous n'avez pas besoin de comprendre la syntaxe.
+
+```{r}
+meteo_janvier_ewr <- weather %>% 
+  filter(origin == "EWR" & month == 1 )
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(meteo_janvier_ewr, aes(x = time_hour, y = temp)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Heures du mois de janvier",
+    y = "Température en degrée Farhenheit",
+    title = "Répartition de la température au mois de janvier en fonction de l'heure"
+  )
+```
+
+Nous pouvons aussi utiliser la paquetage `gapminder` qui contient des données sur l'espérance de vie. Comme précédemment, nous allons débuter par filtrer les données provenant uniquement du Canada.
+
+```{r}
+gap_canada <- gapminder %>%
+  filter(country == "Canada")
+```
+
+Nous pouvons maintenant tracer les données obtenues:
+
+```{r}
+ggplot(gap_canada, aes(x = year, y = lifeExp)) + 
+  geom_line() + geom_point() +
+  labs(
+    x = "Année",
+    y = "Espérance de vie",
+    title = "Répartition de l'espérance de vie au Canada en fonction de l'année")
+```
+
+## Les mesures
+
+### La variation absolue
+
+La variation absolue mesure l’augmentation (ou la diminution) subie par une variable dans le temps. Pour calculer la variation absolue entre un moment A antérieur à un moment B, on utilise la formule ci-dessous :
+
+\begin{equation}
+\Delta V = V_B - V_A
+\end{equation}
+
+où V~B~ est la valeur de la variable au temps B et V~A~ est la valeur de la variable au temps A.
+
+> Remarque : Les unités de la variation absolue sont les mêmes que celles de la variable étudiée.
+
+Si nous voulons connaître la variation absolue de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation absolue, notée `var_abs`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_abs = pop - lag(pop))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_abs)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation absolue de la population",
+    title = "Répartition de la variation absolue de la population du Canada selon l'année"
+  )
+```
+
+### La variation moyenne
+
+La variation moyenne mesure l’augmentation (ou la diminution) moyenne subie par une variable par unité de temps. La variation moyenne entre les moments 𝐴 et 𝐵 est donnée par :
+
+\begin{equation}
+\Delta V_{moy} = \dfrac{V_B - V_A}{B-A}
+\end{equation}
+
+> Remarque : Les unités de la variation moyenne sont les unités de la variable étudiée par unité de temps.
+
+Si nous voulons connaître la variation moyenne de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation moyenne, notée `var_moy`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_moy = (pop - lag(pop))/(year-lag(year)))
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_moy)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation moyenne de la population",
+    title = "Répartition de la variation moyenne de la population du Canada selon l'année"
+  )
+```
+
+### La variation relative (pourcentage de variation)
+
+La variation relative exprime *en pourcentage* la variation subie par une variable entre les moments 𝐴 et 𝐵. Le pourcentageest donné par:
+
+\begin{equation}
+\Delta V_{\%} = \dfrac{V_B - V_A}{V_A}\times 100
+\end{equation}
+
+> Remarque : Il n’y a pas d’unité autre que le symbole de pourcentage.
+
+Si nous voulons connaître la variation relative de la population du Canada, nous allons devoir ajouter une colonne à notre base de données `gap_canada`. Encore une fois, il n'est pas nécessaire de comprendre la syntaxe. Nous ajoutons une colonne variation relative, notée `var_rel`, à notre base de données `gap_canada`.
+
+```{r}
+gap_canada <- gap_canada %>%
+  mutate(var_rel = (pop - lag(pop))/lag(pop) * 100)
+```
+
+Nous pouvons maintenant représenter la variable à l'aide d'un graphique.
+
+```{r, warning = FALSE}
+ggplot(gap_canada, aes(x = year, y = var_rel)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Année",
+    y = "Variation relative de la population",
+    title = "Répartition de la variation relative de la population du Canada selon l'année"
+  )
+```
+
+## Les données construites
+
+
+<!--chapter:end:04-series-chronologiques.Rmd-->
+
+# (PART) La combinatoire et les probabilités {-} 
+
+# La combinatoire
+
+## La factorielle
+
+Pour calculer la factorielle d'un nombre en `R`, il faut utiliser la commande `factorial`. Par exemple, si nous voulons calculer 6!:
+
+```{r}
+factorial(6)
+```
+
+## Les combinaisons
+
+Pour calculer le nombre de combinaisons lorsque nous choisissons $k$ objets parmi $n$ (**sans** ordre), c'est-à-dire $C_k^n$, nous utilisons la commande `choose(n,k)`. Par exemple, si nous voulons calculer le nombre de combinaisons possibles au loto 6-49, $C_6^{49}$, nous avons:
+
+```{r}
+choose(49,6)
+```
+
+## Les arrangements
+
+Pour calculer le nombre d'arrangements lorsque nous choisissons $k$ objets parmi $n$ (**avec** ordre), c'est-à-dire $A_k^n$, nous utilisons les commandes `choose(n,k)` et `factorial`. En effet, nous savons que:
+
+\begin{equation}
+A_k^n = C_k^n \cdot k!
+\end{equation}
+
+et donc on peut calculer un arrangement en effectuant `choose(n,k)*factorial(k)`. Si nous voulons calculer le nombre de comités de 5 personnes nous pouvons former en choisissant parmi 12 personnes, $A_5^{12}$, nous avons:
+
+```{r}
+choose(12,5)*factorial(5)
+```
+
+
+<!--chapter:end:05-combinatoire.Rmd-->
+
+# Les lois de probabilités
+
+Pour être en mesure d'utiliser les lois de probabilités en langage `R`, il faut charger le paquetage `stats`.
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+Chaque distribution en `R` possède quatre fonctions qui lui sont associées. Premièrement, la fonction possède un _nom racine_, par exemple le _nom racine_ pour la distribution *binomiale* est `binom`. Cette racine est précédée par une de ces quatre lettre:
+
+- `p` pour *probabilité*, qui représente la fonction de répartition
+- `q` pour *quantile*, l'inverse de la fonction de répartition
+- `d` pour *densité*, la fonction de densité de la distribution
+- `r` pour *random*, une variable aléatoire suivant la distribution spécifiée.
+
+Pour la loi binomiale par exemple, ces fonctions sont `pbinom`, `qbinom`, `dbinom` et `rbinom`.
+
+## Les lois de probabilités discrètes
+
+### La loi binomiale
+
+Le _nom racine_ pour la loi binomiale est `binom`.
+
+Soit $X$: le nombre de succès en $n$ essais et $X\sim B(n,p)$. Voici la façon de calculer des probabilités pour la loi binomiale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dbinom(k, n, p)`|
+|$P(i\leq X \leq j)$ | `sum(dbinom(i:j, n, p))`|
+|$P(X\leq k)$ | `pbinom(k, n, p)` |
+|$P(X>k)$ | `1-pbinom(k, n, p)` |
+
+Soit $X$ la variable aléatoire comptant le nombre de face 2 que nous obtenons en lançant un dé à quatre reprises. Nous avons que $X\sim B(4,\frac{1}{6})$. Si nous voulons calculer $P(X=3)$, nous aurons:
+
+```{r}
+dbinom(3,4,1/6)
+```
+
+Nous avons donc une probabilité de `r dbinom(3,4,1/6)*100`% d'obtenir 3 fois la face deux en lançant un dé à quatres reprises.
+
+Nous pouvons représenter graphiquement la loi binomiale. Soit $X~B(10,1/4)$. Nous aurons:
+
+```{r}
+fbinom <- data.frame(x = 0:10, y = dbinom(0:10, 10, 1/4))
+ggplot(fbinom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre de succès",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi binomiale en fonction du nombre de succès"
+  )
+```
+
+### La loi de Poisson
+
+Le _nom racine_ pour la loi de Poisson est `pois`.
+
+Soit $X$: le nombre d'événements dans un intervalle fixé et $X\sim Po(\lambda)$. Voici la façon de calculer des probabilités pour la loi de Poisson à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dpois(k, lambda)`|
+|$P(i\leq X \leq j)$ | `sum(dpois(i:j, lambda))`|
+|$P(X\leq k)$ | `ppois(k, lambda)` |
+|$P(X>k)$ | `1-ppois(k, lambda)` |
+
+Soit $X$ le nombre d'erreurs dans une page. Si une page contient en moyenne une demie erreur alors $X\sim Po(1/2)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dpois(2, 1/2)
+```
+
+Nous avons donc une probabilité de `r dpois(2, 1/2)*100`% d'obtenir deux erreurs sur une page.
+
+Nous pouvons représenter graphiquement la loi de Poisson. Soit $X\sim Po(1/2)$. Nous aurons:
+
+```{r}
+fpois <- data.frame(x = 0:10, y = dpois(0:10, 1/2))
+ggplot(fpois, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi de Poisson en fonction du nombre d'événements"
+  )
+```
+
+### La loi géométrique
+
+Le _nom racine_ pour la loi géométrique est `geom`.
+
+Soit $X$: le nombre d'échecs avant d'obtenir un succès et $X\sim G(p)$. Voici la façon de calculer des probabilités pour la loi géométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dgeom(k, p)`|
+|$P(i\leq X \leq j)$ | `sum(dgeom(i:j, p))`|
+|$P(X\leq k)$ | `pgeom(k, p)` |
+|$P(X>k)$ | `1-pgeom(k, p)` |
+
+Soit $X$ le nombre d'échecs avant d'avoir un premier succès. Si la probabilité de succès est $\frac{1}{5}$ alors $X\sim G(1/5)$. Si nous voulons calculer $P(X=6)$, nous aurons:
+
+```{r}
+dgeom(6, 1/5)
+```
+
+Nous avons donc une probabilité de `r dgeom(6, 1/5)*100`% d'obtenir 6 échecs avant un premier succès.
+
+Nous pouvons représenter graphiquement la loi géométrique. Soit $X\sim G(1/5)$. Nous aurons:
+
+```{r}
+fgeom <- data.frame(x = 0:10, y = dgeom(0:10, 1/5))
+ggplot(fgeom, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi géométrique en fonction du nombre d'échecs avant le premier succès"
+  )
+```
+
+> Remarque : Pour la loi géométrique, on rencontre parfois cette définition : la probabilité p'(k) est la probabilité, lors d'une succession d'épreuves de Bernoulli indépendantes, d'obtenir k échecs avant un succès. On remarque qu'il ne s'agit que d'un décalage de la précédente loi géométrique. Si $X$ suit la loi $p$, alors $X+1$ suit la loi $p'$.
+
+### La loi hypergéométrique
+
+Le _nom racine_ pour la loi hypergéométrique est `hyper`.
+
+On tire sans remise $n$ objets d'un ensemble de $N$ objets dont $A$
+possèdent une caractéristique particulière (et les autres $B=N-A$ ne la possèdent pas). Soit $X$ le nombre d'objets de l'échantillon qui possèdent la caractéristique. Nous avons que $X\sim H(N,A,n)$.
+
+Voici la façon de calculer des probabilités pour la loi hypergéométrique à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(X=k)$    |`dhyper(k, A, B, n)`|
+|$P(i\leq X \leq j)$ | `sum(dhyper(i:j, A, B, n))`|
+|$P(X\leq k)$ | `phyper(k, A, B, n)` |
+|$P(X>k)$ | `1-phyper(k, A, B, n)` |
+
+Soit $X$ le nombre de boules blanches de l'échantillon de taille 4. Si l'urne contient 5 boules blanches et 8 boules noires, nous avons $X\sim H(13,5,4)$. Si nous voulons calculer $P(X=2)$, nous aurons:
+
+```{r}
+dhyper(2, 5, 8, 4)
+```
+
+Nous avons donc une probabilité de `r dhyper(2, 5, 8, 4)*100`% de piger 2 boules blanches dans un échantillon de taille 4.
+
+Nous pouvons représenter graphiquement la loi hypergéométrique. Soit $X\sim H(13,5,4)$. Nous aurons:
+
+```{r}
+fhyper <- data.frame(x = 0:4, y = dhyper(0:4, 5, 8, 4))
+ggplot(fhyper, aes(x = x, y = y)) +
+  geom_bar(width = 0.1, stat = "identity") +
+  labs(
+    x = "Nombre d'événements",
+    y = "Probabilité",
+    title = "Répartition de la probabilité de la loi hypergéométrique en fonction du nombre de boules blanches dans l'échantillon"
+  )
+```
+
+## Les lois de probabilités continues
+
+### La loi normale
+
+Le _nom racine_ pour la loi normale est `norm`.
+
+Si $X$ suit une loi normale de moyenne $\mu$ et de variance $\sigma^2$, nous avons $X\sim N(\mu,\sigma^2)$.
+
+Voici la façon de calculer des probabilités pour la loi normale à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pnorm(j, mu, sigma)-pnorm(i, mu, sigma)`|
+|$P(X\leq k)$ | `pnorm(k, mu, sigma)` |
+|$P(X>k)$ | `1-pnorm(k, mu, sigma)` |
+
+Soit $X\sim N(3,25)$ une variable aléatoire suivant une loi normale de moyenne 3 et de variance 25. Si nous voulons calculer la probabilité $P(1.25<X<3.6)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5)
+```
+
+La probabilité que notre variable aléatoire se trouve entre 1.25 et 3.6 est donc `r (pnorm(3.6, 3, 5) - pnorm(1.25, 3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi normale. Soit $X\sim N(0,1)$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1))
+```
+
+###  La loi de Student
+
+Le _nom racine_ pour la loi de Student est `t`.
+
+Si $X$ suit une loi de Student à $\nu$ degrés de liberté, nous avons $X\sim T_{\nu}$.
+
+Voici la façon de calculer des probabilités pour la loi de Student à l'aide de `R`:
+
+|Probabilités|Commande `R`|
+|-----------:|:-----------|
+|$P(i\leq X \leq j)$ | `pt(j, nu)-pt(i, nu)`|
+|$P(X\leq k)$ | `pt(k, nu)` |
+|$P(X>k)$ | `1-pt(k, nu)` |
+
+Soit $X\sim T_5$ une variable aléatoire suivant une loi de Student à 5 degrés de liberté. Si nous voulons calculer la probabilité $P(X>3)$ en `R`, nous pouvons utiliser la commande suivante:
+
+```{r}
+1 - pt(3, 5)
+```
+
+La probabilité que notre variable aléatoire soit plus grande que 3 est donc `r (1 - pt(3, 5))*100` %.
+
+Nous pouvons représenter graphiquement la loi de Student. Soit $X\sim T_{5}$. Nous aurons:
+
+```{r}
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args = list(df = 5))
+```
+
+<!--chapter:end:06-lois-probabilites.Rmd-->
+
+# (PART) L'estimation de paramètres et les tests d'hypothèses {-} 
+
+# Les distributions d'échantillonnage
+
+## Paquetages utiles {-}
+
+Chargeons tous les paquetages qui nous seront utiles.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(okcupiddata)
+library(mosaic)
+```
+
+## L'échantillonnage
+
+Le paquetage `okcupiddata` [@R-okcupiddata] se trouve [ici](https://github.com/rudeboybert/okcupiddata).
+
+```{r}
+profiles_subset <- profiles %>% 
+  filter(between(height, 55, 85))
+```
+
+```{r}
+ggplot(profiles_subset,aes(height)) +
+  geom_histogram(bins = 20, color = "white") +
+  labs(
+    x = "Taille",
+    y = "Fréquence",
+    title = "Histogramme"
+  )
+```
+
+```{r}
+knitr::include_app("http://ismay.shinyapps.io/okcupidheights/")
+```
+
+
+
+<!--chapter:end:07-distributions-echantillonnage.Rmd-->
+
+# L'estimation par intervalle de confiance
+
+
+<!--chapter:end:08-estimation.Rmd-->
+
+# Les tests d'hypothèses
+
+
+<!--chapter:end:09-tests-hypotheses.Rmd-->
+
+`r if (knitr:::is_html_output()) '# Bibliographie {-}'`
+
+<!--chapter:end:99-bibliographie.Rmd-->
+
+
+<!--chapter:end:intro-r.Rmd-->
+
+
+<!--chapter:end:introR.Rmd-->
+

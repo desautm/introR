@@ -22,4 +22,18 @@ profiles_subset <- profiles %>%
   filter(between(height, 55, 85))
 ```
 
+```{r}
+ggplot(profiles_subset,aes(height)) +
+  geom_histogram(bins = 20, color = "white") +
+  labs(
+    x = "Taille",
+    y = "Fréquence",
+    title = "Histogramme"
+  )
+```
+
+```{r}
+knitr::include_app("http://ismay.shinyapps.io/okcupidheights/")
+```
+
 

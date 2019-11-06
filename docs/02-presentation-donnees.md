@@ -128,7 +128,7 @@ ggplot(diamonds, aes(clarity)) + geom_bar() +
     title = "Diagramme à bandes de la clarté des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-6-1.png" width="672" />
 
 Pour la variable `cut`.
 
@@ -141,7 +141,7 @@ ggplot(diamonds, aes(cut)) + geom_bar() +
     title = "Diagramme à bandes de la coupe des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-7-1.png" width="672" />
 
 ### Diagramme circulaire
 
@@ -152,7 +152,7 @@ ggplot(diamonds, aes(x = factor(1), fill = cut)) +
   coord_polar(theta = "y")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-8-1.png" width="672" />
 
 ## Variables quantitatives
 
@@ -227,7 +227,7 @@ ggplot(mtcars, aes(cyl)) +
     title = "Diagramme à bâtons du nombre de cylindres")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-12-1.png" width="672" />
 
 ### Histogramme
 
@@ -243,7 +243,7 @@ ggplot(diamonds, aes(price)) +
     title = "Histogramme du prix des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-13-1.png" width="672" />
 
 ### Polygone de fréquences
 
@@ -259,7 +259,7 @@ ggplot(diamonds, aes(price)) +
     title = "Polygone de fréquences du prix des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-14-1.png" width="672" />
 
 ### Ogive des pourcentages cumulés
 
@@ -275,7 +275,7 @@ ggplot(diamonds, aes(price)) +
     title = "Ogive des pourcentages cumulés du prix des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-15-1.png" width="672" />
 
 ### Histogramme et polygone de fréquences
 
@@ -292,4 +292,4 @@ ggplot(diamonds, aes(price)) +
     title = "Histogramme et polygone de fréquences du prix des diamants")
 ```
 
-<img src="02-presentation-donnees_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="02-presentation-donnees_files/figure-html4/unnamed-chunk-16-1.png" width="672" />
